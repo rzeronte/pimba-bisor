@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>rZe/NaBL</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+
+        <script src="./js/rze.js" ></script>
+        <script src="./js/front.js" ></script>
+        
+        <script src="./js/contextmenu/jquery.contextMenu.js"></script>
+
+        <link rel="stylesheet" href="./css/rze.css" type="text/css">
+        <link rel="stylesheet" href="./css/contextmenu/jquery.contextMenu.css" type="text/css">
+        <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.css" />
+    </head>
+    
+    <body id="body">
+        
+        <div id="header">
+            <h1>Fucking Awesome Project</h1>
+            
+            <form id="rze_perspectives">
+                <select>
+                    <option value="0">--Seleccione perspectiva--</option>
+                </select>
+            </form>
+            
+            <div class="actions">
+                <button type="button" id="btn_addWidget">Nueva tarjeta</button>
+            </div>            
+        </div>
+        
+        <!-- Componente RZE -->
+        <div class="rze_container" data-perspective="0"></div>
+        <!-- Fin RZE-->
+    </body>
+    
+</html>
