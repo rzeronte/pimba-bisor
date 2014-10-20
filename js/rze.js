@@ -4,23 +4,24 @@ var rZe = function (aOptions) {
     //**************************************************** PROPIEDADES
     var self = this;
     
-    var dataWidgetOrigin = new Array();
-
-    this.aWidgets = new Array();
-    this.depthHover = new Array();
-    
-    this.widgetMainDepthWidth = 100;
-    this.widgetMainDepthHeight = 100;
-    
-    this.currentWidgetDragging = null;
-    this.currentWidgetOn = null;
+    /* Propiedades */
+    var dataWidgetOrigin               = new Array();
+    this.depthHover                    = new Array();
+    this.widgetMainDepthWidth          = 100;
+    this.widgetMainDepthHeight         = 100;
+    this.currentWidgetDragging         = null;
+    this.currentWidgetOn               = null;
     this.currentFatherOfWidgetDragging = null;
+    this.mouseX                        = 0;
+    this.mouseY                        = 0;
+    this.maxDepth                      = 4;
     
-    this.mouseX = 0;
-    this.mouseY = 0;
-    
-    this.maxDepth = 4;
-    
+    /* Callbacks para refresco de información*/
+    this.cb_init                       = aOptions['cb_init'];
+    this.cb_change_perspective         = aOptions['cb_change_perspective'];
+
+    /* Ejecutamos callback de inicio */
+    this.cb_init(self);
     /**
      * Inicia el proceso
      **/        
@@ -71,6 +72,13 @@ var rZe = function (aOptions) {
         self.createDialog();
     }
     
+    /*
+     * Establece los datos desde un array json
+     **/
+    this.setJSONDataWidgets = function(data) {
+        self.dataWidgetOrigin = data;
+        self.go(); // Reinicia el dashboard
+    }
     /*
      * Cambia el parentId de un widget en el array de datos
      **/
@@ -316,6 +324,15 @@ var rZe = function (aOptions) {
         });
     }
 
+    /*
+    * Añade opciones al select de perspectivas desde userData
+    */
+    this.fillSelectPerspectives = function(perspectives) {
+        for (var i=0; i<perspectives.length;i++) {
+            $("#rze_perspectives select").append(new Option('Perspective #'+perspectives[i], perspectives[i], false, false));        
+        }
+    }
+    
     /*
      * Crea en el DOM los div que servirán de widgets desde array de datos
      * recursivamente
@@ -586,7 +603,9 @@ $( document ).ready(function() {
         var optionSelect = $("#rze_perspectives select").val();
         if ( parseInt(optionSelect) > 0) {
             oRZe.clearDashboard();
-            getPerspectiveData($("#rze_perspectives select").val());
+            //getPerspectiveData();
+            oRZe.cb_change_perspective(oRZe, $("#rze_perspectives select").val());
+
         } else if (parseInt(optionSelect) == 0) {
             oRZe.clearDashboard();
         }
