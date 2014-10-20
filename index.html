@@ -3,32 +3,36 @@
     <head>
         <title>rZe/NaBL</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!-- JQuery by Google-->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
-
-        <script src="./js/rze.js" ></script>
-        <script src="./js/front.js" ></script>
-        
-        <script src="./js/contextmenu/jquery.contextMenu.js"></script>
-
-        <link rel="stylesheet" href="./css/rze.css" type="text/css">
-        <link rel="stylesheet" href="./css/contextmenu/jquery.contextMenu.css" type="text/css">
         <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.css" />
+
+        <!-- pimba-bisor -->
+        <script src="./js/pimba-bisor/pimba-bisor.js" ></script>
+        <link rel="stylesheet" href="./pimba-bisor/css/pimba-bisor.css" type="text/css">
+
+        <!-- Toolkit de menú contextual para pimba-bisor -->
+        <script src="./pimba-bisor/js/contextmenu/jquery.contextMenu.js"></script>
+        <link rel="stylesheet" href="./css/contextmenu/jquery.contextMenu.css" type="text/css">
+
+        <!-- Demo -->
+        <script src="./js/demo.js" ></script>
     </head>
     
     <body id="body">
         
         <div id="header">
-            <h1>Fucking Awesome Project</h1>
+            <h1>Pimba Access Demo</h1>
             
             <form id="rze_perspectives">
                 <select>
-                    <option value="0">--Seleccione perspectiva--</option>
+                    <option value="0">--Select perspective--</option>
                 </select>
             </form>
             
             <div class="actions">
-                <button type="button" id="btn_addWidget">Nueva tarjeta</button>
+                <button type="button" id="btn_addWidget">Add card</button>
             </div>            
         </div>
         
