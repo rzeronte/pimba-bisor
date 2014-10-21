@@ -1,7 +1,4 @@
-var oRZe;
-
-var rZe = function (aOptions) {
-    //**************************************************** PROPIEDADES
+var PimbaBisor = function (aOptions) {
     var self = this;
     
     /* Propiedades */
@@ -19,14 +16,55 @@ var rZe = function (aOptions) {
     /* Callbacks para refresco de información*/
     this.cb_init                       = aOptions['cb_init'];
     this.cb_change_perspective         = aOptions['cb_change_perspective'];
-
+    
     /* Ejecutamos callback de inicio */
     this.cb_init(self);
+
+    /****************************************************  Eventos JQuery*/
+    /** Gestión de evento para click en botón de AÑADIR tarjeta**/
+    $( "#btn_addWidget" ).click(function() {
+        oRZe.addDialog(0);
+    });
+
+    /** Gestión de evento para click en botón de ORDENAR WIDGET**/
+    $( "#btn_orderWidgets" ).click(function() {
+        oRZe.widgetsRedraw();
+    }); 
+
+    /** Gestión de evento para cambio de perspectiva**/
+    $("body").on('change', '#rze_perspectives', function() {
+        var optionSelect = $("#rze_perspectives select").val();
+        if ( parseInt(optionSelect) > 0) {
+            self.clearDashboard();
+            self.cb_change_perspective(self, $("#rze_perspectives select").val());
+        } else if (parseInt(optionSelect) == 0) {
+            self.clearDashboard();
+        }
+
+    });
+    /** Gestión de evento para click en botón de MINIMIZAR WIDGET**/    
+    $("body").on("click",".hook", function(){
+        var status = $(this).attr("data-collapsed");
+        var idWidget = $(this).parent().attr("id");
+
+        if (status == "true") {
+            self.maximizeWidget(idWidget);
+            $(this).attr("data-collapsed", "false");
+            $(this).text("[-]");
+
+        } else if (status == "false") {
+            self.minimizeWidget(idWidget);            
+            $(this).attr("data-collapsed", "true");
+            $(this).text("[+]");
+        }
+    });
+    
+    //***************************************************************** MÉTODOS
     /**
-     * Inicia el proceso
+     * Inicia pimba-bisor
      **/        
     this.go = function() {
-        
+
         /* Creamos físicamente cada widget desde el array de datos */
         self.createWidgets(self.dataWidgetOrigin);
 
@@ -578,55 +616,9 @@ var rZe = function (aOptions) {
         $( "#rze_popup_add" ).dialog();
         $( "#rze_popup_add_form [name='parent']").val(idWidget);
     }
-}
-    /**/
-
-$( document ).ready(function() {
-    /*
-     * Gestión de evento para click en botón de AÑADIR tarjeta
-     **/
-    $( "#btn_addWidget" ).click(function() {
-        oRZe.addDialog(0);
-    });
     
-    /*
-     * Gestión de evento para click en botón de ORDENAR WIDGET
-     **/
-    $( "#btn_orderWidgets" ).click(function() {
-        oRZe.widgetsRedraw();
-    }); 
-
-    /*
-     * Gestión de evento para cambio de perspectiva
-     **/
-    $("body").on('change', '#rze_perspectives', function() {
-        var optionSelect = $("#rze_perspectives select").val();
-        if ( parseInt(optionSelect) > 0) {
-            oRZe.clearDashboard();
-            //getPerspectiveData();
-            oRZe.cb_change_perspective(oRZe, $("#rze_perspectives select").val());
-
-        } else if (parseInt(optionSelect) == 0) {
-            oRZe.clearDashboard();
-        }
-        
-    });
-    /*
-     * Gestión de evento para click en botón de MINIMIZAR WIDGET
-     **/    
-    $("body").on("click",".hook", function(){
-        var status = $(this).attr("data-collapsed");
-        var idWidget = $(this).parent().attr("id");
-        
-        if (status == "true") {
-            oRZe.maximizeWidget(idWidget);
-            $(this).attr("data-collapsed", "false");
-            $(this).text("[-]");
+    this.setupEvents = function() {
             
-        } else if (status == "false") {
-            oRZe.minimizeWidget(idWidget);            
-            $(this).attr("data-collapsed", "true");
-            $(this).text("[+]");
-        }
-    });
-});
+    }
+
+}
