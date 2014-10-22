@@ -14,13 +14,16 @@ body{
 div,p,a{
     font-size: 10px;
 }
+
+.pimba_bisor_dashboard {
+    padding: 30px;
+}
 /* Container para el section area*/
 .rze_container{
-    margin: 0;
     padding: 0px 0 0px 0;
     background-color: #4d777a;
-    width: 100%;
-    min-height: 900px;
+    width: 95%;
+    min-height: 600px;
     position: relative;
     border-top: solid 3px #0266c8;
     border-bottom: solid 3px #0266c8;
@@ -37,12 +40,13 @@ div,p,a{
     float: left;
     width: auto;
     margin: 10px 10px 0px 20px;
-    padding: 0 0 10px 0;
+    padding: 10px 10px 10px 10px;
     height: auto;
     overflow: hidden;
-    -moz-border-radius: 8px 8px 8px 8px;
-    -webkit-border-radius: 8px 8px 8px 8px;
-    border-radius: 8px 8px 8px 8px;
+    -moz-border-radius: 4px 4px 4px 4px;
+    -webkit-border-radius: 4px 4px 4px px;
+    border-radius: 4px 4px 4px 4px;
+    font-size: 14px;
 }
 
 
@@ -52,13 +56,12 @@ div,p,a{
 }
 
 .rze_widget > div.move{
-    position: absolute;
-    width: 15px;
-    height: 100%;
-    border-right: solid 1px #d0d0d0;
-    border-bottom: solid 1px #d0d0d0;
-    color: white;
+    width: 20px;
+    height: 20px;
     z-index: 999;
+    color: #888;
+    font-size: 16px;
+    float: left;
 }
 
 .rze_widget > div.move:hover{
@@ -79,7 +82,30 @@ div,p,a{
     margin: 0;
     cursor: pointer;
 }
-
+.rze_widget > div.edit{
+    width: 20px;
+    height: 20px;
+    float: left;
+    color: #888;
+    font-size: 16px;
+    cursor:pointer;
+}
+.rze_widget > div.add{
+    width: 20px;
+    height: 20px;
+    float: left;
+    color: #888;
+    font-size: 16px;
+    cursor:pointer;
+}
+.rze_widget > div.delete{
+    width: 20px;
+    height: 20px;
+    float: left;
+    color: #888;
+    font-size: 16px;
+    cursor:pointer;
+}
 .rze_widget_dragging{
     border: solid 3px #ccc;
     cursor: move;
@@ -96,11 +122,11 @@ div,p,a{
     background-color: red;
 }
 /* Depths*/
-.depth_0 > div.move{ background-color: #0266C8;}
-.depth_1 > div.move{ background-color: #F90101;}
-.depth_2 > div.move{ background-color: #F2B50F;}
-.depth_3 > div.move{ background-color: #00933B;}
-.depth_4 > div.move{ background-color: #404040;}
+.depth_0 > div.move{}
+.depth_1 > div.move{}
+.depth_2 > div.move{}
+.depth_3 > div.move{}
+.depth_4 > div.move{}
 
 canvas{
     z-index:9999;

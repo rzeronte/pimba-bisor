@@ -14,7 +14,17 @@
         <!-- theme default para las tarjetas -->
         <link rel="stylesheet" href="./pimba-bisor/css/theme-default.css" type="text/css">
         
-        <!-- Demo Fake App con Pimba-bisor -->
+        <!-- Bootstrap CDN -->
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+        <!-- *********************Demo Fake App con Pimba-bisor **************** -->
         <script type="text/javascript">
 
             var pimbaBisor;     // objeto PimbaBisor
@@ -47,9 +57,9 @@
              **/
             function fakePrivatePimbasProject(sessionId) {
                 var pimbaConfig = {
-                    'url_userData'            : "http://93.156.34.198:8080/api/users",
-                    'url_getPerspectiveCards' : "http://93.156.34.198:8080/api/perspectives",
-                    'url_updateCards'         : "http://93.156.34.198:8080/api/cards"
+                    'PIMBA_API_USERS'        : "http://93.156.34.198:8080/api/users",
+                    'PIMBA_API_PERSPECTIVES' : "http://93.156.34.198:8080/api/perspectives",
+                    'PIMBA_API_CARDS'        : "http://93.156.34.198:8080/api/cards"
                 };
 
                 /* Callbacks de eventos:
@@ -68,7 +78,7 @@
                     'cb_init': function (objBisor) {
                             $.ajax({
                                 type: 'GET',
-                                url: pimbaConfig["url_userData"],
+                                url: pimbaConfig["PIMBA_API_USERS"],
                                 success: function(data) {
                                     /*Actualización de select del pimba-bisor*/
                                     objBisor.fillSelectPerspectives(data.perspectives);
@@ -83,7 +93,7 @@
                     'cb_change_perspective': function (objBisor, id_perspective) {
                         $.ajax({
                             type: 'GET',
-                            url: pimbaConfig["url_getPerspectiveCards"] + "/" + id_perspective,
+                            url: pimbaConfig["PIMBA_API_PERSPECTIVES"] + "/" + id_perspective,
                             success: function(data) {
                                 /* Establece datos de tarjetas y refresca el dashboard*/
                                 objBisor.setJSONDataWidgets(data);
@@ -98,7 +108,7 @@
                     'cb_update_widget': function(objBisor, dataWidget) {
                         $.ajax({
                             type: 'PUT',
-                            url: pimbaConfig["url_updateCards"] + "/" + dataWidget["idWidget"],
+                            url: pimbaConfig["PIMBA_API_CARDS"] + "/" + dataWidget["idWidget"],
                             data: {
                                 'parent': dataWidget["to"]
                             },
@@ -110,6 +120,55 @@
                                 console.log("Error cb_update_widget");
                             }
                         }); 
+                    },
+                    'cb_edit_widget': function(objBisor, dataWidget) {
+                        $.ajax({
+                            type: 'PUT',
+                            url: pimbaConfig["PIMBA_API_CARDS"] + "/" + dataWidget["_id"],
+                            data: {
+                                'parent'      : dataWidget["parent"],
+                                'title'       : dataWidget["title"],
+                                'description' : dataWidget["description"]
+                            },
+                            success: function(data) {
+                                /* Establece datos de tarjetas y refresca el dashboard*/
+                            },beforeSend: function (xhr) {
+                                xhr.setRequestHeader ("Authorization", "Bearer " + sessionId);
+                            },error: function(){
+                                console.log("Error cb_edit_widget");
+                            }
+                        });                         
+                    },
+                    'cb_create_widget': function(objBisor, dataWidget) {
+                        $.ajax({
+                            type: 'POST',
+                            url: pimbaConfig["PIMBA_API_CARDS"],
+                            data: {
+                                'parent'      : dataWidget["parent"],
+                                'title'       : dataWidget["title"],
+                                'description' : dataWidget["description"]
+                            },
+                            success: function(data) {
+                                /* Establece datos de tarjetas y refresca el dashboard*/
+                            },beforeSend: function (xhr) {
+                                xhr.setRequestHeader ("Authorization", "Bearer " + sessionId);
+                            },error: function(){
+                                console.log("Error cb_create_widget");
+                            }
+                        });                         
+                    },
+                    'cb_delete_widget': function(objBisor, dataWidget) {
+                        $.ajax({
+                            type: 'DELETE',
+                            url: pimbaConfig["PIMBA_API_CARDS"] + "/" + dataWidget["_id"],
+                            success: function(data) {
+                                /* Establece datos de tarjetas y refresca el dashboard*/
+                            },beforeSend: function (xhr) {
+                                xhr.setRequestHeader ("Authorization", "Bearer " + sessionId);
+                            },error: function(){
+                                console.log("Error cb_delete_widget");
+                            }
+                        });                            
                     }
                 };
                 
@@ -125,7 +184,9 @@
         </div>
         
         <!-- Componente RZE -->
-        <div class="rze_container"></div>
+        <div class="pimba_bisor_dashboard">
+            <div class="rze_container"></div>            
+        </div>
         <!-- Fin RZE-->
     </body> 
 </html>
