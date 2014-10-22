@@ -388,7 +388,7 @@ var PimbaBisor = function (aOptions) {
     * Añade opciones al select de perspectivas desde userData
     */
     this.fillSelectPerspectives = function(perspectives) {
-        $("#rze_perspectives select").append(new Option('--Seleccione perspectiva--', 0, false, false));        
+        $("#rze_perspectives select").append(new Option('Select perspective', 0, false, false));        
         for (var i=0; i<perspectives.length;i++) {
             $("#rze_perspectives select").append(new Option('Perspective #'+perspectives[i], perspectives[i], false, false));        
         }
@@ -600,7 +600,6 @@ var PimbaBisor = function (aOptions) {
                     description : description,
                     parent     : parentId           
                 });
-                self.addWidget(parentId, 0, title, description);
             }
             
             $("#rze_popup_add").dialog("close");
@@ -655,6 +654,12 @@ var PimbaBisor = function (aOptions) {
         self.cb_delete_widget(self, {
             _id : idWidget 
         });        
+    }
+    
+    /* Inserta la información de un widget en el array donde corresponda */
+    this.insertWidgetData = function(widgetData){
+        var parentId = widgetData["parent"];
+        
     }
        
     /* Lanzamos al final una vez definidos todos los métodos*/

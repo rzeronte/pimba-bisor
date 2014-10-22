@@ -28,7 +28,7 @@
         <script type="text/javascript">
 
             var pimbaBisor;     // objeto PimbaBisor
-            window.onload = login("pimba", "pimba");
+            window.onload = login("pimba2", "pimba2");
 
             /*
              * Ejemplo básico Ajax para logeo en la API Pimba
@@ -152,7 +152,8 @@
                                 'description' : dataWidget["description"]
                             },
                             success: function(data) {
-                                /* Establece datos de tarjetas y refresca el dashboard*/
+                                /*Añadimos el widget */
+                                objBisor.addWidget(data);
                             },beforeSend: function (xhr) {
                                 xhr.setRequestHeader ("Authorization", "Bearer " + sessionId);
                             },error: function(){
