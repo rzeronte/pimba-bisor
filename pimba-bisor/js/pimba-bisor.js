@@ -33,13 +33,8 @@ var PimbaBisor = function (aOptions) {
         /****************************************************  Eventos JQuery*/
         /** Gestión de evento para click en botón de AÑADIR tarjeta**/
         $( "#btn_addWidget" ).click(function() {
-            oRZe.addDialog(0);
+            self.addDialog(0);
         });
-
-        /** Gestión de evento para click en botón de ORDENAR WIDGET**/
-        $( "#btn_orderWidgets" ).click(function() {
-            oRZe.widgetsRedraw();
-        }); 
 
         /** Gestión de evento para cambio de perspectiva**/
         $("body").on('change', '#rze_perspectives', function() {
