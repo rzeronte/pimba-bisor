@@ -86,7 +86,7 @@ var PimbaBisor = function (aOptions) {
             drop: function (event, ui) {
 
                 var divFromParent = $(".rze_container > #"+self.currentWidgetDragging);
-                // Si no encontramos en el dashboard es que movemos de widget a wiget
+                // Si no encontramos en el dashboard, es que el widget no estaba ya en el dashboard
                 if (divFromParent.length == 0) {
                    /* callback de actualización de widget*/
                    self.cb_update_widget(self, {
@@ -387,6 +387,7 @@ var PimbaBisor = function (aOptions) {
     * Añade opciones al select de perspectivas desde userData
     */
     this.fillSelectPerspectives = function(perspectives) {
+        $("#rze_perspectives select").append(new Option('--Seleccione perspectiva--', 0, false, false));        
         for (var i=0; i<perspectives.length;i++) {
             $("#rze_perspectives select").append(new Option('Perspective #'+perspectives[i], perspectives[i], false, false));        
         }
@@ -408,8 +409,10 @@ var PimbaBisor = function (aOptions) {
         self.addWidget(widgetData);
          
         var widgetsChildren = widgetData["childs"];
-        for (var j=0; j < widgetsChildren.length ; j++){
-            self.createWidgetsForWidget(widgetsChildren[j]);
+        if (widgetsChildren) {
+            for (var j=0; j < widgetsChildren.length ; j++){
+                self.createWidgetsForWidget(widgetsChildren[j]);
+            }
         }
     }
 
@@ -426,7 +429,6 @@ var PimbaBisor = function (aOptions) {
         widget.css("width", 30);
         
         widget.find(".rze_widget").hide();
-        widget.find(".rze_info").hide();
 
         widget.resizable("option", "disabled", true );
     }
@@ -444,7 +446,6 @@ var PimbaBisor = function (aOptions) {
         widget.css("width", "auto");
 
         widget.find(".rze_widget").show();
-        widget.find(".rze_info").show();
         
         widget.resizable("option", "disabled", false );
         
@@ -493,6 +494,7 @@ var PimbaBisor = function (aOptions) {
         var template = $("#pimba-bisor-template");
         var widget = $("#" + widgetData['_id']);
         
+        widget.find(".bisor-theme-default").remove();
         widget.append($(template).html());
         
         /* Rastreamos el array de widget para sustituir en el template */

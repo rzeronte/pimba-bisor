@@ -47,8 +47,9 @@
              **/
             function fakePrivatePimbasProject(sessionId) {
                 var pimbaConfig = {
-                    'url_userData'           :"http://93.156.34.198:8080/api/users",
-                    'url_getPerspectiveCards':"http://93.156.34.198:8080/api/perspectives"
+                    'url_userData'            : "http://93.156.34.198:8080/api/users",
+                    'url_getPerspectiveCards' : "http://93.156.34.198:8080/api/perspectives",
+                    'url_updateCards'         : "http://93.156.34.198:8080/api/cards"
                 };
 
                 /* Callbacks de eventos:
@@ -74,7 +75,7 @@
                                 },beforeSend: function (xhr) {
                                     xhr.setRequestHeader ("Authorization", "Bearer " + sessionId);
                                 },error: function(){
-                                    console.log("Error getCardsData");
+                                    console.log("Error cb_init");
                                 }
                             });     
                         },
@@ -89,12 +90,26 @@
                             },beforeSend: function (xhr) {
                                 xhr.setRequestHeader ("Authorization", "Bearer " + sessionId);
                             },error: function(){
-                                console.log("Error getCardsData");
+                                console.log("Error cb_change_perspective");
                             }
                         });     
                     },
                     /* callback para cambio de información en wiget (drop válido) */
                     'cb_update_widget': function(objBisor, dataWidget) {
+                        $.ajax({
+                            type: 'PUT',
+                            url: pimbaConfig["url_updateCards"] + "/" + dataWidget["idWidget"],
+                            data: {
+                                'parent': dataWidget["to"]
+                            },
+                            success: function(data) {
+                                /* Establece datos de tarjetas y refresca el dashboard*/
+                            },beforeSend: function (xhr) {
+                                xhr.setRequestHeader ("Authorization", "Bearer " + sessionId);
+                            },error: function(){
+                                console.log("Error cb_update_widget");
+                            }
+                        }); 
                     }
                 };
                 
