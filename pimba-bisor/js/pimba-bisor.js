@@ -48,18 +48,18 @@ var PimbaBisor = function (aOptions) {
         
         /** Gestión de evento para añadir widget**/
         $("body").on('click', '.add', function() {
-            var parentId = $(this).parent().attr("id");
+            var parentId = $(this).parent().parent().attr("id");
             self.addWidgetDialog(parentId);
         });
         
         /** Gestión de evento para borrar widget**/
         $("body").on('click', '.delete', function() {
-            var widgetId = $(this).parent().attr("id");
+            var widgetId = $(this).parent().parent().attr("id");
             self.deleteWidget(widgetId);
         });               
         /** Gestión de evento para editar widget**/
         $("body").on('click', '.edit', function() {
-            var idWidget = $(this).parent().attr("id");
+            var idWidget = $(this).parent().parent().attr("id");
             self.editWidgetDialog(idWidget);
         });      
         
@@ -627,11 +627,13 @@ var PimbaBisor = function (aOptions) {
     
     this.editWidgetDialog = function(idWidget) {
         var widget = $("#"+idWidget );
+        var content = $("#"+idWidget + " .content");
+
         $("#rze_popup_add_form").get(0).reset();
         
         var id          = widget.attr("id");
-        var title       = $("#"+idWidget + " [data-pimba-field='title']").html();
-        var description = $("#"+idWidget + " [data-pimba-field='description']").html();
+        var title       = content.find("[data-pimba-field='title']").html();
+        var description = content.find("[data-pimba-field='description']").html();
         var parent      = widget.parent().attr("id");
         
         $("#rze_popup_add").show();
