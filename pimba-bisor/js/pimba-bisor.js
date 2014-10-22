@@ -248,32 +248,46 @@ var PimbaBisor = function (aOptions) {
      * Configura y habilita un widget 
      **/    
     this.setupWidget = function(obj) {
+        var divActions = $("<div>", {
+            "class": 'actions'
+        });
+        $(obj).append(divActions);           
+
+        var divContent = $("<div>", {
+            "class": 'content'
+        });
+        $(obj).append(divContent);           
+
         if (!self._isWidgetFirstDepth(obj.attr("id"))) {
             /* Opción de eliminar */
             var div = $("<div>", {
-                "class": 'delete glyphicon glyphicon-remove-circle'
+                "class": 'delete glyphicon glyphicon-remove-circle',
+                "title": 'Delete card'
             });
-            $(obj).prepend(div);           
+            $(divActions).prepend(div);           
         }
 
         /* Opción de editar */
         var div = $("<div>", {
-            "class": 'edit glyphicon glyphicon-edit'
+            "class": 'edit glyphicon glyphicon-edit',
+            "title": 'Edit card'
         });
-        $(obj).prepend(div);
+        $(divActions).prepend(div);
 
         /* Opción de añadir */
         var div = $("<div>", {
-            "class": 'add glyphicon glyphicon-credit-card'
+            "class": 'add glyphicon glyphicon-credit-card',
+            "title": 'Add card'
         });
-        $(obj).prepend(div);
+        $(divActions).prepend(div);
 
         if (!self._isWidgetFirstDepth(obj.attr("id"))) {
             /* Añadimos Tooltip de arrastre (la banza izquierda) */
             var div = $("<div>", {
-                "class": 'move glyphicon glyphicon-move'
+                "class": 'move glyphicon glyphicon-move',
+                "title": 'Move card'
             });
-            $(obj).prepend(div);
+            $(divActions).prepend(div);
         }
         
         $(obj).resizable();
@@ -481,7 +495,7 @@ var PimbaBisor = function (aOptions) {
         var widget = $("#" + widgetData['_id']);
         
         widget.find(".bisor-theme-default").remove();
-        widget.append($(template).html());
+        widget.children(".content").html($(template).html());
         
         /* Rastreamos el array de widget para sustituir en el template */
         for (var i in widgetData){

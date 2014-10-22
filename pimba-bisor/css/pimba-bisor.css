@@ -10,11 +10,6 @@ body{
     padding: 0;
 }
 
-
-div,p,a{
-    font-size: 10px;
-}
-
 .pimba_bisor_dashboard {
     padding: 30px;
 }
@@ -49,6 +44,29 @@ div,p,a{
     font-size: 14px;
 }
 
+.rze_widget .actions {
+    width: 20px;
+    height: auto;
+    float: left;
+    font-size: 16px !important;
+    cursor: pointer;
+}
+
+.rze_widget .content {
+    width: auto;
+    height: 100%;
+    margin: 0 0 0 5px;
+    padding: 0;
+    float: left;
+    clear: right;
+}
+.rze_widget .content p,
+.rze_widget .content h1,
+.rze_widget .content h2
+{
+    margin: 0;
+    padding: 0;
+}
 
 .rze_widget .rze_widget{
     margin-top: 10px;
@@ -60,34 +78,19 @@ div,p,a{
     height: 20px;
     z-index: 999;
     color: #888;
-    font-size: 16px;
     float: left;
+    cursor: move;
 }
 
 .rze_widget > div.move:hover{
     cursor: move;
 }
 
-.rze_widget > div.hook{
-    float: right;
-    width: 20px;
-    height: 20px;
-    border-left: solid 1px #d0d0d0;
-    border-bottom: solid 1px #d0d0d0;
-    color: white;
-    background-color: gray;
-    text-align: center;
-    font-size: 14px;
-    padding: 0;
-    margin: 0;
-    cursor: pointer;
-}
 .rze_widget > div.edit{
     width: 20px;
     height: 20px;
     float: left;
     color: #888;
-    font-size: 16px;
     cursor:pointer;
 }
 .rze_widget > div.add{
@@ -95,7 +98,6 @@ div,p,a{
     height: 20px;
     float: left;
     color: #888;
-    font-size: 16px;
     cursor:pointer;
 }
 .rze_widget > div.delete{
@@ -103,9 +105,9 @@ div,p,a{
     height: 20px;
     float: left;
     color: #888;
-    font-size: 16px;
     cursor:pointer;
 }
+
 .rze_widget_dragging{
     border: solid 3px #ccc;
     cursor: move;
