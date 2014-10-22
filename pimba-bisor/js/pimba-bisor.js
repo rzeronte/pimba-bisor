@@ -390,7 +390,7 @@ var PimbaBisor = function (aOptions) {
     this.fillSelectPerspectives = function(perspectives) {
         $("#rze_perspectives select").append(new Option('Select perspective', 0, false, false));        
         for (var i=0; i<perspectives.length;i++) {
-            $("#rze_perspectives select").append(new Option(perspectives[i]['description'], perspectives[i]['_id'], false, false));        
+            $("#rze_perspectives select").append(new Option(perspectives[i]['title'], perspectives[i]['_id'], false, false));        
         }
     }
     

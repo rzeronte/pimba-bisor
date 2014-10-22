@@ -81,7 +81,6 @@
                                 type: 'GET',
                                 url: pimbaConfig["PIMBA_API_USERS"],
                                 success: function(data) {
-                                    console.log(data);
                                     /*Actualización de select del pimba-bisor*/
                                     objBisor.fillSelectPerspectives(data.perspectives);
                                 },beforeSend: function (xhr) {
@@ -98,6 +97,7 @@
                             url: pimbaConfig["PIMBA_API_PERSPECTIVES"] + "/" + id_perspective,
                             success: function(data) {
                                 /* Establece datos de tarjetas y refresca el dashboard*/
+                                console.log(data);
                                 objBisor.setJSONDataWidgets(data);
                             },beforeSend: function (xhr) {
                                 xhr.setRequestHeader ("Authorization", "Bearer " + sessionId);
