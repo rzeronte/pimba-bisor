@@ -81,6 +81,7 @@
                                 type: 'GET',
                                 url: pimbaConfig["PIMBA_API_USERS"],
                                 success: function(data) {
+                                    console.log(data);
                                     /*Actualización de select del pimba-bisor*/
                                     objBisor.fillSelectPerspectives(data.perspectives);
                                 },beforeSend: function (xhr) {

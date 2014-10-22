@@ -355,9 +355,9 @@ var PimbaBisor = function (aOptions) {
             drop: function (event, ui) {
                 /* callback de actualización */
                 self.cb_update_widget(self, {
-                    'idWidget'    : self.currentWidgetDragging,
-                    'to': self.currentWidgetOn,
-                    'from': (self.currentFatherOfWidgetDragging != null) ? self.currentFatherOfWidgetDragging.attr("id"): null
+                    'idWidget': self.currentWidgetDragging,
+                    'to'      : self.currentWidgetOn,
+                    'from'    : (self.currentFatherOfWidgetDragging != null) ? self.currentFatherOfWidgetDragging.attr("id"): null
                 });
                 
                 self.changeWidgetParentInArray(self.currentWidgetDragging, self.currentWidgetOn);
@@ -390,7 +390,7 @@ var PimbaBisor = function (aOptions) {
     this.fillSelectPerspectives = function(perspectives) {
         $("#rze_perspectives select").append(new Option('Select perspective', 0, false, false));        
         for (var i=0; i<perspectives.length;i++) {
-            $("#rze_perspectives select").append(new Option('Perspective #'+perspectives[i], perspectives[i], false, false));        
+            $("#rze_perspectives select").append(new Option(perspectives[i]['description'], perspectives[i]['_id'], false, false));        
         }
     }
     
@@ -620,6 +620,8 @@ var PimbaBisor = function (aOptions) {
 
         $( "#rze_popup_add" ).show();
         $( "#rze_popup_add" ).dialog();
+        $( "#rze_popup_add" ).dialog({"title": "Add Card"});
+
         $( "#rze_popup_add_form [name='parent']").val(parentId);
         $("#rze_popup_add_form .submit").attr("value", "Create in #"+parentId);
     }
