@@ -64,13 +64,14 @@
 
                 /* Callbacks de eventos:
                  * 
-                 * Son funciones que permiten customizar el comportamiento de una app que utilice pimba-bisor
-                 * pimba-bisor ejecutará estas funciones en momentos determinados según el tipo de callback que
-                 * sea.
+                 * Son funciones que permiten customizar el comportamiento de una
+                 *  app que utilice pimba-bisor pimba-bisor ejecutará estas
+                 *  unciones en momentos determinados según el tipo de callback
+                 *  que sea.
                  * 
-                 * En nuestro caso usaremos estos callbacks para negociar contra api-pimba-server y actualizar
-                 * pimba-bisor a nuestro antojo
-                 * */
+                 * En nuestro caso usaremos estos callbacks para negociar contra
+                 * api-pimba-server y actualizar  pimba-bisor a nuestro antojo
+                 */
                 aOptions = {
                     showSelectPerspective: true,
                     templateWidget: 'pimba-bisor/templates/default.html',
@@ -104,7 +105,7 @@
                             }
                         });     
                     },
-                    /* callback para cambio de información en wiget (drop válido) */
+                    /* callback para cambio de posición en un wiget (drop válido) */
                     'cb_update_widget': function(objBisor, dataWidget) {
                         $.ajax({
                             type: 'PUT',
@@ -121,6 +122,7 @@
                             }
                         }); 
                     },
+                    /* callback para la edición de información de un widget*/
                     'cb_edit_widget': function(objBisor, dataWidget) {
                         $.ajax({
                             type: 'PUT',
@@ -139,6 +141,7 @@
                             }
                         });                         
                     },
+                    /* callback para la creación de un widget */
                     'cb_create_widget': function(objBisor, dataWidget) {
                         $.ajax({
                             type: 'POST',
@@ -157,6 +160,7 @@
                             }
                         });                         
                     },
+                    /* callback para eliminación de un widget */
                     'cb_delete_widget': function(objBisor, dataWidget) {
                         $.ajax({
                             type: 'DELETE',
@@ -172,6 +176,7 @@
                     }
                 };
                 
+                /* Inicializamos el objeto bisor */
                 pimbaBisor = new PimbaBisor(aOptions);
              }
         </script>

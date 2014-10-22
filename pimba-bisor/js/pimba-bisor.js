@@ -569,23 +569,26 @@ var PimbaBisor = function (aOptions) {
             
             /* Diferenciamos si es nuevo o editamos, para diferenciar callbacks */
             if (id != "") {
-                /* callback de edición de información de widget*/
-                self.cb_edit_widget(self, {
-                    _id         : id, 
+               /* callback de edición de información de widget*/
+               var widgetData = {
+                   _id         : id, 
+                   title       : title,
+                   description : description,
+                   parent     : parentId           
+               };
+               
+               self.cb_edit_widget(self, widgetData);
+               self.loadDataInTemplateWidget(widgetData);
+            } else {
+                /* callback de creación de widget*/
+                self.cb_create_widget(self, {
                     title       : title,
                     description : description,
                     parent     : parentId           
                 });
-            } else {
-                    self.cb_create_widget(self, {
-                    title       : title,
-                    description : description,
-                    parent     : parentId           
-                });            
+                self.addWidget(parentId, 0, title, description);
             }
-
             
-            //self.addWidget(parentId, 0, title, description);
             $("#rze_popup_add").dialog("close");
 
             
