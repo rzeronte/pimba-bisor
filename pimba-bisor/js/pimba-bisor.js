@@ -1,4 +1,5 @@
 var PimbaBisor = function (aOptions) {
+    
     var self = this;
     
     /* Propiedades */
@@ -12,53 +13,66 @@ var PimbaBisor = function (aOptions) {
     this.mouseX                        = 0;
     this.mouseY                        = 0;
     this.maxDepth                      = 4;
+    this.showSelectPerspective         = aOptions['showSelectPerspective'];
     
     /* Callbacks para refresco de información*/
     this.cb_init                       = aOptions['cb_init'];
     this.cb_change_perspective         = aOptions['cb_change_perspective'];
+    this.cb_update_widget              = aOptions['cb_update_widget'];
+    this.templateWidget                = aOptions['templateWidget'];
     
-    /* Ejecutamos callback de inicio */
-    this.cb_init(self);
-
-    /****************************************************  Eventos JQuery*/
-    /** Gestión de evento para click en botón de AÑADIR tarjeta**/
-    $( "#btn_addWidget" ).click(function() {
-        oRZe.addDialog(0);
-    });
-
-    /** Gestión de evento para click en botón de ORDENAR WIDGET**/
-    $( "#btn_orderWidgets" ).click(function() {
-        oRZe.widgetsRedraw();
-    }); 
-
-    /** Gestión de evento para cambio de perspectiva**/
-    $("body").on('change', '#rze_perspectives', function() {
-        var optionSelect = $("#rze_perspectives select").val();
-        if ( parseInt(optionSelect) > 0) {
-            self.clearDashboard();
-            self.cb_change_perspective(self, $("#rze_perspectives select").val());
-        } else if (parseInt(optionSelect) == 0) {
-            self.clearDashboard();
+    this.constructor = function(aOptions) {
+        /*Dibujamos o no el intercambiador de perspectivas*/
+        if (aOptions['showSelectPerspective'] === true) {
+            self.drawSelectPerspectives(); 
         }
+        
+        /* Ejecutamos callback de inicio */
+        this.cb_init(self); 
+        
+        /****************************************************  Eventos JQuery*/
+        /** Gestión de evento para click en botón de AÑADIR tarjeta**/
+        $( "#btn_addWidget" ).click(function() {
+            oRZe.addDialog(0);
+        });
 
-    });
-    /** Gestión de evento para click en botón de MINIMIZAR WIDGET**/    
-    $("body").on("click",".hook", function(){
-        var status = $(this).attr("data-collapsed");
-        var idWidget = $(this).parent().attr("id");
+        /** Gestión de evento para click en botón de ORDENAR WIDGET**/
+        $( "#btn_orderWidgets" ).click(function() {
+            oRZe.widgetsRedraw();
+        }); 
 
-        if (status == "true") {
-            self.maximizeWidget(idWidget);
-            $(this).attr("data-collapsed", "false");
-            $(this).text("[-]");
+        /** Gestión de evento para cambio de perspectiva**/
+        $("body").on('change', '#rze_perspectives', function() {
+            var optionSelect = $("#rze_perspectives select").val();
+            if ( parseInt(optionSelect) > 0) {
+                self.clearDashboard();
+                self.cb_change_perspective(self, $("#rze_perspectives select").val());
+            } else if (parseInt(optionSelect) == 0) {
+                self.clearDashboard();
+            }
 
-        } else if (status == "false") {
-            self.minimizeWidget(idWidget);            
-            $(this).attr("data-collapsed", "true");
-            $(this).text("[+]");
-        }
-    });
-    
+        });
+        /** Gestión de evento para click en botón de MINIMIZAR WIDGET**/    
+        $("body").on("click",".hook", function(){
+            var status = $(this).attr("data-collapsed");
+            var idWidget = $(this).parent().attr("id");
+
+            if (status == "true") {
+                self.maximizeWidget(idWidget);
+                $(this).attr("data-collapsed", "false");
+                $(this).text("[-]");
+
+            } else if (status == "false") {
+                self.minimizeWidget(idWidget);            
+                $(this).attr("data-collapsed", "true");
+                $(this).text("[+]");
+            }
+        });
+        
+        /* Cargámos el template*/
+        self.loadTemplateWidget(aOptions['templateWidget']);
+    }
+
     //***************************************************************** MÉTODOS
     /**
      * Inicia pimba-bisor
@@ -75,11 +89,19 @@ var PimbaBisor = function (aOptions) {
         $(".rze_container").droppable({
             accept: '.rze_widget',
             drop: function (event, ui) {
+
                 var divFromParent = $(".rze_container > #"+self.currentWidgetDragging);
-                if (divFromParent.length > 0) {
-                    console.log("El Div ya está en el desktop no se hace nada");
-                } else {
+                // Si no encontramos en el dashboard es que movemos de widget a wiget
+                if (divFromParent.length == 0) {
+                   /* callback de actualización de widget*/
+                   self.cb_update_widget(self, {
+                        'idWidget' : self.currentWidgetDragging,
+                        'to'       : self.currentWidgetOn,
+                        'from'     : (self.currentFatherOfWidgetDragging != null)?self.currentFatherOfWidgetDragging.attr("id"):null
+                    });
+                    
                     self.changeWidgetParentInArray(self.currentWidgetDragging, false);
+                    
                     $("#"+self.currentWidgetDragging).appendTo(".rze_container");
                     $("#"+self.currentWidgetDragging).attr("position", "absolute");
 
@@ -91,7 +113,7 @@ var PimbaBisor = function (aOptions) {
                         self.setClassByDataDepth();
 
                         self.currentFatherOfWidgetDragging = null;
-                    }                    
+                    }
                 }
             }
         });
@@ -109,7 +131,38 @@ var PimbaBisor = function (aOptions) {
 
         self.createDialog();
     }
+
+    /*
+     * Carga el template para los widgets
+     **/
+    this.loadTemplateWidget = function(urlTemplate) {
+        $.ajax({
+            type: 'GET',
+            url: urlTemplate,
+            success: function(data) {
+                $(".rze_container").after(data);
+            },error: function(){
+                console.log("Error loadTemplateWidget");
+            }
+        });     
+    }
     
+    /*
+     * Dibuja el select de perspectivas
+     **/
+    this.drawSelectPerspectives = function() {
+        var tagFormSelectPerspectives = $("<form>", {
+            "id"    : "rze_perspectives"
+        });
+        
+        /* Input para título */
+        var select = document.createElement('select');
+        
+        $(select).appendTo(tagFormSelectPerspectives);
+        $(".rze_container").before(tagFormSelectPerspectives);
+
+    }
+        
     /*
      * Establece los datos desde un array json
      **/
@@ -241,41 +294,13 @@ var PimbaBisor = function (aOptions) {
         });
         $(obj).prepend(div);
 
-        $( obj ).append("<span class='identifier' title='Widget'>" + obj.attr("id")+"</span>");   // Debug;
-
-        $(obj).find("span").tooltip({
-            show: {
-                effect: "slideDown",
-                delay: 250
-            },
-            content: function() {
-                var html = "";
-                var currentDepth = $(obj).attr("data-depth");
-                html+="Identificador: " + obj.attr("id") + "<br/>";
-                html+="Estado Draggable: " + $( obj ).attr("data-draggable") + "<br/>";
-                html+="---<br/>";
-                html+="Nº Hijos: " + $( obj ).children(".rze_widget").length + "<br/>";
-                html+="Nº Descendientes: " + $( obj ).find(".rze_widget").length + "<br/>";
-                html+="---<br/>";
-                html+="Profundidad: " + currentDepth + "<br/>";
-                html+="---<br/>";
-                html+="Nº Depth uno: " + $( obj ).find("div[data-depth='"+parseInt(parseInt(currentDepth)+1)+"']" ).length + "<br/>";
-                html+="Nº Depth dos: " + $( obj ).find("div[data-depth='"+parseInt(parseInt(currentDepth)+2)+"']" ).length + "<br/>";
-                html+="Nº Depth tres: " + $( obj ).find("div[data-depth='"+parseInt(parseInt(currentDepth)+3)+"']" ).length + "<br/>";
-                html+="Nº Depth cuatro: " + $( obj ).find("div[data-depth='"+parseInt(parseInt(currentDepth)+4)+"']" ).length + "<br/>";
-                return html;
-            }
-        });
-
-        self.setContextMenuForWidget(obj.attr("id"));
-        /* --------------------- Creamos la configuración draggable básica*/
         $(obj).resizable();
 
-        $( obj ).draggable({
-            snap:        ".containerDev",
+        $(obj).draggable({
+            snap       : ".containerDev",
             containment: ".rze_container",
-            handle:      "div.move",
-            zIndex:      10,
+            handle     : "div.move",
+            zIndex     : 10,
             start: function(event, ui) {
                 var idWidget = $(this).attr("id");
                 self.currentWidgetDragging = idWidget;
@@ -292,7 +317,6 @@ var PimbaBisor = function (aOptions) {
                 }
 
                 $(".rze_widget").css("overflow", "visible");
-
                 $(this).find(".rze_widget").hide();
             },
             stop: function() {
@@ -300,19 +324,14 @@ var PimbaBisor = function (aOptions) {
                 self.currentFatherOfWidgetDragging = null;
                 $(this).draggable( "option", "zIndex", 10 );
                 $(this).removeClass("rze_widget_dragging");
-
                 $(this).find(".rze_widget").show();
-
                 $(".rze_widget").css("overflow", "hidden");
-
-                //$(this).find(".rze_widget").fadeIn();
             }
         });
 
         /*-----------------------Creamos la configuración droppable básica*/
         $(obj).droppable({
             accept: '.rze_widget',
-            //hoverClass: "hoverClass",
             over: function (event, ui) {
                 var idWidget = $(this).attr("id");
                 self.currentWidgetOn = idWidget;
@@ -336,9 +355,15 @@ var PimbaBisor = function (aOptions) {
                 }
 
                 self.refreshCascadeSelectWidgets();
-
             },
             drop: function (event, ui) {
+                /* callback de actualización */
+                self.cb_update_widget(self, {
+                    'idWidget'    : self.currentWidgetDragging,
+                    'to': self.currentWidgetOn,
+                    'from': (self.currentFatherOfWidgetDragging != null) ? self.currentFatherOfWidgetDragging.attr("id"): null
+                });
+                
                 self.changeWidgetParentInArray(self.currentWidgetDragging, self.currentWidgetOn);
                 $("#"+self.currentWidgetOn).append($("#"+self.currentWidgetDragging));
 
@@ -358,6 +383,7 @@ var PimbaBisor = function (aOptions) {
 
                 self.depthHover = new Array();    
                 self.refreshCascadeSelectWidgets();
+                
             }
         });
     }
@@ -384,12 +410,8 @@ var PimbaBisor = function (aOptions) {
      * recursivamente
      */
     this.createWidgetsForWidget = function(widgetData) {
-        self.addWidget(
-            (widgetData["parent"] == "undefined") ? "false":widgetData["parent"], 
-            widgetData["_id"],
-            widgetData["title"],
-            widgetData["description"]
-        );
+        self.addWidget(widgetData);
+         
         var widgetsChildren = widgetData["childs"];
         for (var j=0; j < widgetsChildren.length ; j++){
             self.createWidgetsForWidget(widgetsChildren[j]);
@@ -435,63 +457,17 @@ var PimbaBisor = function (aOptions) {
     }
 
     /**
-     * Crea el menú contextual para un widget
-     **/     
-    this.setContextMenuForWidget = function(idWidget) {
-    
-        $.contextMenu({
-            selector: '#'+ idWidget, 
-            callback: function(key, options) {
-                var idWidget = options.selector;
-                
-                if (key == "widget_status_delete") {
-                    $(idWidget).remove();
-                } else if (key == "widget_status_add") {
-                    self.addDialog($(idWidget).attr("id"));
-                    //self.addWidget($(idWidget).attr("id"), 0);
-                } else {
-                    $(idWidget).removeClass("widget_status_off");
-                    $(idWidget).removeClass("widget_status_wip");
-                    $(idWidget).removeClass("widget_status_ended");
-                    $(idWidget).removeClass("widget_status_problem");
-                    $(idWidget).removeClass("widget_status_blocked");
-
-                    $(idWidget).addClass(key);
-                }
-            },
-            items: {
-                "widget_status_off": {name: "Pendiente", icon: "off"},
-                "widget_status_wip": {name: "En proceso", icon: "wip"},
-                "widget_status_ended": {name: "Finalizado", icon: "ended"},
-                "sep1": "---------",
-                "widget_status_problem": {name: "Problema", icon: "problem"},
-                "widget_status_blocked": {name: "Bloqueado", icon: "blocked"},
-                "sep2": "---------",
-                "widget_status_delete": {name: "Eliminar", icon: "delete"},
-                "widget_status_add": {name: "Añadir tarjeta", icon: "add"},
-                "sep3": "---------",
-                "salir": {name: "Salir", icon: "quit"}
-            }
-        });        
-    }
-    
-    /**
      * Añade un widget, con un padre si es dado
      * Si parent != false, situa en dashboard
      * Si el Id Widget es 0, se autogenera automáticamente
      **/    
-    this.addWidget = function(idWidgetParent, idWidget, title, description){
+    this.addWidget = function(widgetData) {
+        var idWidget = widgetData["_id"];
+        var idWidgetParent = (widgetData["parent"] == "undefined") ? "false":widgetData["parent"];
+
         /* Si no se especifica ID se crea uno aleatorio e insertamos en array general*/
         if (idWidget === 0) {
             idWidget = self._randomIdentifiers(1111, 9999);
-            dataWidgetOrigin.push({
-                "widgetId": idWidget,
-                "data": {
-                    "parentId": idWidgetParent,
-                    "title": title, 
-                    "description": description
-                }
-            });
         }
         
         var divWidget = $("<div>", {
@@ -507,23 +483,31 @@ var PimbaBisor = function (aOptions) {
             divWidget.appendTo("#" + idWidgetParent)
         }
 
-        /* Añadimos capa info y cargamos datos en ellas*/
-        var divInfo = $("<div>", { "class": 'rze_info' });
-        var divInfoTitle = $("<div>", { "class": 'rze_title' });
-        var divInfoDescription = $("<div>", { "class": 'rze_desc' });
-        $(divInfo).prepend(divInfoTitle);
-        $(divInfo).prepend(divInfoDescription);
-        $(divWidget).prepend(divInfo);
-        divWidget.find(".rze_title").text(title);
-        divWidget.find(".rze_desc").text(description);
-        
         // Resto de configuraciones en el widget
         self.setupWidget(divWidget);
+        self.loadDataInTemplateWidget(widgetData);
       
         self.setClassByDataDepth();
         self.widgetsRedraw();
     }
 
+    /*
+     * Carga en un widget su template e inyecta sus datos en el
+     **/
+    this.loadDataInTemplateWidget = function(widgetData){
+        var template = $("#pimba-bisor-template");
+        var widget = $("#" + widgetData['_id']);
+        
+        widget.append($(template).html());
+        
+        /* Rastreamos el array de widget para sustituir en el template */
+        for (var i in widgetData){
+            if (typeof(widgetData[i]) != 'object') {
+               widget.find("[data-pimba-field='" + i + "']").text(widgetData[i]);
+            }
+        }
+    }
+    
     /**
      * Añade una perspectiva
      **/    
@@ -616,9 +600,7 @@ var PimbaBisor = function (aOptions) {
         $( "#rze_popup_add" ).dialog();
         $( "#rze_popup_add_form [name='parent']").val(idWidget);
     }
-    
-    this.setupEvents = function() {
-            
-    }
-
+       
+    /* Lanzamos al final una vez definidos todos los métodos*/
+    self.constructor(aOptions);
 }

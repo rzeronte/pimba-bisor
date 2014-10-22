@@ -10,25 +10,7 @@ body{
     padding: 0;
 }
 
-#header > h1{
-    color: #0266C8;
-    width: 100%;
-    font-weight: bold;
-}
 
-#header > form{
-    
-}
-#header > div{
-    margin-top: 20px;
-}
-
-#header > div.actions button{
-    font-size: 12px;
-    border: solid 1px #0266c8;
-    background-color: #0266c8;
-    color: white;
-}
 div,p,a{
     font-size: 10px;
 }
@@ -63,25 +45,12 @@ div,p,a{
     border-radius: 8px 8px 8px 8px;
 }
 
-.rze_widget > div.rze_info{
-    width: 90%;
-    margin: 20px 0 0 30px;
-}
-.rze_widget > div.rze_info > .rze_title{
-    font-weight: bold;
-    font-size: 14px;
-    margin-bottom: 10px;
-    color: #888888;
-}
 
-.rze_widget > div.rze_info > .rze_desc{
-    font-style: italic;
-    max-width: 200px;
-}
 .rze_widget .rze_widget{
     margin-top: 10px;
     margin-bottom: 10px;
 }
+
 .rze_widget > div.move{
     position: absolute;
     width: 15px;
@@ -110,15 +79,6 @@ div,p,a{
     margin: 0;
     cursor: pointer;
 }
-.rze_widget > span.identifier{
-    position: absolute;
-    left: 30px;
-    top: 0;
-    color: gray;
-    font-size: 12px;
-    font-weight: bold;
-    cursor: help;
-}
 
 .rze_widget_dragging{
     border: solid 3px #ccc;
@@ -141,24 +101,6 @@ div,p,a{
 .depth_2 > div.move{ background-color: #F2B50F;}
 .depth_3 > div.move{ background-color: #00933B;}
 .depth_4 > div.move{ background-color: #404040;}
-
-
-/* Estados */
-.widget_status_off{
-    background-color: #b3b3b3;
-}
-.widget_status_wip{
-    background-color: #eceb81;    
-}
-.widget_status_ended{
-    background-color: #8fe88f;        
-}
-.widget_status_problem{
-    background-color: #ecca81;        
-}
-.widget_status_blocked{
-    background-color: #ec8181;            
-}
 
 canvas{
     z-index:9999;
