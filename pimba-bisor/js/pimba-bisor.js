@@ -321,7 +321,7 @@ var PimbaBisor = function (aOptions) {
 
         /*-----------------------Creamos la configuración droppable básica*/
         $(obj).droppable({
-            accept: '.current',
+            accept: '.rze_widget',
             over: function (event, ui) {
                 var idWidget = $(this).attr("id");
                 self.currentWidgetOn = idWidget;
