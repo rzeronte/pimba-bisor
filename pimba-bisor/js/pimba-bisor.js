@@ -112,7 +112,7 @@ var PimbaBisor = function (aOptions) {
         for (var i in self.depthTemplates) {
             $.ajax({
                 type: 'GET',
-                url: self.depthTemplates[i],
+                url: self.depthTemplates[i]['file'],
                 success: function(data) {
                     $(".rze_container").after(data);
                 },error: function(){ console.log("Error loadTemplateWidget");  }
@@ -501,10 +501,16 @@ var PimbaBisor = function (aOptions) {
      * Carga en un widget su template e inyecta sus datos en el
      **/
     this.loadDataInTemplateWidget = function(widgetData) {
-        var template = $("#pimba-bisor-template");
         var widget   = $("#" + widgetData['_id']);
+        var depth = widget.parents(".rze_widget").length;
+
+        if (self.depthTemplates[depth]['id']) {
+            var idTemplate = self.depthTemplates[depth]['id'];
+        } else {
+            var idTemplate = self.depthTemplates[0]['id'];
+        }
         
-        console.log("Depth:" + widget.attr("data-depth"));
+        var template = $("#"+idTemplate);
         
         widget.find(".bisor-theme-default").remove();
         widget.children(".content").html($(template).html());
