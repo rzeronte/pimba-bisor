@@ -143,3 +143,12 @@ canvas{
 .ui-dialog{
     z-index: 1000 !important;
 }
+
+/* Formulario de edicion (dialog)*/
+#rze_popup_add  input{
+    width: 100%;    
+}
+#rze_popup_add  textarea{
+    width: 100%;
+    height: 200px;
+}

@@ -54,8 +54,11 @@ var PimbaBisor = function (aOptions) {
         
         /** Gestión de evento para borrar widget**/
         $("body").on('click', '.delete', function() {
-            var widgetId = $(this).parent().parent().attr("id");
-            self.deleteWidget(widgetId);
+            var question = confirm("Are you sure?");
+            if (question == true) {
+                var widgetId = $(this).parent().parent().attr("id");
+                self.deleteWidget(widgetId);
+            }
         });               
         /** Gestión de evento para editar widget**/
         $("body").on('click', '.edit', function() {
@@ -627,6 +630,7 @@ var PimbaBisor = function (aOptions) {
 
         $("#rze_popup_add").show();
         $("#rze_popup_add").dialog();
+        $("#rze_popup_add").dialog({ width: 500, height: 340 })
         $("#rze_popup_add").dialog({"title": "Add Card in #"+ parentId});
 
         $("#rze_popup_add_form [name='parent']").val(parentId);
@@ -646,6 +650,7 @@ var PimbaBisor = function (aOptions) {
         
         $("#rze_popup_add").show();
         $("#rze_popup_add").dialog();
+        $("#rze_popup_add").dialog({ width: 500, height: 340 })
         $( "#rze_popup_add" ).dialog({"title": "Edit Card"});
         
         $("#rze_popup_add_form [name='id']").val(id);
