@@ -22,7 +22,7 @@ var PimbaBisor = function (aOptions) {
     this.cb_create_widget              = aOptions['cb_create_widget'];
     this.cb_delete_widget              = aOptions['cb_delete_widget'];
     /*Template para el widget */
-    this.templateWidget                = aOptions['templateWidget'];
+    this.depthTemplates                = aOptions['depthTemplates'];
     
     this.constructor = function(aOptions) {
         /*Dibujamos o no el intercambiador de perspectivas*/
@@ -75,7 +75,7 @@ var PimbaBisor = function (aOptions) {
         });      
         
         /* Cargámos el template*/
-        self.loadTemplateWidget(aOptions['templateWidget']);
+        self.loadDepthTemplates();
         
         /* Creamos el dialog*/ 
         self.createDialog();
@@ -108,16 +108,16 @@ var PimbaBisor = function (aOptions) {
     /*
      * Carga el template para los widgets
      **/
-    this.loadTemplateWidget = function(urlTemplate) {
-        $.ajax({
-            type: 'GET',
-            url: urlTemplate,
-            success: function(data) {
-                $(".rze_container").after(data);
-            },error: function(){
-                console.log("Error loadTemplateWidget");
-            }
-        });     
+    this.loadDepthTemplates = function() {
+        for (var i in self.depthTemplates) {
+            $.ajax({
+                type: 'GET',
+                url: self.depthTemplates[i],
+                success: function(data) {
+                    $(".rze_container").after(data);
+                },error: function(){ console.log("Error loadTemplateWidget");  }
+            });            
+        }
     }
     
     /*
@@ -500,15 +500,17 @@ var PimbaBisor = function (aOptions) {
     /*
      * Carga en un widget su template e inyecta sus datos en el
      **/
-    this.loadDataInTemplateWidget = function(widgetData){
+    this.loadDataInTemplateWidget = function(widgetData) {
         var template = $("#pimba-bisor-template");
-        var widget = $("#" + widgetData['_id']);
+        var widget   = $("#" + widgetData['_id']);
+        
+        console.log("Depth:" + widget.attr("data-depth"));
         
         widget.find(".bisor-theme-default").remove();
         widget.children(".content").html($(template).html());
         
         /* Rastreamos el array de widget para sustituir en el template */
-        for (var i in widgetData){
+        for (var i in widgetData) {
             if (typeof(widgetData[i]) != 'object') {
                widget.find("[data-pimba-field='" + i + "']").text(widgetData[i]);
             }
@@ -626,7 +628,10 @@ var PimbaBisor = function (aOptions) {
     
     /* Activa y muestra el dialogo*/
     this.addWidgetDialog = function(parentId) {
-        $("#rze_popup_add_form").get(0).reset();
+        $("#rze_popup_add_form").find("[name='id']").val('');
+        $("#rze_popup_add_form").find("[name='title']").html('');
+        $("#rze_popup_add_form").find("[name='description']").html('');
+        $("#rze_popup_add_form").find("[name='parent']").val('');
 
         $("#rze_popup_add").show();
         $("#rze_popup_add").dialog();
@@ -641,7 +646,10 @@ var PimbaBisor = function (aOptions) {
         var widget = $("#"+idWidget );
         var content = $("#"+idWidget + " .content");
 
-        $("#rze_popup_add_form").get(0).reset();
+        $("#rze_popup_add_form").find("[name='id']").val('');
+        $("#rze_popup_add_form").find("[name='title']").html('');
+        $("#rze_popup_add_form").find("[name='description']").html('');
+        $("#rze_popup_add_form").find("[name='parent']").val('');
         
         var id          = widget.attr("id");
         var title       = content.find("[data-pimba-field='title']").html();
