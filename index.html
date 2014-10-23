@@ -4,7 +4,7 @@
         <title>pimba-bisor - Demo</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <!-- JQuery by Google-->
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
         <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.css" />
         <!-- Bootstrap CDN -->
@@ -73,7 +73,7 @@
                  * api-pimba-server y actualizar  pimba-bisor a nuestro antojo
                  */
                 aOptions = {
-                    showSelectPerspective: true,
+                    showSelectorCards: true,
                     templateWidget: 'pimba-bisor/templates/default.html',
                     /* callback de inicio del dashboard */
                     'cb_init': function (objBisor) {
@@ -90,14 +90,13 @@
                                 }
                             });     
                         },
-                    /* callback para cambio de perspectiva en selector de las mismas */
-                    'cb_change_perspective': function (objBisor, id_perspective) {
+                    /* callback para cambio de tarjeta en selector de bisor */
+                    'cb_change_select': function (objBisor, id_perspective) {
                         $.ajax({
                             type: 'GET',
                             url: pimbaConfig["PIMBA_API_PERSPECTIVES"] + "/" + id_perspective,
                             success: function(data) {
                                 /* Establece datos de tarjetas y refresca el dashboard*/
-                                console.log(data);
                                 objBisor.setJSONDataWidgets(data);
                             },beforeSend: function (xhr) {
                                 xhr.setRequestHeader ("Authorization", "Bearer " + sessionId);
@@ -108,6 +107,7 @@
                     },
                     /* callback para cambio de posición en un wiget (drop válido) */
                     'cb_update_widget': function(objBisor, dataWidget) {
+                        console.log("cb_update_widget");
                         $.ajax({
                             type: 'PUT',
                             url: pimbaConfig["PIMBA_API_CARDS"] + "/" + dataWidget["idWidget"],

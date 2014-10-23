@@ -13,10 +13,10 @@ var PimbaBisor = function (aOptions) {
     this.mouseX                        = 0;
     this.mouseY                        = 0;
     this.maxDepth                      = 4;
-    this.showSelectPerspective         = aOptions['showSelectPerspective'];
+    this.showSelectorCards             = aOptions['showSelectorCards'];
     /* Callbacks para refresco de información*/
     this.cb_init                       = aOptions['cb_init'];
-    this.cb_change_perspective         = aOptions['cb_change_perspective'];
+    this.cb_change_select              = aOptions['cb_change_select'];
     this.cb_update_widget              = aOptions['cb_update_widget'];
     this.cb_edit_widget                = aOptions['cb_edit_widget'];
     this.cb_create_widget              = aOptions['cb_create_widget'];
@@ -26,8 +26,8 @@ var PimbaBisor = function (aOptions) {
     
     this.constructor = function(aOptions) {
         /*Dibujamos o no el intercambiador de perspectivas*/
-        if (aOptions['showSelectPerspective'] === true) {
-            self.drawSelectPerspectives(); 
+        if (aOptions['showSelectorCards'] === true) {
+            self.drawSelectorCards(); 
         }
         
         /* Ejecutamos callback de inicio */
@@ -39,7 +39,7 @@ var PimbaBisor = function (aOptions) {
             var optionSelect = $("#rze_perspectives select").val();
             if ( parseInt(optionSelect) > 0) {
                 self.clearDashboard();
-                self.cb_change_perspective(self, $("#rze_perspectives select").val());
+                self.cb_change_select(self, $("#rze_perspectives select").val());
             } else if (parseInt(optionSelect) == 0) {
                 self.clearDashboard();
             }
@@ -81,13 +81,6 @@ var PimbaBisor = function (aOptions) {
 
         /* Redibujamos widgets*/
         self.widgetsRedraw();
-        
-        /* ----------------------------------------Droppable genérico - Desktop*/
-        $(".rze_container").droppable({
-            accept: '.rze_widget',
-            drop: function (event, ui) {
-            }
-        });
     
         /* --------------------------------------- Coordenadas de mouse*/
         $("body").mousemove(function(e){
@@ -119,7 +112,7 @@ var PimbaBisor = function (aOptions) {
     /*
      * Dibuja el select de perspectivas
      **/
-    this.drawSelectPerspectives = function() {
+    this.drawSelectorCards = function() {
         var tagFormSelectPerspectives = $("<form>", {
             "id"    : "rze_perspectives"
         });
@@ -298,7 +291,10 @@ var PimbaBisor = function (aOptions) {
             handle     : "div.move",
             zIndex     : 10,
             start: function(event, ui) {
+                
                 var idWidget = $(this).attr("id");
+                $(this).addClass("current");
+                
                 self.currentWidgetDragging = idWidget;
                 var divParent = $(this).parents(".rze_widget");
                 if (divParent.length > 0) {
@@ -308,9 +304,6 @@ var PimbaBisor = function (aOptions) {
                 $(this).draggable( "option", "zIndex", 15 );
                 $(this).addClass("rze_widget_dragging");
 
-                if (!self._isWidgetFirstDepth(idWidget)) {
-                    $(".rze_container").droppable( "option", "disabled", false );
-                }
 
                 $(".rze_widget").css("overflow", "visible");
                 $(this).find(".rze_widget").hide();
@@ -322,64 +315,64 @@ var PimbaBisor = function (aOptions) {
                 $(this).removeClass("rze_widget_dragging");
                 $(this).find(".rze_widget").show();
                 $(".rze_widget").css("overflow", "hidden");
+                $(this).removeClass("current");
             }
         });
 
         /*-----------------------Creamos la configuración droppable básica*/
         $(obj).droppable({
-            accept: '.rze_widget',
+            accept: '.current',
             over: function (event, ui) {
                 var idWidget = $(this).attr("id");
                 self.currentWidgetOn = idWidget;
 
-                $(".rze_container").droppable( "option", "disabled", true );
                 self.depthHover.push(idWidget);
                 self.refreshCascadeSelectWidgets();
             },
             out: function (event, ui) {
+
                 if (self.depthHover.length == 0) {
                     self.currentWidgetOn = null;                        
                 } else {
                     var stackHover = self.depthHover.pop();
                     var stackLastAfterPop = self.depthHover[self.depthHover.length-1];
                     self.currentWidgetOn = stackLastAfterPop;                                           
-                    $(".rze_container").droppable( "option", "disabled", true );
-                }
-
-                if (self.currentWidgetOn == null) {
-                    $(".rze_container").droppable( "option", "disabled", false );                        
                 }
 
                 self.refreshCascadeSelectWidgets();
             },
             drop: function (event, ui) {
-                /* callback de actualización */
-                self.cb_update_widget(self, {
-                    'idWidget': self.currentWidgetDragging,
-                    'to'      : self.currentWidgetOn,
-                    'from'    : (self.currentFatherOfWidgetDragging != null) ? self.currentFatherOfWidgetDragging.attr("id"): null
-                });
-                
-                self.changeWidgetParentInArray(self.currentWidgetDragging, self.currentWidgetOn);
-                $("#"+self.currentWidgetOn).append($("#"+self.currentWidgetDragging));
+                /* HACK Jquery: Para evitar que se dispare el drop hacia atrás
+                 * comprobamos adcionalmente que el drop que ejecuta esto, es el del
+                 * widget*/
+                if (self.currentWidgetOn == $(this).attr("id")) {
+                    /* callback de actualización */
+                    self.cb_update_widget(self, {
+                        'idWidget': self.currentWidgetDragging,
+                        'to'      : self.currentWidgetOn,
+                        'from'    : (self.currentFatherOfWidgetDragging != null) ? self.currentFatherOfWidgetDragging.attr("id"): null
+                    });
 
-                /* Redibujamos la capa destino */
-                self._widgetRedrawChildrens($("#"+self.currentWidgetOn));
-                self.setClassByDataDepth();
+                    self.changeWidgetParentInArray(self.currentWidgetDragging, self.currentWidgetOn);
+                    $("#"+self.currentWidgetOn).append($("#"+self.currentWidgetDragging));
 
-                /* Actualizamos el origen si existiese */
-                if (self.currentFatherOfWidgetDragging != null){
-                    self._widgetRedrawChildrens(self.currentFatherOfWidgetDragging);
-                    self.currentFatherOfWidgetDragging = null;
+                    /* Redibujamos la capa destino */
+                    self._widgetRedrawChildrens($("#"+self.currentWidgetOn));
+                    self.setClassByDataDepth();
+
+                    /* Actualizamos el origen si existiese */
+                    if (self.currentFatherOfWidgetDragging != null){
+                        self._widgetRedrawChildrens(self.currentFatherOfWidgetDragging);
+                        self.currentFatherOfWidgetDragging = null;
+                    }
+
+                    $(".rze_widget").css("overflow", "hidden");
+
+                    $("#"+self.currentWidgetOn).find(".rze_widget").show();
+
+                    self.depthHover = new Array();    
+                    self.refreshCascadeSelectWidgets();
                 }
-
-                $(".rze_widget").css("overflow", "hidden");
-
-                $("#"+self.currentWidgetOn).find(".rze_widget").show();
-
-                self.depthHover = new Array();    
-                self.refreshCascadeSelectWidgets();
-                
             }
         });
     }
@@ -388,7 +381,7 @@ var PimbaBisor = function (aOptions) {
     * Añade opciones al select de perspectivas desde userData
     */
     this.fillSelectPerspectives = function(perspectives) {
-        $("#rze_perspectives select").append(new Option('Select perspective', 0, false, false));        
+        $("#rze_perspectives select").append(new Option('Select card master', 0, false, false));        
         for (var i=0; i<perspectives.length;i++) {
             $("#rze_perspectives select").append(new Option(perspectives[i]['title'], perspectives[i]['_id'], false, false));        
         }
@@ -468,7 +461,7 @@ var PimbaBisor = function (aOptions) {
         
         var divWidget = $("<div>", {
             "id": idWidget,
-            "class": 'rze_widget',
+            "class": 'rze_widget draggable droppable',
             "data-draggable": "true"
         })
         
