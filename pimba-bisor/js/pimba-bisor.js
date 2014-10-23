@@ -348,9 +348,11 @@ var PimbaBisor = function (aOptions) {
                 if (self.currentWidgetOn == $(this).attr("id")) {
                     /* callback de actualización */
                     self.cb_update_widget(self, {
-                        'idWidget': self.currentWidgetDragging,
-                        'to'      : self.currentWidgetOn,
-                        'from'    : (self.currentFatherOfWidgetDragging != null) ? self.currentFatherOfWidgetDragging.attr("id"): null
+                        '_id'         :  self.currentWidgetDragging,
+                        'parent'      : self.currentWidgetOn,
+                        'title'       : $(self.currentWidgetDragging + " [name='title']").val(),
+                        'description' : $(self.currentWidgetDragging + " [name='description']").val(),
+                        'from'        : (self.currentFatherOfWidgetDragging != null) ? self.currentFatherOfWidgetDragging.attr("id"): null
                     });
 
                     self.changeWidgetParentInArray(self.currentWidgetDragging, self.currentWidgetOn);

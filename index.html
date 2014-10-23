@@ -110,9 +110,11 @@
                         console.log("cb_update_widget");
                         $.ajax({
                             type: 'PUT',
-                            url: pimbaConfig["PIMBA_API_CARDS"] + "/" + dataWidget["idWidget"],
+                            url: pimbaConfig["PIMBA_API_CARDS"] + "/" + dataWidget["_id"],
                             data: {
-                                'parent': dataWidget["to"]
+                                'parent'      : dataWidget["parent"],
+                                'title'       : dataWidget["title"],
+                                'description' : dataWidget["description"]
                             },
                             success: function(data) {
                                 /* Establece datos de tarjetas y refresca el dashboard*/
