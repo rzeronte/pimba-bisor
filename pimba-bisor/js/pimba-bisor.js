@@ -23,7 +23,7 @@ var PimbaBisor = function (aOptions) {
     this.cb_delete_widget              = aOptions['cb_delete_widget'];
     /*Template para el widget */
     this.depthTemplates                = aOptions['depthTemplates'];
-    
+
     this.constructor = function(aOptions) {
         /*Dibujamos o no el intercambiador de perspectivas*/
         if (aOptions['showSelectorCards'] === true) {
@@ -501,16 +501,16 @@ var PimbaBisor = function (aOptions) {
      * Carga en un widget su template e inyecta sus datos en el
      **/
     this.loadDataInTemplateWidget = function(widgetData) {
-        console.log("loadDataInTemplateWidget");
         var widget   = $("#" + widgetData['_id']);
         var depth = widget.parents(".rze_widget").length;
-
-        if (self.depthTemplates[depth]['id']) {
-            var idTemplate = self.depthTemplates[depth]['id'];
-        } else {
-            var idTemplate = self.depthTemplates[0]['id'];
+        
+        var templatesDefined = Object.keys(self.depthTemplates).length;
+        
+        if (depth >= templatesDefined) {
+            depth = 0;
         }
         
+        var idTemplate = self.depthTemplates[depth]['id'];
         var template = $("#"+idTemplate);
         widget.children(".bisor-theme-default").remove();
         widget.children(".content").html($(template).html());
