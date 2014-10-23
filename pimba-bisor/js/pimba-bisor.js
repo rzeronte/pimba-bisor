@@ -62,6 +62,14 @@ var PimbaBisor = function (aOptions) {
             var idWidget = $(this).parent().parent().attr("id");
             self.editWidgetDialog(idWidget);
         });      
+        /** Gestión de evento para refresh widget**/
+        $("body").on('click', '.refresh_card_button', function() {
+            var optionSelect = $("#rze_perspectives select").val();
+            if (parseInt(optionSelect) > 0) {
+                self.clearDashboard();
+                self.cb_change_select(self, $("#rze_perspectives select").val());                
+            }
+        });      
         
         /* Cargámos el template*/
         self.loadTemplateWidget(aOptions['templateWidget']);
@@ -117,11 +125,15 @@ var PimbaBisor = function (aOptions) {
             "id"    : "rze_perspectives"
         });
         
+        var tagSpanRefresh = $("<span>", {
+            "class"    : "refresh_card_button glyphicon glyphicon-refresh" 
+        });
+        
         /* Input para título */
         var select = document.createElement('select');
-        
         $(select).appendTo(tagFormSelectPerspectives);
         $(".rze_container").before(tagFormSelectPerspectives);
+        $(select).after(tagSpanRefresh);
     }
         
     /*
