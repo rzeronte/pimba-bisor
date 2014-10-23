@@ -501,6 +501,7 @@ var PimbaBisor = function (aOptions) {
      * Carga en un widget su template e inyecta sus datos en el
      **/
     this.loadDataInTemplateWidget = function(widgetData) {
+        console.log("loadDataInTemplateWidget");
         var widget   = $("#" + widgetData['_id']);
         var depth = widget.parents(".rze_widget").length;
 
@@ -511,14 +512,13 @@ var PimbaBisor = function (aOptions) {
         }
         
         var template = $("#"+idTemplate);
-        
-        widget.find(".bisor-theme-default").remove();
+        widget.children(".bisor-theme-default").remove();
         widget.children(".content").html($(template).html());
         
         /* Rastreamos el array de widget para sustituir en el template */
         for (var i in widgetData) {
             if (typeof(widgetData[i]) != 'object') {
-               widget.find("[data-pimba-field='" + i + "']").text(widgetData[i]);
+               widget.children(".content").find("[data-pimba-field='" + i + "']").text(widgetData[i]);
             }
         }
     }
@@ -608,9 +608,10 @@ var PimbaBisor = function (aOptions) {
                    description : description,
                    parent     : parentId           
                };
+
+               self.loadDataInTemplateWidget(widgetData);
                
                self.cb_edit_widget(self, widgetData);
-               self.loadDataInTemplateWidget(widgetData);
             } else {
                 /* callback de creación de widget*/
                 self.cb_create_widget(self, {
