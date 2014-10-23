@@ -20,8 +20,6 @@ body{
     width: 95%;
     min-height: 600px;
     position: relative;
-    border-top: solid 3px #0266c8;
-    border-bottom: solid 3px #0266c8;
     cursor: crosshair;
     overflow: hidden;
 }

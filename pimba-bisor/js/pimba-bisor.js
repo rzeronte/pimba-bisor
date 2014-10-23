@@ -613,12 +613,12 @@ var PimbaBisor = function (aOptions) {
     this.addWidgetDialog = function(parentId) {
         $("#rze_popup_add_form").get(0).reset();
 
-        $( "#rze_popup_add" ).show();
-        $( "#rze_popup_add" ).dialog();
-        $( "#rze_popup_add" ).dialog({"title": "Add Card"});
+        $("#rze_popup_add").show();
+        $("#rze_popup_add").dialog();
+        $("#rze_popup_add").dialog({"title": "Add Card in #"+ parentId});
 
-        $( "#rze_popup_add_form [name='parent']").val(parentId);
-        $("#rze_popup_add_form .submit").attr("value", "Create in #"+parentId);
+        $("#rze_popup_add_form [name='parent']").val(parentId);
+        $("#rze_popup_add_form .submit").attr("value", "Create");
     }
     
     this.editWidgetDialog = function(idWidget) {
@@ -634,6 +634,8 @@ var PimbaBisor = function (aOptions) {
         
         $("#rze_popup_add").show();
         $("#rze_popup_add").dialog();
+        $( "#rze_popup_add" ).dialog({"title": "Edit Card"});
+        
         $("#rze_popup_add_form [name='id']").val(id);
         $("#rze_popup_add_form [name='title']").val(title);
         $("#rze_popup_add_form [name='description']").val(description);
