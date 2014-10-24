@@ -571,7 +571,7 @@ var PimbaBisor = function (aOptions) {
         var inputDescription = document.createElement('textarea');
         inputDescription.setAttribute('type', 'text');
         inputDescription.setAttribute('placeholder', 'Escribe la descripción');
-        inputTitle.setAttribute('required', true);
+        inputDescription.setAttribute('required', true);
         inputDescription.setAttribute('name', 'description');
         $(inputDescription).appendTo(tagForm);
 
