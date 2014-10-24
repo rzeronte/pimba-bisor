@@ -55,7 +55,7 @@ body{
 }
 
 .rze_widget .content {
-    width: auto;
+    width: 90%;
     height: 100%;
     margin: 0 0 0 5px;
     padding: 0;
@@ -64,7 +64,8 @@ body{
 }
 .rze_widget .content p,
 .rze_widget .content h1,
-.rze_widget .content h2
+.rze_widget .content h2,
+.rze_widget .content h3
 {
     margin: 0;
     padding: 0;
