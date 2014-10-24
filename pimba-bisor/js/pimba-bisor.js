@@ -23,6 +23,7 @@ var PimbaBisor = function (aOptions) {
     this.cb_delete_widget              = aOptions['cb_delete_widget'];
     /*Template para el widget */
     this.depthTemplates                = aOptions['depthTemplates'];
+    this.dialogFormTemplateFile        = "pimba-bisor/templates/dialog-form.html";
 
     this.constructor = function(aOptions) {
         /*Dibujamos o no el intercambiador de perspectivas*/
@@ -72,13 +73,11 @@ var PimbaBisor = function (aOptions) {
                 self.clearDashboard();
                 self.cb_change_select(self, $("#rze_perspectives select").val());                
             }
-        });      
+        });
         
         /* Cargámos el template*/
-        self.loadDepthTemplates();
-        
-        /* Creamos el dialog*/ 
-        self.createDialog();
+        self.loadStaticTemplates();
+       
     }
 
     //***************************************************************** MÉTODOS
@@ -106,16 +105,62 @@ var PimbaBisor = function (aOptions) {
     }
 
     /*
-     * Carga el template para los widgets
+     * Carga templates para dialogo y para depth de tarjetas
      **/
-    this.loadDepthTemplates = function() {
+    this.loadStaticTemplates = function() {
+        // Template para el dialog y el formulario de edición
+        $.ajax({
+            type: 'GET',
+            url: self.dialogFormTemplateFile,
+            success: function(data) {
+                $(".rze_container").after(data);
+            },error: function(){ console.log("Error loadTemplateWidget[dialogFormTemplate]");  }
+        });            
+        
+        $("body").on('click', '#submit_add_form', function() {
+            $("#rze_popup_add_form").submit();
+        });
+        
+        /* Gestión de evento click sobre el boton crear/editar del formulario */
+        $("body").on('submit', '#rze_popup_add_form', function(event) {
+             
+            var id = $( "#rze_popup_add_form [name='id']").val();
+            var title       = $( "#rze_popup_add_form [name='title']").val();
+            var description = $( "#rze_popup_add_form [name='description']").val();
+            var parentId    = $( "#rze_popup_add_form [name='parent']").val();
+            
+            /* Diferenciamos si es nuevo o editamos, para diferenciar callbacks */
+            if (id != "") {
+               /* callback de edición de información de widget*/
+               var widgetData = {
+                   _id         : id, 
+                   title       : title,
+                   description : description,
+                   parent     : parentId           
+               };
+
+               self.loadDataInTemplateWidget(widgetData);
+               self.cb_edit_widget(self, widgetData);
+            } else {
+                /* callback de creación de widget*/
+                self.cb_create_widget(self, {
+                    title       : title,
+                    description : description,
+                    parent     : parentId           
+                });
+            }
+            $('#rze_popup_add').modal('hide');
+            event.preventDefault();
+        });
+
+        // Templates para widgets
         for (var i in self.depthTemplates) {
             $.ajax({
                 type: 'GET',
                 url: self.depthTemplates[i]['file'],
                 success: function(data) {
                     $(".rze_container").after(data);
-                },error: function(){ console.log("Error loadTemplateWidget");  }
+                },error: function(){ console.log("Error loadTemplateWidget[depthTemplates]");  }
             });            
         }
     }
@@ -253,12 +298,14 @@ var PimbaBisor = function (aOptions) {
     }
     
     /**
-     * Configura y habilita un widget 
+     * Crea capa de acciones en un widget y lo hace draggable y droppable
      **/    
     this.setupWidget = function(obj) {
+        /* Container de acciones en el widget*/
         var divActions = $("<div>", {
             "class": 'actions'
         });
+        
         $(obj).append(divActions);           
 
         var divContent = $("<div>", {
@@ -270,7 +317,7 @@ var PimbaBisor = function (aOptions) {
             /* Opción de eliminar */
             var div = $("<div>", {
                 "class": 'delete glyphicon glyphicon-remove-circle',
-                "title": 'Delete card'
+                "title": 'Delete card',
             });
             $(divActions).prepend(div);           
         }
@@ -278,7 +325,7 @@ var PimbaBisor = function (aOptions) {
         /* Opción de editar */
         var div = $("<div>", {
             "class": 'edit glyphicon glyphicon-edit',
-            "title": 'Edit card'
+            "title": 'Edit card',
         });
         $(divActions).prepend(div);
 
@@ -539,119 +586,27 @@ var PimbaBisor = function (aOptions) {
      **/
     this.clearDashboard = function() {
         $(".rze_container").html("");
-    }
-    
-    /* Crea las capa para el jquery dialog */
-    this.createDialog = function() {
-        var divDialog = $("<div>", {
-            "id": "rze_popup_add",
-            "title": "Card information"
-        });
-
-        var tagForm = $("<form>", {
-            "id"    : "rze_popup_add_form",
-            "method": "post"
-        });
-        
-        /* Input para id */
-        var inputTitle = document.createElement('input');
-        inputTitle.setAttribute('type', 'hidden');
-        inputTitle.setAttribute('name', 'id');
-        $(inputTitle).appendTo(tagForm);
-
-        /* Input para título */
-        var inputTitle = document.createElement('input');
-        inputTitle.setAttribute('type', 'text');
-        inputTitle.setAttribute('placeholder', 'Escribe el título');
-        inputTitle.setAttribute('required', true);
-        inputTitle.setAttribute('name', 'title');
-        $(inputTitle).appendTo(tagForm);
-        
-        /* Input para descripción */
-        var inputDescription = document.createElement('textarea');
-        inputDescription.setAttribute('type', 'text');
-        inputDescription.setAttribute('placeholder', 'Escribe la descripción');
-        inputDescription.setAttribute('required', true);
-        inputDescription.setAttribute('name', 'description');
-        $(inputDescription).appendTo(tagForm);
-
-        /* Input para parent */
-        var inputParent = document.createElement('input');
-        inputParent.setAttribute('type', 'hidden');
-        inputParent.setAttribute('name', 'parent');
-        $(inputParent).appendTo(tagForm);
-        
-        /* Input para submit */
-        var inputSubmit = document.createElement('input');
-        inputSubmit.setAttribute('type', 'submit');
-        inputSubmit.setAttribute('value', 'Crear');
-        inputSubmit.setAttribute('class', 'submit');
-        $(inputSubmit).appendTo(tagForm);
-
-        tagForm.appendTo(divDialog);
-        divDialog.appendTo("body");
-        
-        /* Gestión de evento click sobre el boton crear/editar del formulario */
-        $( "#rze_popup_add_form" ).submit(function( event ) {
-            
-            var id = $( "#rze_popup_add_form [name='id']").val();
-            var title       = $( "#rze_popup_add_form [name='title']").val();
-            var description = $( "#rze_popup_add_form [name='description']").val();
-            var parentId    = $( "#rze_popup_add_form [name='parent']").val();
-            
-            /* Diferenciamos si es nuevo o editamos, para diferenciar callbacks */
-            if (id != "") {
-               /* callback de edición de información de widget*/
-               var widgetData = {
-                   _id         : id, 
-                   title       : title,
-                   description : description,
-                   parent     : parentId           
-               };
-
-               self.loadDataInTemplateWidget(widgetData);
-               
-               self.cb_edit_widget(self, widgetData);
-            } else {
-                /* callback de creación de widget*/
-                self.cb_create_widget(self, {
-                    title       : title,
-                    description : description,
-                    parent     : parentId           
-                });
-            }
-            
-            $("#rze_popup_add").dialog("close");
-
-            
-            // Vaciamos formulario de datos
-            this.reset();
-            
-            event.preventDefault();
-        });
-        
-        $("#rze_popup_add").hide();
-    }
-    
+    } 
+  
     /* Activa y muestra el dialogo*/
     this.addWidgetDialog = function(parentId) {
-        $("#rze_popup_add_form").find("[name='id']").val('');
-        $("#rze_popup_add_form").find("[name='title']").html('');
-        $("#rze_popup_add_form").find("[name='description']").html('');
-        $("#rze_popup_add_form").find("[name='parent']").val('');
+        $('#rze_popup_add').modal('show');
+        $("#rze_popup_add_form [name='id']").val('');
+        $("#rze_popup_add_form [name='title']").val('');
+        $("#rze_popup_add_form [name='description']").val('');
+        $("#rze_popup_add_form [name='parent']").val('');
 
-        $("#rze_popup_add").show();
-        $("#rze_popup_add").dialog();
-        $("#rze_popup_add").dialog({ width: 500, height: 340 })
-        $("#rze_popup_add").dialog({"title": "Add Card in #"+ parentId});
 
         $("#rze_popup_add_form [name='parent']").val(parentId);
-        $("#rze_popup_add_form .submit").attr("value", "Create");
+        $("#rze_popup_add .modal-title").html("Create card in #"+ parentId);
+        $("#rze_popup_add_form #submit_add_form").html("Create");
     }
     
     this.editWidgetDialog = function(idWidget) {
         var widget = $("#"+idWidget );
         var content = $("#"+idWidget + " .content");
+
+        $('#rze_popup_add').modal('show');
 
         $("#rze_popup_add_form").find("[name='id']").val('');
         $("#rze_popup_add_form").find("[name='title']").html('');
@@ -663,17 +618,13 @@ var PimbaBisor = function (aOptions) {
         var description = content.find("[data-pimba-field='description']").html();
         var parent      = widget.parent().attr("id");
         
-        $("#rze_popup_add").show();
-        $("#rze_popup_add").dialog();
-        $("#rze_popup_add").dialog({ width: 500, height: 340 })
-        $( "#rze_popup_add" ).dialog({"title": "Edit Card"});
-        
         $("#rze_popup_add_form [name='id']").val(id);
         $("#rze_popup_add_form [name='title']").val(title);
         $("#rze_popup_add_form [name='description']").val(description);
         $("#rze_popup_add_form [name='parent']").val(parent);
 
-        $("#rze_popup_add_form .submit").attr("value", "Edit");
+        $("#rze_popup_add .modal-title").html("Edit card");
+        $("#rze_popup_add_form #submit_add_form").html("Edit");
     }
     
     /*
