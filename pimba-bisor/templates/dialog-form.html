@@ -7,13 +7,13 @@
         <h4 class="modal-title" id="myModalLabel">Edit card info</h4>
       </div>
       <div class="modal-body">
-          <form id="rze_popup_add_form" action="">
+          <form id="rze_popup_add_form" action="" validate>
               <input type="hidden" name="id"/>
               <input type="hidden" name="parent"/>
               <label>Title:</label>
-              <input type="text" name="title" placeholder="Write title"/>
+              <input type="text" name="title" placeholder="Write title" required/>
               <label>Description:</label>
-              <textarea name="description" placeholder="Write description"></textarea>
+              <textarea name="description" placeholder="Write description" required></textarea>
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
               <button type="button" class="btn btn-success submit" id="submit_add_form">Save changes</button>
           </form>

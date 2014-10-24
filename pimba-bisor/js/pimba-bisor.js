@@ -118,12 +118,17 @@ var PimbaBisor = function (aOptions) {
         });            
         
         $("body").on('click', '#submit_add_form', function() {
+        if(!document.getElementById("rze_popup_add_form").checkValidity())
+        {
+            alert("Fill all fields, please.");
+        } else {
             $("#rze_popup_add_form").submit();
+        }
         });
         
         /* Gestión de evento click sobre el boton crear/editar del formulario */
         $("body").on('submit', '#rze_popup_add_form', function(event) {
-             
+
             var id = $( "#rze_popup_add_form [name='id']").val();
             var title       = $( "#rze_popup_add_form [name='title']").val();
             var description = $( "#rze_popup_add_form [name='description']").val();
