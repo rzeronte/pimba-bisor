@@ -23,15 +23,15 @@ body{
     cursor: crosshair;
     overflow: hidden;
 }
+
 /* Widget básico */
 .rze_widget{
     border: solid 1px #d0d0d0;
     background-color: #f3f3f3;
     position: absolute;
-    min-height: 40px;
-    min-width: 100px;
     float: left;
     width: auto;
+    height: auto;
     margin: 10px 10px 0px 20px;
     padding: 10px 10px 10px 10px;
     height: auto;
@@ -40,27 +40,36 @@ body{
     -webkit-border-radius: 4px 4px 4px px;
     border-radius: 4px 4px 4px 4px;
     font-size: 14px;
+    float: left;
 }
 
 .rze_widget .actions {
-    width: 20px;
+    width: 100%;
     height: auto;
-    float: left;
     font-size: 16px !important;
     cursor: pointer;
+    float: left;
 }
+
+.rze_widget .childs{
+    border: solid 1px #ccc;
+    width: 100%;
+    height: auto;
+    float: left;
+}
+
 .refresh_card_button{
     cursor:pointer;
     margin-left: 5px;
 }
 
 .rze_widget .content {
-    width: 90%;
-    height: 100%;
+    width: 100%;
+    height: auto;
     margin: 0 0 0 5px;
     padding: 0;
-    float: left;
     clear: right;
+    float: left;
 }
 .rze_widget .content p,
 .rze_widget .content h1,
@@ -81,8 +90,8 @@ body{
     height: 20px;
     z-index: 999;
     color: #888;
-    float: left;
     cursor: move;
+    float: move;
 }
 
 .rze_widget > div.move:hover{
@@ -92,23 +101,23 @@ body{
 .rze_widget > div.edit{
     width: 20px;
     height: 20px;
-    float: left;
     color: #888;
     cursor:pointer;
+    float: left;
 }
 .rze_widget > div.add{
     width: 20px;
     height: 20px;
-    float: left;
     color: #888;
     cursor:pointer;
+    float: left;
 }
 .rze_widget > div.delete{
     width: 20px;
     height: 20px;
-    float: left;
     color: #888;
     cursor:pointer;
+    float: left;
 }
 
 .rze_widget_dragging{
@@ -127,11 +136,11 @@ body{
     background-color: red;
 }
 /* Depths*/
-.depth_0 > div.move{}
-.depth_1 > div.move{}
-.depth_2 > div.move{}
-.depth_3 > div.move{}
-.depth_4 > div.move{}
+.depth_0{width: 600px; min-height: 600px;}
+.depth_1{width: 500px; min-height: 500px;}
+.depth_2{width: 400px; min-height: 400px;}
+.depth_3{width: 300px; min-height: 300px;}
+.depth_4{}
 
 canvas{
     z-index:9999;

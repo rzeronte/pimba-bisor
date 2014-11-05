@@ -2,10 +2,8 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
-        <file>file:/var/www/html/pimba-bisor/index.html</file>
-        <file>file:/var/www/html/pimba-bisor/pimba-bisor/js/pimba-bisor.js</file>
-        <file>file:/var/www/html/pimba-bisor/pimba-bisor/templates/default-card.html</file>
-        <file>file:/var/www/html/pimba-bisor/pimba-bisor/templates/small-card.html</file>
-        <file>file:/var/www/html/pimba-bisor/pimba-bisor/templates/big-card.html</file>
+        <file>file:/var/www/pimba-bisor/pimba-bisor/js/pimba-bisor.js</file>
+        <file>file:/var/www/pimba-bisor/pimba-bisor/css/pimba-bisor.css</file>
+        <file>file:/var/www/pimba-bisor/index.html</file>
     </open-files>
 </project-private>

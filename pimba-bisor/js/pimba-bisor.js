@@ -305,7 +305,7 @@ var PimbaBisor = function (aOptions) {
     /**
      * Crea capa de acciones en un widget y lo hace draggable y droppable
      **/    
-    this.setupWidget = function(obj) {
+    this.setupWidget = function(obj, widgetData) {
         /* Container de acciones en el widget*/
         var divActions = $("<div>", {
             "class": 'actions'
@@ -332,6 +332,7 @@ var PimbaBisor = function (aOptions) {
             "class": 'edit glyphicon glyphicon-edit',
             "title": 'Edit card',
         });
+
         $(divActions).prepend(div);
 
         /* Opción de añadir */
@@ -339,6 +340,7 @@ var PimbaBisor = function (aOptions) {
             "class": 'add glyphicon glyphicon-credit-card',
             "title": 'Add card'
         });
+
         $(divActions).prepend(div);
 
         if (!self._isWidgetFirstDepth(obj.attr("id"))) {
@@ -350,6 +352,20 @@ var PimbaBisor = function (aOptions) {
             $(divActions).prepend(div);
         }
         
+        // Añadimos al DOM finalmente
+        var divChilds =  $("<div>", {
+            "class": 'childs'
+        });
+        
+        divChilds.appendTo(obj);
+        
+        /* Si no se indica parent se crea en el dashboard */
+        if (widgetData['parent']== false) {
+            obj.appendTo("div.rze_container");
+        } else {
+            obj.appendTo("#" + widgetData['parent'] + "> .childs");
+        }
+
         $(obj).resizable();
 
         $(obj).draggable({
@@ -528,21 +544,15 @@ var PimbaBisor = function (aOptions) {
             idWidget = self._randomIdentifiers(1111, 9999);
         }
         
+        // Contenedor principal del widget
         var divWidget = $("<div>", {
             "id": idWidget,
             "class": 'rze_widget draggable droppable',
             "data-draggable": "true"
-        })
-        
-        /* Si no se indica parent se crea en el dashboard */
-        if (idWidgetParent == false) {
-            divWidget.appendTo("div.rze_container");
-        } else {
-            divWidget.appendTo("#" + idWidgetParent)
-        }
+        });
 
         // Resto de configuraciones en el widget
-        self.setupWidget(divWidget);
+        self.setupWidget(divWidget, widgetData);
         self.loadDataInTemplateWidget(widgetData);
       
         self.setClassByDataDepth();
@@ -646,7 +656,6 @@ var PimbaBisor = function (aOptions) {
     /* Inserta la información de un widget en el array donde corresponda */
     this.insertWidgetData = function(widgetData){
         var parentId = widgetData["parent"];
-        
     }
        
     /* Lanzamos al final una vez definidos todos los métodos*/
