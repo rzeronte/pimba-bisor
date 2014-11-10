@@ -429,35 +429,42 @@ var PimbaBisor = function (aOptions) {
                  * comprobamos adcionalmente que el drop que ejecuta esto, es el del
                  * widget*/
                 if (self.currentWidgetOn == $(this).attr("id")) {
-                    /* callback de actualización */
-                    self.cb_update_widget(self, {
-                        '_id'         :  self.currentWidgetDragging,
-                        'parent'      : self.currentWidgetOn,
-                        'title'       : $(self.currentWidgetDragging + " [name='title']").val(),
-                        'description' : $(self.currentWidgetDragging + " [name='description']").val(),
-                        'from'        : (self.currentFatherOfWidgetDragging != null) ? self.currentFatherOfWidgetDragging.attr("id"): null
-                    });
+                    // Solo hago cosas si cambio de padre el widget que arrastro
+                    if (self.currentWidgetOn != $("#"+self.currentWidgetDragging).parent().parent().attr("id")) {
+                        /* callback de actualización */
+                        self.cb_update_widget(self, {
+                            '_id'         :  self.currentWidgetDragging,
+                            'parent'      : self.currentWidgetOn,
+                            'title'       : $(self.currentWidgetDragging + " [name='title']").val(),
+                            'description' : $(self.currentWidgetDragging + " [name='description']").val(),
+                            'from'        : (self.currentFatherOfWidgetDragging != null) ? self.currentFatherOfWidgetDragging.attr("id"): null
+                        });
 
-                    self.changeWidgetParentInArray(self.currentWidgetDragging, self.currentWidgetOn);
-                    $("#"+self.currentWidgetOn).append($("#"+self.currentWidgetDragging));
+                        self.changeWidgetParentInArray(self.currentWidgetDragging, self.currentWidgetOn);
+                        $("#"+self.currentWidgetOn + "> .childs").append($("#"+self.currentWidgetDragging));
 
-                    /* Redibujamos la capa destino */
-                    self._widgetRedrawChildrens($("#"+self.currentWidgetOn));
-                    self.setClassByDataDepth();
+                        $("#"+self.currentWidgetDragging).css("top", 0);
+                        $("#"+self.currentWidgetDragging).css("left", 0);
 
-                    /* Actualizamos el origen si existiese */
-                    if (self.currentFatherOfWidgetDragging != null){
-                        self._widgetRedrawChildrens(self.currentFatherOfWidgetDragging);
-                        self.currentFatherOfWidgetDragging = null;
+                        /* Redibujamos la capa destino */
+                        self._widgetRedrawChildrens($("#"+self.currentWidgetOn));
+                        self.setClassByDataDepth();
+
+                        /* Actualizamos el origen si existiese */
+                        if (self.currentFatherOfWidgetDragging != null){
+                            self._widgetRedrawChildrens(self.currentFatherOfWidgetDragging);
+                            self.currentFatherOfWidgetDragging = null;
+                        }
+
+                        $(".rze_widget").css("overflow", "hidden");
+
+                        $("#"+self.currentWidgetOn).find(".rze_widget").show();
+
+                        self.depthHover = new Array();    
+                        self.refreshCascadeSelectWidgets();
                     }
-
-                    $(".rze_widget").css("overflow", "hidden");
-
-                    $("#"+self.currentWidgetOn).find(".rze_widget").show();
-
-                    self.depthHover = new Array();    
-                    self.refreshCascadeSelectWidgets();
                 }
+
             }
         });
     }

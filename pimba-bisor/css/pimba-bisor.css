@@ -28,7 +28,7 @@ body{
 .rze_widget{
     border: solid 1px #d0d0d0;
     background-color: #f3f3f3;
-    position: absolute;
+    position: relative;
     float: left;
     width: auto;
     height: auto;
@@ -42,6 +42,12 @@ body{
     font-size: 14px;
     float: left;
 }
+/* Depths*/
+.depth_0{width: 900px; min-height: 800px;}
+.depth_1{width: 500px; min-height: 500px;}
+.depth_2{width: 400px; min-height: 400px;}
+.depth_3{width: 300px; min-height: 300px;}
+.depth_4{}
 
 .rze_widget .actions {
     width: 100%;
@@ -50,11 +56,12 @@ body{
     cursor: pointer;
     float: left;
 }
-
+.rze_widget .actions div{
+    margin-right: 5px;
+}
 .rze_widget .childs{
-    border: solid 1px #ccc;
     width: 100%;
-    height: auto;
+    height: 100%;
     float: left;
 }
 
@@ -135,12 +142,7 @@ body{
 .hoverClass{
     background-color: red;
 }
-/* Depths*/
-.depth_0{width: 600px; min-height: 600px;}
-.depth_1{width: 500px; min-height: 500px;}
-.depth_2{width: 400px; min-height: 400px;}
-.depth_3{width: 300px; min-height: 300px;}
-.depth_4{}
+
 
 canvas{
     z-index:9999;
