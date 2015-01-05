@@ -25,9 +25,30 @@ Bootstrap
 ##Instalación e inicialización
 
 Debes incluir previamente las librerías de Bisor:
-	<script src="./pimba-bisor/js/pimba-bisor.js" ></script>
-	<link rel="stylesheet" href="./pimba-bisor/css/pimba-bisor.css" type="text/css">
-	<link rel="stylesheet" href="./pimba-bisor/css/theme-default.css" type="text/css">
+
+```
+<script src="./pimba-bisor/js/pimba-bisor.js" ></script>
+<link rel="stylesheet" href="./pimba-bisor/css/pimba-bisor.css" type="text/css">
+<link rel="stylesheet" href="./pimba-bisor/css/theme-default.css" type="text/css">
+```
+
+...y añadir al HTML de tu proyecto el contenedor del dashboard:
+
+
+```html
+<div class="pimba_bisor_dashboard">
+   <div class="rze_container"></div>            
+</div>
+```
+
+...y crear el objeto Bisor
+	
+```
+aOptions = new Array();
+pimbaBisor = new PimbaBisor(aOptions);
+```
+
+Si en este punto puedes recargar la página sin conflictor, *enhorabuena!*, ya has instalado BISOR en tu proyecto.
 
 ##Métodos útiles
 A continuación se describen algunos de los métodos mas útiles para integrar Bisor con terceras aplicaciones.
