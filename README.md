@@ -1,5 +1,4 @@
 #pimba-bisor
-------------
 
 Allows the view of PIMBA's data through draggable widgets
 
