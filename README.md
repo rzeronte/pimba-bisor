@@ -8,7 +8,7 @@ Bisor utiliza algunas librerías externas que puedes cargar desde un repositorio
 JQuery by Google
 
 
-```
+```html
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.css" />
@@ -16,7 +16,7 @@ JQuery by Google
 
 Bootstrap
 
-```
+```html
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
@@ -26,10 +26,10 @@ Bootstrap
 
 Debes incluir previamente las librerías de Bisor:
 
-```
-<script src="./pimba-bisor/js/pimba-bisor.js" ></script>
-<link rel="stylesheet" href="./pimba-bisor/css/pimba-bisor.css" type="text/css">
-<link rel="stylesheet" href="./pimba-bisor/css/theme-default.css" type="text/css">
+```html
+<script src="../pimba-bisor/js/pimba-bisor.js" ></script>
+<link rel="stylesheet" href="../pimba-bisor/css/pimba-bisor.css" type="text/css">
+<link rel="stylesheet" href="../pimba-bisor/css/theme-default.css" type="text/css">
 ```
 
 ...y añadir al HTML de tu proyecto el contenedor del dashboard:
@@ -44,11 +44,35 @@ Debes incluir previamente las librerías de Bisor:
 ...y crear el objeto Bisor
 	
 ```javascript
+<script type='text/javascript'>
 var aOptions = new Array();
 var pimbaBisor = new PimbaBisor(aOptions);
 ```
 
 Si en este punto puedes recargar la página sin conflictos o errores, **enhorabuena!**, ya has instalado BISOR en tu proyecto.
+
+##Personalización al inicializar
+Bisor ofrece algunas posibilidades de personalización que permitirán ajustar
+su funcionamiento en el momento de su inicialización. Esta personalización se
+realizará mediante parámetros pasados al constructor:
+
+```javascript
+<script type='text/javascript'>
+aOptions = {
+    showSelectorCards: true,
+    depthTemplates: {
+        0: { file: '../pimba-bisor/templates/default-card.html', id:'bisor-template-default'},
+        1: { file: '../pimba-bisor/templates/small-card.html',   id:'bisor-template-small'},
+        2: { file: '../pimba-bisor/templates/big-card.html',     id:'bisor-template-big'}
+    }
+};
+                
+pimbaBisor = new PimbaBisor(aOptions);
+```
+
+En el ejemplo anterior podemos ver un ejemplo de inicialización en el que se
+especifican 2 parámetros, uno indica que queremos ver el selector de perspectivas/tarjetas
+y el otro corresponde a los templates utilizados para los widgets.
 
 ##Eventos disponibles
 

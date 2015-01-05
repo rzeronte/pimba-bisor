@@ -23,8 +23,19 @@ var PimbaBisor = function (aOptions) {
     this.cb_edit_widget                = aOptions['cb_edit_widget'];
     this.cb_create_widget              = aOptions['cb_create_widget'];
     this.cb_delete_widget              = aOptions['cb_delete_widget'];
-    /*Template para el widget */
-    this.depthTemplates                = aOptions['depthTemplates'];
+
+    /*Template para el widget, si no se definen se usan por defecto */
+    if (typeof(aOptions['depthTemplates']) == 'undefined') {
+        this.depthTemplates = {
+                0: { file: '../pimba-bisor/templates/default-card.html', id:'bisor-template-default'},
+                1: { file: '../pimba-bisor/templates/small-card.html',   id:'bisor-template-small'},
+                2: { file: '../pimba-bisor/templates/big-card.html',     id:'bisor-template-big'}
+        };
+    } else {
+        this.depthTemplates            = aOptions['depthTemplates'];
+    }
+    
+    /* El template para el formulario es siempre el mismo, no customizable */
     this.dialogFormTemplateFile        = "../pimba-bisor/templates/dialog-form.html";
 
     this.constructor = function(aOptions) {
