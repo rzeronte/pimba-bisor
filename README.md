@@ -132,6 +132,9 @@ Aquí un ejemplo de inicialización con el callback *cb_init* definido
      }
 </script>
 ```
+
+Puedes ver el código de la demo callbacks-events.html para ver un ejemplo.
+
 *NOTA: Los callbacks pueden definirse 'inline' desde el propio array de opciones o
 si resulta mas cómodo puede definirse como una función separada.*
 
