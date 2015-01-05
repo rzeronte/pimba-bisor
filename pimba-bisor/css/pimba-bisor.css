@@ -4,24 +4,17 @@ body{
     font-family: Arial;
 }
 
-#header{
-    width: 100%;
-    margin: 0 0 0 20px;
-    padding: 0;
-}
-
 .pimba_bisor_dashboard {
-    padding: 30px;
 }
 /* Container para el section area*/
 .rze_container{
     padding: 0px 0 0px 0;
     background-color: #4d777a;
-    width: 95%;
+    width: 99%;
     min-height: 600px;
     position: relative;
     cursor: crosshair;
-    overflow: hidden;
+    float: left;
 }
 
 /* Widget básico */
@@ -43,10 +36,10 @@ body{
     float: left;
 }
 /* Depths*/
-.depth_0{width: 900px; min-height: 800px;}
-.depth_1{width: 500px; min-height: 500px;}
-.depth_2{width: 400px; min-height: 400px;}
-.depth_3{width: 300px; min-height: 300px;}
+.depth_0{width: 95%; margin-right: 20px; min-height: 900px;}
+.depth_1{width: 500px; min-height: 300px;}
+.depth_2{width: 400px; min-height: 200px;}
+.depth_3{width: 300px; min-height: 100px;}
 .depth_4{}
 
 .rze_widget .actions {

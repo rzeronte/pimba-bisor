@@ -14,6 +14,8 @@ var PimbaBisor = function (aOptions) {
     this.mouseY                        = 0;
     this.maxDepth                      = 4;
     this.showSelectorCards             = aOptions['showSelectorCards'];
+    this.gridWidth                     = 20;
+    this.gridHeight                    = 20;
     /* Callbacks para refresco de información*/
     this.cb_init                       = aOptions['cb_init'];
     this.cb_change_select              = aOptions['cb_change_select'];
@@ -23,16 +25,19 @@ var PimbaBisor = function (aOptions) {
     this.cb_delete_widget              = aOptions['cb_delete_widget'];
     /*Template para el widget */
     this.depthTemplates                = aOptions['depthTemplates'];
-    this.dialogFormTemplateFile        = "pimba-bisor/templates/dialog-form.html";
+    this.dialogFormTemplateFile        = "../pimba-bisor/templates/dialog-form.html";
 
     this.constructor = function(aOptions) {
+        console.log('[Bisor]constructor')
         /*Dibujamos o no el intercambiador de perspectivas*/
         if (aOptions['showSelectorCards'] === true) {
             self.drawSelectorCards(); 
         }
         
         /* Ejecutamos callback de inicio */
-        this.cb_init(self); 
+        if (typeof(this.cb_init) != 'undefined') {
+            this.cb_init(self); 
+        }
         
         /****************************************************  Eventos JQuery*/
         /** Gestión de evento para cambio de perspectiva**/
@@ -85,7 +90,7 @@ var PimbaBisor = function (aOptions) {
      * Inicia pimba-bisor
      **/        
     this.go = function() {
-
+        console.log(self.dataWidgetOrigin);
         /* Creamos físicamente cada widget desde el array de datos */
         self.createWidgets(self.dataWidgetOrigin);
 
@@ -108,6 +113,7 @@ var PimbaBisor = function (aOptions) {
      * Carga templates para dialogo y para depth de tarjetas
      **/
     this.loadStaticTemplates = function() {
+        console.log("[Bisor]loadStaticTemplates");
         // Template para el dialog y el formulario de edición
         $.ajax({
             type: 'GET',
@@ -373,6 +379,7 @@ var PimbaBisor = function (aOptions) {
             containment: ".rze_container",
             handle     : "div.move",
             zIndex     : 10,
+            grid: [ self.gridWidth, self.gridHeight ], 
             start: function(event, ui) {
                 
                 var idWidget = $(this).attr("id");
@@ -455,14 +462,11 @@ var PimbaBisor = function (aOptions) {
                             self._widgetRedrawChildrens(self.currentFatherOfWidgetDragging);
                             self.currentFatherOfWidgetDragging = null;
                         }
-
-                        $(".rze_widget").css("overflow", "hidden");
-
-                        $("#"+self.currentWidgetOn).find(".rze_widget").show();
-
-                        self.depthHover = new Array();    
-                        self.refreshCascadeSelectWidgets();
                     }
+                    $(".rze_widget").css("overflow", "hidden");
+                    $("#"+self.currentWidgetOn).find(".rze_widget").show();
+                    self.depthHover = new Array();    
+                    self.refreshCascadeSelectWidgets();
                 }
 
             }
