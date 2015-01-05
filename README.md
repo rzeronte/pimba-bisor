@@ -27,7 +27,7 @@ Bootstrap
 Debes incluir previamente las librerías de Bisor:
 
 ```html
-<script src="../pimba-bisor/js/pimba-bisor.js" ></script>
+<script type="text/javascript" src="../pimba-bisor/js/pimba-bisor.js"></script>
 <link rel="stylesheet" href="../pimba-bisor/css/pimba-bisor.css" type="text/css">
 <link rel="stylesheet" href="../pimba-bisor/css/theme-default.css" type="text/css">
 ```
@@ -41,12 +41,13 @@ Debes incluir previamente las librerías de Bisor:
 </div>
 ```
 
-...y crear el objeto Bisor
+...y por último crear el objeto Bisor
 	
 ```javascript
 <script type='text/javascript'>
-var aOptions = new Array();
-var pimbaBisor = new PimbaBisor(aOptions);
+  var aOptions = new Array();
+  var pimbaBisor = new PimbaBisor(aOptions);
+</script>
 ```
 
 Si en este punto puedes recargar la página sin conflictos o errores, **enhorabuena!**, ya has instalado BISOR en tu proyecto.
@@ -58,21 +59,27 @@ realizará mediante parámetros pasados al constructor:
 
 ```javascript
 <script type='text/javascript'>
-aOptions = {
-    showSelectorCards: true,
-    depthTemplates: {
-        0: { file: '../pimba-bisor/templates/default-card.html', id:'bisor-template-default'},
-        1: { file: '../pimba-bisor/templates/small-card.html',   id:'bisor-template-small'},
-        2: { file: '../pimba-bisor/templates/big-card.html',     id:'bisor-template-big'}
-    }
-};
+  aOptions = {
+      showSelectorCards: true
+  };
                 
-pimbaBisor = new PimbaBisor(aOptions);
+  pimbaBisor = new PimbaBisor(aOptions);
+</script>
 ```
 
 En el ejemplo anterior podemos ver un ejemplo de inicialización en el que se
-especifican 2 parámetros, uno indica que queremos ver el selector de perspectivas/tarjetas
-y el otro corresponde a los templates utilizados para los widgets.
+especifica un parámetro.
+
+###Parámetros disponibles
+
+Parámetro | Valor | Descripción
+--------- | ----- | -----------
+showSelectorCards | true ó false | Muestra o no, el selector de cambio de perspectiva
+depthTemplates |  {
+                        0: { file: '../pimba-bisor/templates/default-card.html', id:'bisor-template-default'},
+                        1: { file: '../pimba-bisor/templates/small-card.html',   id:'bisor-template-small'},
+                        2: { file: '../pimba-bisor/templates/big-card.html',     id:'bisor-template-big'}
+                    } | Un array que permite especificar templates HTML para cada nivel de profundidad y su clase CSS
 
 ##Eventos disponibles
 
