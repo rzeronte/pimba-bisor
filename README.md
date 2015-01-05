@@ -48,10 +48,23 @@ var aOptions = new Array();
 var pimbaBisor = new PimbaBisor(aOptions);
 ```
 
-Si en este punto puedes recargar la página sin conflictor, *enhorabuena!*, ya has instalado BISOR en tu proyecto.
+Si en este punto puedes recargar la página sin conflictos o errores, **enhorabuena!**, ya has instalado BISOR en tu proyecto.
 
 ##Eventos disponibles
 
+Bisor internamente dispone de una serie de eventos que son lanzados de forma asíncrona a medida que se van desencadenando
+según su naturaleza.
+
+Nombre de la función del evento | Situación de lanzamiento | Argumentos de vuelta
+------------------------------- | ------------------------ | --------------------
+cb_init | Inicialización del objeto Bisor. | self
+cb_change_select | Se produce un cambio de perspectiva en el selector de las mismas. | self, id_perspective
+cb_update_widget | Un widget es movido a un sitio distinto del que estaba. | self, dataWidget
+cb_edit_widget | Al editar un widget | self, dataWidget
+cb_create_widget | Al crear un widget | self, dataWidget
+cb_delete_widget | Al borrar un widget | self, dataWidget
+
+Bisor permite indicar a su constructor que funciones serán lanzadas cuando un evento de este tipo sea lanzado.
 ##Métodos útiles
 A continuación se describen algunos de los métodos mas útiles para integrar Bisor con terceras aplicaciones.
 
