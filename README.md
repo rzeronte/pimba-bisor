@@ -43,12 +43,14 @@ Debes incluir previamente las librerías de Bisor:
 
 ...y crear el objeto Bisor
 	
-```
-aOptions = new Array();
-pimbaBisor = new PimbaBisor(aOptions);
+```javascript
+var aOptions = new Array();
+var pimbaBisor = new PimbaBisor(aOptions);
 ```
 
 Si en este punto puedes recargar la página sin conflictor, *enhorabuena!*, ya has instalado BISOR en tu proyecto.
+
+##Eventos disponibles
 
 ##Métodos útiles
 A continuación se describen algunos de los métodos mas útiles para integrar Bisor con terceras aplicaciones.
