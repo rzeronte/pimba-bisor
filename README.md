@@ -75,11 +75,11 @@ especifica un parámetro.
 Parámetro | Valor | Descripción
 --------- | ----- | -----------
 showSelectorCards | true ó false | Muestra o no, el selector de cambio de perspectiva
-depthTemplates |  {
+depthTemplates |  
                         0: { file: '../pimba-bisor/templates/default-card.html', id:'bisor-template-default'},
                         1: { file: '../pimba-bisor/templates/small-card.html',   id:'bisor-template-small'},
                         2: { file: '../pimba-bisor/templates/big-card.html',     id:'bisor-template-big'}
-                    } | Un array que permite especificar templates HTML para cada nivel de profundidad y su clase CSS
+                     | Un array que permite especificar templates HTML para cada nivel de profundidad y su clase CSS
 
 ##Eventos disponibles
 
