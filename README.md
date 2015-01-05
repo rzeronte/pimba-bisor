@@ -57,25 +57,12 @@ Bisor ofrece algunas posibilidades de personalización que permitirán ajustar
 su funcionamiento en el momento de su inicialización. Esta personalización se
 realizará mediante parámetros pasados al constructor:
 
-```javascript
-<script type='text/javascript'>
-  aOptions = {
-      showSelectorCards: true
-  };
-                
-  pimbaBisor = new PimbaBisor(aOptions);
-</script>
-```
-
-En el ejemplo anterior podemos ver un ejemplo de inicialización en el que se
-especifica un parámetro.
-
 ###Parámetros disponibles
 
 Parámetro | Valor | Descripción
 --------- | ----- | -----------
 showSelectorCards | true ó false | Muestra o no, el selector de cambio de perspectiva
-depthTemplates | Array *  | Un array que permite especificar templates HTML para cada nivel de profundidad y su clase CSS
+depthTemplates | Array *  | Un array que permite especificar templates HTML para cada nivel de profundidad de anidamiento de un widget y su clase CSS
 
 * El array para dephTemplates debe respetar el siguiente patrón
 
@@ -84,6 +71,24 @@ depthTemplates | Array *  | Un array que permite especificar templates HTML para
 1: { file: '../pimba-bisor/templates/small-card.html',   id:'bisor-template-small'},
 2: { file: '../pimba-bisor/templates/big-card.html',     id:'bisor-template-big'} |                     
 ```
+
+```javascript
+<script type='text/javascript'>
+  aOptions = {
+      showSelectorCards: true,
+      depthTemplates: {
+          0: { file: '../pimba-bisor/templates/default-card.html', id:'bisor-template-default'},
+          1: { file: '../pimba-bisor/templates/small-card.html',   id:'bisor-template-small'},
+          2: { file: '../pimba-bisor/templates/big-card.html',     id:'bisor-template-big'}
+      }
+  };
+                
+  pimbaBisor = new PimbaBisor(aOptions);
+</script>
+```
+
+En el ejemplo anterior podemos ver un ejemplo de inicialización en el que se
+especifican los dos parámetros simultánamente.
 
 ##Eventos disponibles
 
