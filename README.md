@@ -10,40 +10,79 @@ Métodos útiles
   -----------------------------------------------
 
   Rellena el selector de perspectivas con los datos recibidos en el parámetro
- 'perspectivesJSONData' que debe enviar un array de perspectivas con el
-  siguiente formato:
+ 'perspectivesJSONData'. Este parámetro debe respetar el siguiente formato:
 
   "perspectives" (Array): {
-            "__v":60,
-            "_id":"544987b19c14e40000000004",
-            "title":"Bugs pimba-bisor",
-            "user":"5449873c9c14e40000000003",
-            "childs":[
-                "54498cbd343a950a5e000004",
-                "54498ccb343a950a5e000005",
-                "544996af343a950a5e000007",
-                "5449953f9c14e4000000000b",
-                "546031687a9dc85c73000003",
-                "54602a547a9dc85c73000001",
-                "544995479c14e4000000000c",
-                "544995da9c14e4000000000d"
+            "__v": integer,
+            "_id": text,
+            "title": text,
+            "user": text,
+            "childs": Array[
+                "_id": text
             ]
-        },{
-            "__v":0,
-            "_id":"544987bb9c14e40000000005",
-            "description":" ",
-            "title":"Bugs pendientes pimba-server",
-            "user":"5449873c9c14e40000000003",
-            "childs":[]
-        },{
-            "__v":8,
-            "_id":"544987c99c14e40000000006",
-            "description":"ideas",
-            "title":"Pimba! IDEAS",
-            "user":"5449873c9c14e40000000003",
-            "childs":[
-                "544991be9c14e40000000009",
-                "544992969c14e4000000000a"
-            ]
-    }    
+   }
 
+   setJSONDataWidgets ( dataWidgets )
+   ----------------------------------
+
+   Establece los datos de los widgets para el dashboard actual mediante los
+   datos recibidos en el JSON 'dataWidgets'. Es el método estándar para
+   reiniciar el contenido de los widgets globalmente. El parámetro debe respetar
+   el siguiente formato:
+
+  "dataWidgets" (Array): {
+        "__v": integer,
+        "_id": text,
+        "childs": Array[
+           {
+                "__v": integer,
+                "_id": text,
+                "childs": Array[
+                    {
+                        "__v": integer,
+                        "_id": text,
+                        "description": text,
+                        "parent": boolean,
+                        "title": text,
+                        "user": text,
+                        "childs": Array[
+                            "_id": text
+                        ]
+                    }
+                ],
+                "description": text,
+                "parent": text,
+                "title": text,
+                "user": text
+            }
+        ],
+        "title": text,
+        "user": text
+        }
+    
+    Bisor utiliza este método internamente cada vez que cambiamos de perspectiva
+    mediante el método estándard (el selector).
+
+    NOTA: En el fondo estámos indicando a Bisor la tarjeta que adoptará la forma
+    del dashboard, por ello no se echa en falta datos como su descripción o
+    parent.
+
+    addWidget( widgetData)
+    ----------------------
+
+    Añade un widget al dashboard actual. El parámetro que recibe es un JSON con
+    los datos del widget que desea crear. Este parámetro debe respetar el
+    siguiente formato:
+
+    "dataWidget": {
+        "__v": integer,
+        "_id": text,
+        "childs": Array[],
+        "title": text,
+        "description": text,
+        "parent": boolean,
+        "user": text
+    }
+
+    NOTA: Hay que destacar que cuando se ejecuta este método, es posible incluir
+    hijos que se incluirán como tal.
