@@ -101,7 +101,6 @@ var PimbaBisor = function (aOptions) {
      * Inicia pimba-bisor
      **/        
     this.go = function() {
-        console.log(self.dataWidgetOrigin);
         /* Creamos físicamente cada widget desde el array de datos */
         self.createWidgets(self.dataWidgetOrigin);
 
@@ -213,6 +212,7 @@ var PimbaBisor = function (aOptions) {
         self.dataWidgetOrigin = data;
         self.go(); // Reinicia el dashboard
     }
+    
     /*
      * Cambia el parentId de un widget en el array de datos: MAL
      **/
@@ -224,7 +224,23 @@ var PimbaBisor = function (aOptions) {
             }
         }        
     }
-
+    
+    /*
+     * Establece la posición X e Y para un widget
+     * 
+     */
+    this.setWidgetPositionXYInArray = function (widgetId, X, Y) {
+        console.log("[Bisor]setWidgetPositionXYInArray");
+        
+        for (var i = 0; i< dataWidgetOrigin.length; i++) {
+            if (dataWidgetOrigin[i]["_id"] == widgetId) {
+                dataWidgetOrigin[i]["posX"] = 69;
+                dataWidgetOrigin[i]["posY"] = 69;
+                return;
+            }
+        }         
+    }
+    
     /*
      * Crea un número aleatorio entre min y max
      **/
@@ -405,7 +421,6 @@ var PimbaBisor = function (aOptions) {
                 $(this).draggable( "option", "zIndex", 15 );
                 $(this).addClass("rze_widget_dragging");
 
-
                 $(".rze_widget").css("overflow", "visible");
                 $(this).find(".rze_widget").hide();
             },
@@ -451,15 +466,19 @@ var PimbaBisor = function (aOptions) {
                     if (self.currentWidgetOn != $("#"+self.currentWidgetDragging).parent().parent().attr("id")) {
                         /* callback de actualización */
                         self.cb_update_widget(self, {
-                            '_id'         :  self.currentWidgetDragging,
+                            '_id'         : self.currentWidgetDragging,
                             'parent'      : self.currentWidgetOn,
                             'title'       : $(self.currentWidgetDragging + " [name='title']").val(),
                             'description' : $(self.currentWidgetDragging + " [name='description']").val(),
                             'from'        : (self.currentFatherOfWidgetDragging != null) ? self.currentFatherOfWidgetDragging.attr("id"): null
                         });
 
+                        // Cambiamos el padre en el array de datos
                         self.changeWidgetParentInArray(self.currentWidgetDragging, self.currentWidgetOn);
+                        // Movemos el widget físicamente
                         $("#"+self.currentWidgetOn + "> .childs").append($("#"+self.currentWidgetDragging));
+                        // Cambiamos la posición X e Y en el array de datos (con el widget ya movido físicamente)
+                        self.setWidgetPositionXYInArray(self.currentWidgetDragging, 69, 69);
 
                         $("#"+self.currentWidgetDragging).css("top", 0);
                         $("#"+self.currentWidgetDragging).css("left", 0);
@@ -473,13 +492,15 @@ var PimbaBisor = function (aOptions) {
                             self._widgetRedrawChildrens(self.currentFatherOfWidgetDragging);
                             self.currentFatherOfWidgetDragging = null;
                         }
+                    } else {
+                        // Cambiamos la posición X e Y en el array de datos (con el widget ya movido físicamente)
+                        self.setWidgetPositionXYInArray(self.currentWidgetDragging, 69, 69);
                     }
                     $(".rze_widget").css("overflow", "hidden");
                     $("#"+self.currentWidgetOn).find(".rze_widget").show();
                     self.depthHover = new Array();    
                     self.refreshCascadeSelectWidgets();
                 }
-
             }
         });
     }
