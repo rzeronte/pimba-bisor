@@ -1,18 +1,15 @@
-pimba-bisor
-===========
+#pimba-bisor
 
 Allows the view of PIMBA's data through draggable widgets
 
-Métodos útiles
-==============
+##Métodos útiles
 
-  fillSelectPerspectives ( perspectivesJSONData )
-  -----------------------------------------------
+###fillSelectPerspectives(perspectivesJSONData)
 
-  Rellena el selector de perspectivas con los datos recibidos en el parámetro
- 'perspectivesJSONData'. Este parámetro debe respetar el siguiente formato:
+Rellena el selector de perspectivas con los datos recibidos en el parámetro
+'perspectivesJSONData'. Este parámetro debe respetar el siguiente formato:
 
-  "perspectives" (Array): {
+  "perspectives"(Array): {
             "__v": integer,
             "_id": text,
             "title": text,
@@ -22,8 +19,7 @@ Métodos útiles
             ]
    }
 
-   setJSONDataWidgets ( dataWidgets )
-   ----------------------------------
+###setJSONDataWidgets ( dataWidgets )
 
    Establece los datos de los widgets para el dashboard actual mediante los
    datos recibidos en el JSON 'dataWidgets'. Es el método estándar para
@@ -63,9 +59,9 @@ Métodos útiles
     Bisor utiliza este método internamente cada vez que cambiamos de perspectiva
     mediante el método estándard (el selector).
 
-    NOTA: En el fondo estámos indicando a Bisor la tarjeta que adoptará la forma
+    **En el fondo estámos indicando a Bisor la tarjeta que adoptará la forma
     del dashboard, por ello no se echa en falta datos como su descripción o
-    parent.
+    parent.**
 
     addWidget( widgetData)
     ----------------------
@@ -84,5 +80,5 @@ Métodos útiles
         "user": text
     }
 
-    NOTA: Hay que destacar que cuando se ejecuta este método, es posible incluir
-    hijos que se incluirán como tal.
+    **NOTA: Hay que destacar que cuando se ejecuta este método, es posible incluir
+    hijos que se incluirán como tal.**
