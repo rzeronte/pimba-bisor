@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>pimba-bisor - Demo</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!-- JQuery by Google-->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+        <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.css" />
+        <!-- Bootstrap CDN -->
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+        <!-- pimba-bisor -->
+        <script src="../pimba-bisor/js/pimba-bisor.js" ></script>
+        <link rel="stylesheet" href="../pimba-bisor/css/pimba-bisor.css" type="text/css">
+        <!-- theme default para las tarjetas -->
+        <link rel="stylesheet" href="../pimba-bisor/css/theme-default.css" type="text/css">
+        
+
+        <!-- *********************Demo Fake App con Pimba-bisor **************** -->
+        <script type="text/javascript">
+
+            var pimbaBisor;     // objeto PimbaBisor
+            window.onload = simpleBisorDemo();
+
+            function simpleBisorDemo() {
+
+                aOptions = {
+                    showSelectorCards: true,
+                    'cb_init': function (objBisor) {
+                        alert("Este es el callback cb_init!");
+                    }
+                };
+                pimbaBisor = new PimbaBisor(aOptions);
+             }
+        </script>
+    </head>
+
+    <body id="body">
+        <h1>Ejemplo callback cb_init de Bisor!</h1>
+        <p>En este ejemplo inicializamos Bisor y seteamos el callback <i>cb_init</i> de Bisor</p>
+        <p>Si puedes ver una ventana de alerta, es que el cb_init se ha ejecutado correctamente.</p>
+        <div class="pimba_bisor_dashboard">
+            <div class="rze_container"></div>            
+        </div>
+
+    </body> 
+</html>

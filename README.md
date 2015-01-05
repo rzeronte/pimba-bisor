@@ -63,7 +63,7 @@ realizará mediante parámetros pasados al constructor:
 
 Parámetro | Valor | Descripción
 --------- | ----- | -----------
-showSelectorCards | true ó false | Muestra o no, el selector de cambio de perspectiva
+showSelectorCards | true ó false | Muestra o no, el selector de cambio de perspectiva/tarjetas
 depthTemplates | Array *  | Un array que permite especificar templates HTML para cada nivel de profundidad de anidamiento de un widget y su clase CSS
 
 * El array para dephTemplates debe respetar el siguiente patrón
@@ -106,7 +106,29 @@ cb_edit_widget | Al editar un widget | self, dataWidget
 cb_create_widget | Al crear un widget | self, dataWidget
 cb_delete_widget | Al borrar un widget | self, dataWidget
 
+###Inicialización con callbacks definidos
+
 Bisor permite indicar a su constructor que funciones serán lanzadas cuando un evento de este tipo sea lanzado.
+
+Aquí un ejemplo de inicialización con el callback *cb_init* definido
+
+```javascript
+<script type="text/javascript">
+    var pimbaBisor;     // objeto PimbaBisor
+    window.onload = simpleBisorDemo();
+
+    function simpleBisorDemo() {
+        aOptions = {
+            showSelectorCards: true,
+            'cb_init': function (objBisor) {
+                alert("Este es el callback cb_init!");
+            }
+        };
+        pimbaBisor = new PimbaBisor(aOptions);
+     }
+</script>
+```
+
 ##Métodos útiles
 A continuación se describen algunos de los métodos mas útiles para integrar Bisor con terceras aplicaciones.
 
