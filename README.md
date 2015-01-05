@@ -138,7 +138,7 @@ si resulta mas cómodo puede definirse como una función separada.*
 ##Métodos útiles
 A continuación se describen algunos de los métodos mas útiles para integrar Bisor con terceras aplicaciones.
 
-####fillSelectPerspectives ( *perspectivesJSONData* )
+#####fillSelectPerspectives ( *perspectivesJSONData* )
 --------------------------------------------------
 Rellena el selector de perspectivas con los datos recibidos en el parámetro *perspectivesJSONData*.
 
@@ -154,7 +154,7 @@ Este parámetro debe respetar el siguiente formato:
 		]
 	}
 
-####setJSONDataWidgets ( *dataWidgets* )
+#####setJSONDataWidgets ( *dataWidgets* )
 -------------------------------------
 Establece los datos de los widgets para el dashboard actual mediante los
 datos recibidos en el parámetro *dataWidgets*. Es el método estándar para
@@ -198,7 +198,7 @@ mediante el método estándard (el selector).
 del dashboard, por ello no se echa en falta datos como su descripción o
 parent.*
 
-####addWidget( *widgetData*)
+#####addWidget( *widgetData*)
 ----------------------------
 
 Añade un widget al dashboard actual. El parámetro que recibe es un JSON con
