@@ -52,6 +52,8 @@ Debes incluir previamente las librerías de Bisor:
 
 Si en este punto puedes recargar la página sin conflictos o errores, **enhorabuena!**, ya has instalado BISOR en tu proyecto.
 
+Puedes ver el código de la demo basic.html para ver un ejemplo.
+
 ##Personalización al inicializar
 Bisor ofrece algunas posibilidades de personalización que permitirán ajustar
 su funcionamiento en el momento de su inicialización. Esta personalización se
