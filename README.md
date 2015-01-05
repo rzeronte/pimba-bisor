@@ -108,7 +108,8 @@ cb_delete_widget | Al borrar un widget | self, dataWidget
 
 ###Inicialización con callbacks definidos
 
-Bisor permite indicar a su constructor que funciones serán lanzadas cuando un evento de este tipo sea lanzado.
+Bisor permite indicar a su constructor que funciones serán lanzadas cuando un evento
+de este tipo sea lanzado.
 
 Aquí un ejemplo de inicialización con el callback *cb_init* definido
 
@@ -128,6 +129,11 @@ Aquí un ejemplo de inicialización con el callback *cb_init* definido
      }
 </script>
 ```
+*NOTA: Los callbacks pueden definirse 'inline' desde el propio array de opciones o
+si resulta mas cómodo puede definirse como una función separada.
+
+También es importante conocer los argumentos devueltos en cada callback para un
+mayor control.*
 
 ##Métodos útiles
 A continuación se describen algunos de los métodos mas útiles para integrar Bisor con terceras aplicaciones.
