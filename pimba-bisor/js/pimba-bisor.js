@@ -24,11 +24,11 @@ var PimbaBisor = function (aOptions) {
     this.cb_create_widget              = aOptions['cb_create_widget'];
     this.cb_delete_widget              = aOptions['cb_delete_widget'];
 
-    /* Control de la instalación tipo bowler o pelo */
-    if (typeof(aOptions["bowlerInstallation"]) != 'undefined') {
-        this.bowlerInstallation        = aOptions["bowlerInstallation"];
+    /* Control de la instalación tipo bower o pelo */
+    if (typeof(aOptions["bowerInstallation"]) != 'undefined') {
+        this.bowerInstallation        = aOptions["bowerInstallation"];
     } else {
-        this.bowlerInstallation        = true;
+        this.bowerInstallation        = true;
     }
 
     /*Template para el widget, si no se definen se usan por defecto */
@@ -102,13 +102,13 @@ var PimbaBisor = function (aOptions) {
             }
         });
 
-        /* Cargámos el template controlando los origenes, si la instalación es bowler o no */
-        var bowlerSource = "";
-        if (self.bowlerInstallation == true) {
-            var bowlerSource = 'bowler_components/pimba-bisor/';
+        /* Cargámos el template controlando los origenes, si la instalación es bower o no */
+        var bowerSource = "";
+        if (self.bowerInstallation == true) {
+            var bowerSource = 'bower_components/pimba-bisor/';
         }
 
-        self.loadStaticTemplates(bowlerSource);
+        self.loadStaticTemplates(bowerSource);
     }
 
     //***************************************************************** MÉTODOS
@@ -137,12 +137,12 @@ var PimbaBisor = function (aOptions) {
     /*
      * Carga templates para dialogo y para depth de tarjetas
      **/
-    this.loadStaticTemplates = function(prefixBowler) {
+    this.loadStaticTemplates = function(prefixBower) {
         console.log("[Bisor]loadStaticTemplates");
         // Template para el dialog y el formulario de edición
         $.ajax({
             type: 'GET',
-            url: prefixBowler + self.dialogFormTemplateFile,
+            url: prefixBower + "pimba-bisor/"+self.dialogFormTemplateFile,
             success: function(data) {
                 $(".rze_container").after(data);
             },error: function(){ console.log("Error loadTemplateWidget[dialogFormTemplate]");  }
@@ -196,7 +196,7 @@ var PimbaBisor = function (aOptions) {
         // Templates para widgets
         for (var i in self.depthTemplates) {
 
-            if (self.bowlerInstallation == true) {
+            if (self.bowerInstallation == true) {
                 var fileRoute = 'bower_components/pimba-bisor/' + self.depthTemplates[i]['file'];
             } else {
                 var fileRoute = self.depthTemplates[i]['file'];
