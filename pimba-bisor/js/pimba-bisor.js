@@ -24,19 +24,26 @@ var PimbaBisor = function (aOptions) {
     this.cb_create_widget              = aOptions['cb_create_widget'];
     this.cb_delete_widget              = aOptions['cb_delete_widget'];
 
+    /* Control de la instalación tipo bowler o pelo */
+    if (typeof(aOptions["bowlerInstallation"]) != 'undefined') {
+        this.bowlerInstallation        = aOptions["bowlerInstallation"];
+    } else {
+        this.bowlerInstallation        = false;
+    }
+
     /*Template para el widget, si no se definen se usan por defecto */
     if (typeof(aOptions['depthTemplates']) == 'undefined') {
         this.depthTemplates = {
-            0: { file: 'templates/default-card.html', id:'bisor-template-default'},
-            1: { file: 'templates/small-card.html',   id:'bisor-template-small'},
-            2: { file: 'templates/big-card.html',     id:'bisor-template-big'}
+            0: { file: '../pimba-bisor/templates/default-card.html', id:'bisor-template-default'},
+            1: { file: '../pimba-bisor/templates/small-card.html',   id:'bisor-template-small'},
+            2: { file: '../pimba-bisor/templates/big-card.html',     id:'bisor-template-big'}
         };
     } else {
         this.depthTemplates            = aOptions['depthTemplates'];
     }
 
     /* El template para el formulario es siempre el mismo, no customizable */
-    this.dialogFormTemplateFile        = "pimba-bisor/templates/dialog-form.html";
+    this.dialogFormTemplateFile        = "../pimba-bisor/templates/dialog-form.html";
 
     this.constructor = function(aOptions) {
         console.log('[Bisor]constructor')
@@ -95,9 +102,13 @@ var PimbaBisor = function (aOptions) {
             }
         });
 
-        /* Cargámos el template*/
-        self.loadStaticTemplates();
+        /* Cargámos el template controlando los origenes, si la instalación es bowler o no */
+        var bowlerSource = "";
+        if (self.bowlerInstallation == true) {
+            var bowlerSource = 'bowler_components/pimba-bisor/';
+        }
 
+        self.loadStaticTemplates(bowlerSource);
     }
 
     //***************************************************************** MÉTODOS
@@ -126,12 +137,12 @@ var PimbaBisor = function (aOptions) {
     /*
      * Carga templates para dialogo y para depth de tarjetas
      **/
-    this.loadStaticTemplates = function() {
+    this.loadStaticTemplates = function(prefixBowler) {
         console.log("[Bisor]loadStaticTemplates");
         // Template para el dialog y el formulario de edición
         $.ajax({
             type: 'GET',
-            url: 'bower_components/pimba-bisor/' + self.dialogFormTemplateFile,
+            url: prefixBowler + self.dialogFormTemplateFile,
             success: function(data) {
                 $(".rze_container").after(data);
             },error: function(){ console.log("Error loadTemplateWidget[dialogFormTemplate]");  }
@@ -184,9 +195,16 @@ var PimbaBisor = function (aOptions) {
 
         // Templates para widgets
         for (var i in self.depthTemplates) {
+
+            if (self.bowlerInstallation == true) {
+                var fileRoute = 'bower_components/pimba-bisor/' + self.depthTemplates[i]['file'];
+            } else {
+                var fileRoute = self.depthTemplates[i]['file'];
+            }
+
             $.ajax({
                 type: 'GET',
-                url: 'bower_components/pimba-bisor/' + self.depthTemplates[i]['file'],
+                url: fileRoute,
                 success: function(data) {
                     $(".rze_container").after(data);
                 },error: function(){ console.log("Error loadTemplateWidget[depthTemplates]");  }

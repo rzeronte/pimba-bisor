@@ -35,7 +35,7 @@
              **/
             function login(username, password) {
                 var pimbaConfig = {
-                    'url_login' : "http://93.156.32.134:8080/api/login"
+                    'url_login' : "http://localhost:8080/api/login"
                 };
 
                 $.ajax({
@@ -57,9 +57,9 @@
              **/
             function fakePrivatePimbasProject(sessionId) {
                 var pimbaConfig = {
-                    'PIMBA_API_USERS'        : "http://93.156.32.134:8080/api/users",
-                    'PIMBA_API_PERSPECTIVES' : "http://93.156.32.134:8080/api/perspectives",
-                    'PIMBA_API_CARDS'        : "http://93.156.32.134:8080/api/cards"
+                    'PIMBA_API_USERS'        : "http://localhost:8080/api/users",
+                    'PIMBA_API_PERSPECTIVES' : "http://localhost:8080/api/perspectives",
+                    'PIMBA_API_CARDS'        : "http://localhost:8080/api/cards"
                 };
 
                 /* Callbacks de eventos:
@@ -74,6 +74,7 @@
                  */
                 aOptions = {
                     showSelectorCards: true,
+                    bowlerInstallation: false,
                     depthTemplates: {
                         0: { file: '../pimba-bisor/templates/default-card.html', id:'bisor-template-default'},
                         1: { file: '../pimba-bisor/templates/small-card.html',   id:'bisor-template-small'},
@@ -188,6 +189,8 @@
     </head>
 
     <body id="body">
+        <p>Para que este ejemplo funcione correctamente debes ejecutar el servidor de pimba y
+        permitir que sea accesible desde localhost:8080</p>
         <!-- Componente RZE -->
         <div class="pimba_bisor_dashboard">
             <div class="rze_container"></div>            
