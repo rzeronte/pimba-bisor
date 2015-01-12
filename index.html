@@ -16,175 +16,6 @@
 
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-
-        <!-- pimba-bisor -->
-        <script src="./pimba-bisor/js/pimba-bisor.js" ></script>
-        <link rel="stylesheet" href="./pimba-bisor/css/pimba-bisor.css" type="text/css">
-        <!-- theme default para las tarjetas -->
-        <link rel="stylesheet" href="./pimba-bisor/css/theme-default.css" type="text/css">
-        
-
-        <!-- *********************Demo Fake App con Pimba-bisor **************** -->
-        <script type="text/javascript">
-
-            var pimbaBisor;     // objeto PimbaBisor
-            window.onload = login("pimba2", "pimba2");
-
-            /*
-             * Ejemplo básico Ajax para logeo en la API Pimba
-             **/
-            function login(username, password) {
-                var pimbaConfig = {
-                    'url_login' : "http://93.156.34.198:8080/api/login"
-                };
-
-                $.ajax({
-                    type: 'POST',
-                    url : pimbaConfig["url_login"],
-                    data: { 'username': username, 'password': password },
-                    dataType: 'json',
-                    success : function(data) {
-                        fakePrivatePimbasProject(data.token);
-                    },
-                    error: function() {
-                        alert("Se ha producido un error en el login");
-                    }
-                });
-            }
-
-            /*
-             * Ejemplo de inicializacioń del pimba-bisor, para un cliente ya logeado.
-             **/
-            function fakePrivatePimbasProject(sessionId) {
-                var pimbaConfig = {
-                    'PIMBA_API_USERS'        : "http://93.156.34.198:8080/api/users",
-                    'PIMBA_API_PERSPECTIVES' : "http://93.156.34.198:8080/api/perspectives",
-                    'PIMBA_API_CARDS'        : "http://93.156.34.198:8080/api/cards"
-                };
-
-                /* Callbacks de eventos:
-                 * 
-                 * Son funciones que permiten customizar el comportamiento de una
-                 *  app que utilice pimba-bisor pimba-bisor ejecutará estas
-                 *  unciones en momentos determinados según el tipo de callback
-                 *  que sea.
-                 * 
-                 * En nuestro caso usaremos estos callbacks para negociar contra
-                 * api-pimba-server y actualizar  pimba-bisor a nuestro antojo
-                 */
-                aOptions = {
-                    showSelectorCards: true,
-                    depthTemplates: {
-                        0: { file: 'pimba-bisor/templates/default-card.html', id:'bisor-template-default'},
-                        1: { file: 'pimba-bisor/templates/small-card.html',   id:'bisor-template-small'},
-                        2: { file: 'pimba-bisor/templates/big-card.html',     id:'bisor-template-big'}
-                    },
-                    /* callback de inicio del dashboard */
-                    'cb_init': function (objBisor) {
-                            $.ajax({
-                                type: 'GET',
-                                url: pimbaConfig["PIMBA_API_USERS"],
-                                success: function(data) {
-                                    /*Actualización de select del pimba-bisor*/
-                                    objBisor.fillSelectPerspectives(data.perspectives);
-                                },beforeSend: function (xhr) {
-                                    xhr.setRequestHeader ("Authorization", "Bearer " + sessionId);
-                                },error: function(){
-                                    console.log("Error cb_init");
-                                }
-                            });     
-                        },
-                    /* callback para cambio de tarjeta en selector de bisor */
-                    'cb_change_select': function (objBisor, id_perspective) {
-                        $.ajax({
-                            type: 'GET',
-                            url: pimbaConfig["PIMBA_API_PERSPECTIVES"] + "/" + id_perspective,
-                            success: function(data) {
-                                /* Establece datos de tarjetas y refresca el dashboard*/
-                                objBisor.setJSONDataWidgets(data);
-                            },beforeSend: function (xhr) {
-                                xhr.setRequestHeader ("Authorization", "Bearer " + sessionId);
-                            },error: function(){
-                                console.log("Error cb_change_perspective");
-                            }
-                        });     
-                    },
-                    /* callback para cambio de posición en un wiget (drop válido) */
-                    'cb_update_widget': function(objBisor, dataWidget) {
-                        console.log("cb_update_widget");
-                        $.ajax({
-                            type: 'PUT',
-                            url: pimbaConfig["PIMBA_API_CARDS"] + "/" + dataWidget["_id"],
-                            data: {
-                                'parent'      : dataWidget["parent"],
-                                'title'       : dataWidget["title"],
-                                'description' : dataWidget["description"]
-                            },
-                            success: function(data) {
-                            },beforeSend: function (xhr) {
-                                xhr.setRequestHeader ("Authorization", "Bearer " + sessionId);
-                            },error: function(){
-                                console.log("Error cb_update_widget");
-                            }
-                        }); 
-                    },
-                    /* callback para la edición de información de un widget*/
-                    'cb_edit_widget': function(objBisor, dataWidget) {
-                        $.ajax({
-                            type: 'PUT',
-                            url: pimbaConfig["PIMBA_API_CARDS"] + "/" + dataWidget["_id"],
-                            data: {
-                                'parent'      : dataWidget["parent"],
-                                'title'       : dataWidget["title"],
-                                'description' : dataWidget["description"]
-                            },
-                            success: function(data) {
-                            },beforeSend: function (xhr) {
-                                xhr.setRequestHeader ("Authorization", "Bearer " + sessionId);
-                            },error: function(){
-                                console.log("Error cb_edit_widget");
-                            }
-                        });                         
-                    },
-                    /* callback para la creación de un widget */
-                    'cb_create_widget': function(objBisor, dataWidget) {
-                        $.ajax({
-                            type: 'POST',
-                            url: pimbaConfig["PIMBA_API_CARDS"],
-                            data: {
-                                'parent'      : dataWidget["parent"],
-                                'title'       : dataWidget["title"],
-                                'description' : dataWidget["description"]
-                            },
-                            success: function(data) {
-                                /*Añadimos el widget */
-                                objBisor.addWidget(data);
-                            },beforeSend: function (xhr) {
-                                xhr.setRequestHeader ("Authorization", "Bearer " + sessionId);
-                            },error: function(){
-                                console.log("Error cb_create_widget");
-                            }
-                        });                         
-                    },
-                    /* callback para eliminación de un widget */
-                    'cb_delete_widget': function(objBisor, dataWidget) {
-                        $.ajax({
-                            type: 'DELETE',
-                            url: pimbaConfig["PIMBA_API_CARDS"] + "/" + dataWidget["_id"],
-                            success: function(data) {
-                            },beforeSend: function (xhr) {
-                                xhr.setRequestHeader ("Authorization", "Bearer " + sessionId);
-                            },error: function(){
-                                console.log("Error cb_delete_widget");
-                            }
-                        });                            
-                    }
-                };
-                
-                /* Inicializamos el objeto bisor */
-                pimbaBisor = new PimbaBisor(aOptions);
-             }
-        </script>
     </head>
 
     <body id="body">
@@ -192,11 +23,14 @@
         <div id="header">
             <h1>Pimba Bisor - Demo</h1>
         </div>
-        
-        <!-- Componente RZE -->
-        <div class="pimba_bisor_dashboard">
-            <div class="rze_container"></div>            
-        </div>
-        <!-- Fin RZE-->
-    </body> 
+        <p><a href="https://github.com/rzeronte/pimba-bisor" target="_blank">Documentación en gitHub</a></p>
+
+        <h2>Demos</h2>
+        <ul>
+            <li><a href="demos\basic.html">Demo básica</a></li>
+            <li><a href="demos\callbacks-events.html">Demo callbacks events</a></li>
+            <li><a href="demos\callbacks-events.html">Pimba Client</a></li>
+        </ul>
+
+    </body>
 </html>
