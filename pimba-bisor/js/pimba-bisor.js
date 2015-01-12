@@ -1,7 +1,7 @@
 var PimbaBisor = function (aOptions) {
-    
+
     var self = this;
-    
+
     /* Propiedades */
     var dataWidgetOrigin               = new Array();
     this.depthHover                    = new Array();
@@ -27,29 +27,29 @@ var PimbaBisor = function (aOptions) {
     /*Template para el widget, si no se definen se usan por defecto */
     if (typeof(aOptions['depthTemplates']) == 'undefined') {
         this.depthTemplates = {
-                0: { file: '../pimba-bisor/templates/default-card.html', id:'bisor-template-default'},
-                1: { file: '../pimba-bisor/templates/small-card.html',   id:'bisor-template-small'},
-                2: { file: '../pimba-bisor/templates/big-card.html',     id:'bisor-template-big'}
+            0: { file: 'templates/default-card.html', id:'bisor-template-default'},
+            1: { file: 'templates/small-card.html',   id:'bisor-template-small'},
+            2: { file: 'templates/big-card.html',     id:'bisor-template-big'}
         };
     } else {
         this.depthTemplates            = aOptions['depthTemplates'];
     }
-    
+
     /* El template para el formulario es siempre el mismo, no customizable */
-    this.dialogFormTemplateFile        = "../pimba-bisor/templates/dialog-form.html";
+    this.dialogFormTemplateFile        = "pimba-bisor/templates/dialog-form.html";
 
     this.constructor = function(aOptions) {
         console.log('[Bisor]constructor')
         /*Dibujamos o no el intercambiador de perspectivas*/
         if (aOptions['showSelectorCards'] === true) {
-            self.drawSelectorCards(); 
+            self.drawSelectorCards();
         }
-        
+
         /* Ejecutamos callback de inicio */
         if (typeof(this.cb_init) === 'function') {
-            this.cb_init(self); 
+            this.cb_init(self);
         }
-        
+
         /****************************************************  Eventos JQuery*/
         /** Gestión de evento para cambio de perspectiva**/
         $("body").on('change', '#rze_perspectives', function() {
@@ -64,13 +64,13 @@ var PimbaBisor = function (aOptions) {
             }
 
         });
-        
+
         /** Gestión de evento para añadir widget**/
         $("body").on('click', '.add', function() {
             var parentId = $(this).parent().parent().attr("id");
             self.addWidgetDialog(parentId);
         });
-        
+
         /** Gestión de evento para borrar widget**/
         $("body").on('click', '.delete', function() {
             var question = confirm("Are you sure?");
@@ -78,12 +78,12 @@ var PimbaBisor = function (aOptions) {
                 var widgetId = $(this).parent().parent().attr("id");
                 self.deleteWidget(widgetId);
             }
-        });               
+        });
         /** Gestión de evento para editar widget**/
         $("body").on('click', '.edit', function() {
             var idWidget = $(this).parent().parent().attr("id");
             self.editWidgetDialog(idWidget);
-        });      
+        });
         /** Gestión de evento para refresh widget**/
         $("body").on('click', '.refresh_card_button', function() {
             var optionSelect = $("#rze_perspectives select").val();
@@ -94,32 +94,32 @@ var PimbaBisor = function (aOptions) {
                 }
             }
         });
-        
+
         /* Cargámos el template*/
         self.loadStaticTemplates();
-       
+
     }
 
     //***************************************************************** MÉTODOS
     /**
      * Inicia pimba-bisor
-     **/        
+     **/
     this.go = function() {
         /* Creamos físicamente cada widget desde el array de datos */
         self.createWidgets(self.dataWidgetOrigin);
 
         /* Redibujamos widgets*/
         self.widgetsRedraw();
-    
+
         /* --------------------------------------- Coordenadas de mouse*/
         $("body").mousemove(function(e){
-           var parentOffset = $(this).parent().offset(); 
-           //or $(this).offset(); if you really just want the current element's offset
-           var relX = e.pageX - parentOffset.left;
-           var relY = e.pageY - parentOffset.top;
+            var parentOffset = $(this).parent().offset();
+            //or $(this).offset(); if you really just want the current element's offset
+            var relX = e.pageX - parentOffset.left;
+            var relY = e.pageY - parentOffset.top;
 
-           self.mouseX = relX;
-           self.mouseY = relY;
+            self.mouseX = relX;
+            self.mouseY = relY;
         });
     }
 
@@ -131,21 +131,21 @@ var PimbaBisor = function (aOptions) {
         // Template para el dialog y el formulario de edición
         $.ajax({
             type: 'GET',
-            url: self.dialogFormTemplateFile,
+            url: 'bower_components/pimba-bisor/' + self.dialogFormTemplateFile,
             success: function(data) {
                 $(".rze_container").after(data);
             },error: function(){ console.log("Error loadTemplateWidget[dialogFormTemplate]");  }
-        });            
-        
-        $("body").on('click', '#submit_add_form', function() {
-        if(!document.getElementById("rze_popup_add_form").checkValidity())
-        {
-            alert("Fill all fields, please.");
-        } else {
-            $("#rze_popup_add_form").submit();
-        }
         });
-        
+
+        $("body").on('click', '#submit_add_form', function() {
+            if(!document.getElementById("rze_popup_add_form").checkValidity())
+            {
+                alert("Fill all fields, please.");
+            } else {
+                $("#rze_popup_add_form").submit();
+            }
+        });
+
         /* Gestión de evento click sobre el boton crear/editar del formulario */
         $("body").on('submit', '#rze_popup_add_form', function(event) {
 
@@ -153,18 +153,18 @@ var PimbaBisor = function (aOptions) {
             var title       = $( "#rze_popup_add_form [name='title']").val();
             var description = $( "#rze_popup_add_form [name='description']").val();
             var parentId    = $( "#rze_popup_add_form [name='parent']").val();
-            
+
             /* Diferenciamos si es nuevo o editamos, para diferenciar callbacks */
             if (id != "") {
-               /* callback de edición de información de widget*/
-               var widgetData = {
-                   _id         : id, 
-                   title       : title,
-                   description : description,
-                   parent     : parentId           
-               };
+                /* callback de edición de información de widget*/
+                var widgetData = {
+                    _id         : id,
+                    title       : title,
+                    description : description,
+                    parent     : parentId
+                };
 
-               self.loadDataInTemplateWidget(widgetData);
+                self.loadDataInTemplateWidget(widgetData);
                 if (typeof(self.cb_edit_widget) === 'function' ) {
                     self.cb_edit_widget(self, widgetData);
                 }
@@ -186,14 +186,14 @@ var PimbaBisor = function (aOptions) {
         for (var i in self.depthTemplates) {
             $.ajax({
                 type: 'GET',
-                url: self.depthTemplates[i]['file'],
+                url: 'bower_components/pimba-bisor/' + self.depthTemplates[i]['file'],
                 success: function(data) {
                     $(".rze_container").after(data);
                 },error: function(){ console.log("Error loadTemplateWidget[depthTemplates]");  }
-            });            
+            });
         }
     }
-    
+
     /*
      * Dibuja el select de perspectivas
      **/
@@ -201,18 +201,18 @@ var PimbaBisor = function (aOptions) {
         var tagFormSelectPerspectives = $("<form>", {
             "id"    : "rze_perspectives"
         });
-        
+
         var tagSpanRefresh = $("<span>", {
-            "class"    : "refresh_card_button glyphicon glyphicon-refresh" 
+            "class"    : "refresh_card_button glyphicon glyphicon-refresh"
         });
-        
+
         /* Input para título */
         var select = document.createElement('select');
         $(select).appendTo(tagFormSelectPerspectives);
         $(".rze_container").before(tagFormSelectPerspectives);
         $(select).after(tagSpanRefresh);
     }
-        
+
     /*
      * Establece los datos desde un array json
      **/
@@ -220,7 +220,7 @@ var PimbaBisor = function (aOptions) {
         self.dataWidgetOrigin = data;
         self.go(); // Reinicia el dashboard
     }
-    
+
     /*
      * Cambia el parentId de un widget en el array de datos: MAL
      **/
@@ -230,53 +230,53 @@ var PimbaBisor = function (aOptions) {
                 dataWidgetOrigin[i]["parent"] = newParentId;
                 return;
             }
-        }        
+        }
     }
-    
+
     /*
      * Establece la posición X e Y para un widget
      * 
      */
     this.setWidgetPositionXYInArray = function (widgetId, X, Y) {
         console.log("[Bisor]setWidgetPositionXYInArray");
-        
+
         for (var i = 0; i< dataWidgetOrigin.length; i++) {
             if (dataWidgetOrigin[i]["_id"] == widgetId) {
                 dataWidgetOrigin[i]["posX"] = 69;
                 dataWidgetOrigin[i]["posY"] = 69;
                 return;
             }
-        }         
+        }
     }
-    
+
     /*
      * Crea un número aleatorio entre min y max
      **/
     this._randomIdentifiers = function(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
-    } 
+    }
 
     /*
      * Devuelve si un widget está en el primer nivel o no
      **/
     this._isWidgetFirstDepth = function(idWidget) {
-         var widgetInFirstLevel = $(".rze_container").children("#" + idWidget);
-         
-         if (widgetInFirstLevel.length > 0) {
-             return true;
-         } else {
-             return false;
-         }
+        var widgetInFirstLevel = $(".rze_container").children("#" + idWidget);
+
+        if (widgetInFirstLevel.length > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
-    
+
     /*
      * Redibuja todos los widgets
-     **/    
+     **/
     this.widgetsRedraw = function() {
         $(".rze_container > .rze_widget").each(function( index ) {
 
             self._widgetRedrawChildrens(this);
-            
+
             $(this).css("top", 0);
             $(this).css("left", 0);
             $(this).css("position", "relative");
@@ -285,35 +285,35 @@ var PimbaBisor = function (aOptions) {
             $( this ).attr("data-depth", "0");
 
         });
-        
+
         self.setClassByDataDepth();
     }
-    
+
     /*
      * Redibuja todos los widgets dentro del widget dado
-     **/       
+     **/
     this._widgetRedrawChildrens = function(oChildren) {
-            var offsetChildrenX = 0;
-            var offsetChildrenY = 10;
-            var childrenWidth = self.widgetMainDepthWidth;
-            var childrenHeight = self.widgetMainDepthHeight;         
-            var separation = 10;
+        var offsetChildrenX = 0;
+        var offsetChildrenY = 10;
+        var childrenWidth = self.widgetMainDepthWidth;
+        var childrenHeight = self.widgetMainDepthHeight;
+        var separation = 10;
 
-            $(oChildren).children(".rze_widget").each(function( index ) {
-                /* Control de la posición */
-                $(this).css("position", "relative");
-                $(this).css("top", 10);
-                $(this).css("left", 0);
-            
-                /*Set del Tag de depth*/
-                var depth = $( this ).parents(".rze_widget").length;
-                $( this ).attr("data-depth", depth);
-                
-                self._widgetRedrawChildrens(this);
+        $(oChildren).children(".rze_widget").each(function( index ) {
+            /* Control de la posición */
+            $(this).css("position", "relative");
+            $(this).css("top", 10);
+            $(this).css("left", 0);
+
+            /*Set del Tag de depth*/
+            var depth = $( this ).parents(".rze_widget").length;
+            $( this ).attr("data-depth", depth);
+
+            self._widgetRedrawChildrens(this);
         });
-        
+
     }
-    
+
     /**
      * Asigna las clases de profundidad en función del data-depth del widget
      **/
@@ -327,37 +327,37 @@ var PimbaBisor = function (aOptions) {
             $(this).attr("data-depth", depth);
         });
     }
-    
+
     /**
      * Refresca el estilo 'hover' de los widets cuando se apilan/sobreponen
      **/
     this.refreshCascadeSelectWidgets = function(){
-        
+
         $(".rze_widget").each(function( index ) {
             $(this).removeClass("rze_widget_hovered");
         });
-        
+
         for (i=0; i<self.depthHover.length; i++) {
             $("#"+self.depthHover[i]).addClass("rze_widget_hovered");
             var depth = $("#"+self.depthHover[i]).attr("data-depth");
         }
     }
-    
+
     /**
      * Crea capa de acciones en un widget y lo hace draggable y droppable
-     **/    
+     **/
     this.setupWidget = function(obj, widgetData) {
         /* Container de acciones en el widget*/
         var divActions = $("<div>", {
             "class": 'actions'
         });
-        
-        $(obj).append(divActions);           
+
+        $(obj).append(divActions);
 
         var divContent = $("<div>", {
             "class": 'content'
         });
-        $(obj).append(divContent);           
+        $(obj).append(divContent);
 
         if (!self._isWidgetFirstDepth(obj.attr("id"))) {
             /* Opción de eliminar */
@@ -365,7 +365,7 @@ var PimbaBisor = function (aOptions) {
                 "class": 'delete glyphicon glyphicon-remove-circle',
                 "title": 'Delete card',
             });
-            $(divActions).prepend(div);           
+            $(divActions).prepend(div);
         }
 
         /* Opción de editar */
@@ -392,14 +392,14 @@ var PimbaBisor = function (aOptions) {
             });
             $(divActions).prepend(div);
         }
-        
+
         // Añadimos al DOM finalmente
         var divChilds =  $("<div>", {
             "class": 'childs'
         });
-        
+
         divChilds.appendTo(obj);
-        
+
         /* Si no se indica parent se crea en el dashboard */
         if (widgetData['parent']== false) {
             obj.appendTo("div.rze_container");
@@ -407,19 +407,19 @@ var PimbaBisor = function (aOptions) {
             obj.appendTo("#" + widgetData['parent'] + "> .childs");
         }
 
-        $(obj).resizable();
+        //$(obj).resizable();
 
         $(obj).draggable({
             snap       : ".containerDev",
             containment: ".rze_container",
             handle     : "div.move",
             zIndex     : 10,
-            grid: [ self.gridWidth, self.gridHeight ], 
+            grid: [ self.gridWidth, self.gridHeight ],
             start: function(event, ui) {
-                
+
                 var idWidget = $(this).attr("id");
                 $(this).addClass("current");
-                
+
                 self.currentWidgetDragging = idWidget;
                 var divParent = $(this).parents(".rze_widget");
                 if (divParent.length > 0) {
@@ -456,11 +456,11 @@ var PimbaBisor = function (aOptions) {
             out: function (event, ui) {
 
                 if (self.depthHover.length == 0) {
-                    self.currentWidgetOn = null;                        
+                    self.currentWidgetOn = null;
                 } else {
                     var stackHover = self.depthHover.pop();
                     var stackLastAfterPop = self.depthHover[self.depthHover.length-1];
-                    self.currentWidgetOn = stackLastAfterPop;                                           
+                    self.currentWidgetOn = stackLastAfterPop;
                 }
 
                 self.refreshCascadeSelectWidgets();
@@ -507,7 +507,7 @@ var PimbaBisor = function (aOptions) {
                     }
                     $(".rze_widget").css("overflow", "hidden");
                     $("#"+self.currentWidgetOn).find(".rze_widget").show();
-                    self.depthHover = new Array();    
+                    self.depthHover = new Array();
                     self.refreshCascadeSelectWidgets();
                 }
             }
@@ -515,15 +515,15 @@ var PimbaBisor = function (aOptions) {
     }
 
     /*
-    * Añade opciones al select de perspectivas desde userData
-    */
+     * Añade opciones al select de perspectivas desde userData
+     */
     this.fillSelectPerspectives = function(perspectives) {
-        $("#rze_perspectives select").append(new Option('Select card master', 0, false, false));        
+        $("#rze_perspectives select").append(new Option('Select card master', 0, false, false));
         for (var i=0; i<perspectives.length;i++) {
-            $("#rze_perspectives select").append(new Option(perspectives[i]['title'], perspectives[i]['_id'], false, false));        
+            $("#rze_perspectives select").append(new Option(perspectives[i]['title'], perspectives[i]['_id'], false, false));
         }
     }
-    
+
     /*
      * Crea en el DOM los div que servirán de widgets desde array de datos
      * recursivamente
@@ -538,7 +538,7 @@ var PimbaBisor = function (aOptions) {
      */
     this.createWidgetsForWidget = function(widgetData) {
         self.addWidget(widgetData);
-         
+
         var widgetsChildren = widgetData["childs"];
         if (widgetsChildren) {
             for (var j=0; j < widgetsChildren.length ; j++){
@@ -549,44 +549,44 @@ var PimbaBisor = function (aOptions) {
 
     /**
      * Minimiza el widget dado
-     **/           
+     **/
     this.minimizeWidget = function(idWidget) {
         var widget = $("#" + idWidget);
-        
+
         widget.css("min-height", 15);
         widget.css("height", 15);
-        
+
         widget.css("min-width", 100);
         widget.css("width", 30);
-        
+
         widget.find(".rze_widget").hide();
 
         widget.resizable("option", "disabled", true );
     }
-    
+
     /**
      * Maximiza el widget dado
-     **/           
+     **/
     this.maximizeWidget = function(idWidget) {
         var widget = $("#" + idWidget);
         widget.show();
         widget.css("min-height", 40);
         widget.css("height", "auto");
-        
+
         widget.css("min-width", 100);
         widget.css("width", "auto");
 
         widget.find(".rze_widget").show();
-        
+
         widget.resizable("option", "disabled", false );
-        
+
     }
 
     /**
      * Añade un widget, con un padre si es dado
      * Si parent != false, situa en dashboard
      * Si el Id Widget es 0, se autogenera automáticamente
-     **/    
+     **/
     this.addWidget = function(widgetData) {
         var idWidget = widgetData["_id"];
         var idWidgetParent = (widgetData["parent"] == "undefined") ? "false":widgetData["parent"];
@@ -595,7 +595,7 @@ var PimbaBisor = function (aOptions) {
         if (idWidget === 0) {
             idWidget = self._randomIdentifiers(1111, 9999);
         }
-        
+
         // Contenedor principal del widget
         var divWidget = $("<div>", {
             "id": idWidget,
@@ -606,7 +606,7 @@ var PimbaBisor = function (aOptions) {
         // Resto de configuraciones en el widget
         self.setupWidget(divWidget, widgetData);
         self.loadDataInTemplateWidget(widgetData);
-      
+
         self.setClassByDataDepth();
         self.widgetsRedraw();
     }
@@ -617,34 +617,34 @@ var PimbaBisor = function (aOptions) {
     this.loadDataInTemplateWidget = function(widgetData) {
         var widget   = $("#" + widgetData['_id']);
         var depth = widget.parents(".rze_widget").length;
-        
+
         var templatesDefined = Object.keys(self.depthTemplates).length;
-        
+
         if (depth >= templatesDefined) {
             depth = 0;
         }
-        
+
         var idTemplate = self.depthTemplates[depth]['id'];
         var template = $("#"+idTemplate);
         widget.children(".bisor-theme-default").remove();
         widget.children(".content").html($(template).html());
-        
+
         /* Rastreamos el array de widget para sustituir en el template */
         for (var i in widgetData) {
             if (typeof(widgetData[i]) != 'object') {
-               widget.children(".content").find("[data-pimba-field='" + i + "']").text(widgetData[i]);
+                widget.children(".content").find("[data-pimba-field='" + i + "']").text(widgetData[i]);
             }
         }
     }
-    
+
     /**
      * Añade una perspectiva
-     **/    
+     **/
     this.addPerspective = function(idWidget) {
         /* Solo añadimos perspectiva cuando estamos en DashBoards, osea
          * sin perspectiva */
         if ($("#rze_perspectives select").val() <= 0) {
-            $("#rze_perspectives select").append(new Option('Perspective #'+idWidget, idWidget, false, false));        
+            $("#rze_perspectives select").append(new Option('Perspective #'+idWidget, idWidget, false, false));
         }
     }
 
@@ -653,8 +653,8 @@ var PimbaBisor = function (aOptions) {
      **/
     this.clearDashboard = function() {
         $(".rze_container").html("");
-    } 
-  
+    }
+
     /* Activa y muestra el dialogo*/
     this.addWidgetDialog = function(parentId) {
         $('#rze_popup_add').modal('show');
@@ -668,7 +668,7 @@ var PimbaBisor = function (aOptions) {
         $("#rze_popup_add .modal-title").html("Create card in #"+ parentId);
         $("#rze_popup_add_form #submit_add_form").html("Create");
     }
-    
+
     this.editWidgetDialog = function(idWidget) {
         var widget = $("#"+idWidget );
         var content = $("#"+idWidget + " .content");
@@ -679,12 +679,12 @@ var PimbaBisor = function (aOptions) {
         $("#rze_popup_add_form").find("[name='title']").html('');
         $("#rze_popup_add_form").find("[name='description']").html('');
         $("#rze_popup_add_form").find("[name='parent']").val('');
-        
+
         var id          = widget.attr("id");
         var title       = content.find("[data-pimba-field='title']").html();
         var description = content.find("[data-pimba-field='description']").html();
         var parent      = widget.parent().attr("id");
-        
+
         $("#rze_popup_add_form [name='id']").val(id);
         $("#rze_popup_add_form [name='title']").val(title);
         $("#rze_popup_add_form [name='description']").val(description);
@@ -693,7 +693,7 @@ var PimbaBisor = function (aOptions) {
         $("#rze_popup_add .modal-title").html("Edit card");
         $("#rze_popup_add_form #submit_add_form").html("Edit");
     }
-    
+
     /*
      * Elimina un widget
      **/
@@ -706,12 +706,12 @@ var PimbaBisor = function (aOptions) {
             });
         }
     }
-    
+
     /* Inserta la información de un widget en el array donde corresponda */
     this.insertWidgetData = function(widgetData){
         var parentId = widgetData["parent"];
     }
-       
+
     /* Lanzamos al final una vez definidos todos los métodos*/
     self.constructor(aOptions);
 }
