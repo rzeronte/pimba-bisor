@@ -46,7 +46,7 @@ var PimbaBisor = function (aOptions) {
         }
         
         /* Ejecutamos callback de inicio */
-        if (typeof(this.cb_init) != 'undefined') {
+        if (typeof(this.cb_init) === 'function') {
             this.cb_init(self); 
         }
         
@@ -56,7 +56,9 @@ var PimbaBisor = function (aOptions) {
             var optionSelect = $("#rze_perspectives select").val();
             if ( parseInt(optionSelect) > 0) {
                 self.clearDashboard();
-                self.cb_change_select(self, $("#rze_perspectives select").val());
+                if (typeof(self.cb_change_select) === 'function' ) {
+                    self.cb_change_select(self, $("#rze_perspectives select").val());
+                }
             } else if (parseInt(optionSelect) == 0) {
                 self.clearDashboard();
             }
@@ -87,7 +89,9 @@ var PimbaBisor = function (aOptions) {
             var optionSelect = $("#rze_perspectives select").val();
             if (parseInt(optionSelect) > 0) {
                 self.clearDashboard();
-                self.cb_change_select(self, $("#rze_perspectives select").val());                
+                if (typeof(self.cb_change_select) === 'function' ) {
+                    self.cb_change_select(self, $("#rze_perspectives select").val());
+                }
             }
         });
         
@@ -161,14 +165,18 @@ var PimbaBisor = function (aOptions) {
                };
 
                self.loadDataInTemplateWidget(widgetData);
-               self.cb_edit_widget(self, widgetData);
+                if (typeof(self.cb_edit_widget) === 'function' ) {
+                    self.cb_edit_widget(self, widgetData);
+                }
             } else {
                 /* callback de creación de widget*/
-                self.cb_create_widget(self, {
-                    title       : title,
-                    description : description,
-                    parent     : parentId           
-                });
+                if (typeof(self.cb_create_widget) === 'function' ) {
+                    self.cb_create_widget(self, {
+                        title: title,
+                        description: description,
+                        parent: parentId
+                    });
+                }
             }
             $('#rze_popup_add').modal('hide');
             event.preventDefault();
@@ -465,14 +473,15 @@ var PimbaBisor = function (aOptions) {
                     // Solo hago cosas si cambio de padre el widget que arrastro
                     if (self.currentWidgetOn != $("#"+self.currentWidgetDragging).parent().parent().attr("id")) {
                         /* callback de actualización */
-                        self.cb_update_widget(self, {
-                            '_id'         : self.currentWidgetDragging,
-                            'parent'      : self.currentWidgetOn,
-                            'title'       : $(self.currentWidgetDragging + " [name='title']").val(),
-                            'description' : $(self.currentWidgetDragging + " [name='description']").val(),
-                            'from'        : (self.currentFatherOfWidgetDragging != null) ? self.currentFatherOfWidgetDragging.attr("id"): null
-                        });
-
+                        if (typeof(self.cb_update_widget) === 'function' ) {
+                            self.cb_update_widget(self, {
+                                '_id': self.currentWidgetDragging,
+                                'parent': self.currentWidgetOn,
+                                'title': $(self.currentWidgetDragging + " [name='title']").val(),
+                                'description': $(self.currentWidgetDragging + " [name='description']").val(),
+                                'from': (self.currentFatherOfWidgetDragging != null) ? self.currentFatherOfWidgetDragging.attr("id") : null
+                            });
+                        }
                         // Cambiamos el padre en el array de datos
                         self.changeWidgetParentInArray(self.currentWidgetDragging, self.currentWidgetOn);
                         // Movemos el widget físicamente
@@ -691,9 +700,11 @@ var PimbaBisor = function (aOptions) {
     this.deleteWidget = function(idWidget) {
         $("#"+idWidget).remove();
         /* callback de eliminación de widget*/
-        self.cb_delete_widget(self, {
-            _id : idWidget 
-        });        
+        if (typeof(self.cb_delete_widget) === 'function' ) {
+            self.cb_delete_widget(self, {
+                _id: idWidget
+            });
+        }
     }
     
     /* Inserta la información de un widget en el array donde corresponda */
