@@ -28,7 +28,7 @@ var PimbaBisor = function (aOptions) {
     if (typeof(aOptions["bowlerInstallation"]) != 'undefined') {
         this.bowlerInstallation        = aOptions["bowlerInstallation"];
     } else {
-        this.bowlerInstallation        = false;
+        this.bowlerInstallation        = true;
     }
 
     /*Template para el widget, si no se definen se usan por defecto */
