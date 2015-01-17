@@ -16,6 +16,14 @@ var PimbaBisor = function (aOptions) {
     this.showSelectorCards             = aOptions['showSelectorCards'];
     this.gridWidth                     = 20;
     this.gridHeight                    = 20;
+
+    // Contenedor de las acciones en los widgets
+    if (aOptions['widgetContainerActionClass'] != '') {
+        this.widgetContainerActionClass    = aOptions['actions'];
+    } else {
+        this.widgetContainerActionClass    = 'actions';
+    }
+    this.actions                       = aOptions["actions"];
     /* Callbacks para refresco de información*/
     this.cb_init                       = aOptions['cb_init'];
     this.cb_change_select              = aOptions['cb_change_select'];
@@ -25,7 +33,7 @@ var PimbaBisor = function (aOptions) {
     this.cb_delete_widget              = aOptions['cb_delete_widget'];
 
     /* Control de la instalación tipo bower o pelo */
-    if (typeof(aOptions["bowerInstallation"]) != 'undefined') {
+    if (aOptions["bowerInstallation"] != 'undefined') {
         this.bowerInstallation        = aOptions["bowerInstallation"];
     } else {
         this.bowerInstallation        = true;
@@ -42,15 +50,8 @@ var PimbaBisor = function (aOptions) {
         this.depthTemplates            = aOptions['depthTemplates'];
     }
 
-    /* El template para el formulario es siempre el mismo, no customizable */
-    this.dialogFormTemplateFile        = "../pimba-bisor/templates/dialog-form.html";
-
     this.constructor = function(aOptions) {
         console.log('[Bisor]constructor')
-        /*Dibujamos o no el intercambiador de perspectivas*/
-        if (aOptions['showSelectorCards'] === true) {
-            self.drawSelectorCards();
-        }
 
         /* Ejecutamos callback de inicio */
         if (typeof(this.cb_init) === 'function') {
@@ -72,25 +73,6 @@ var PimbaBisor = function (aOptions) {
 
         });
 
-        /** Gestión de evento para añadir widget**/
-        $("body").on('click', '.add', function() {
-            var parentId = $(this).parent().parent().attr("id");
-            self.addWidgetDialog(parentId);
-        });
-
-        /** Gestión de evento para borrar widget**/
-        $("body").on('click', '.delete', function() {
-            var question = confirm("Are you sure?");
-            if (question == true) {
-                var widgetId = $(this).parent().parent().attr("id");
-                self.deleteWidget(widgetId);
-            }
-        });
-        /** Gestión de evento para editar widget**/
-        $("body").on('click', '.edit', function() {
-            var idWidget = $(this).parent().parent().attr("id");
-            self.editWidgetDialog(idWidget);
-        });
         /** Gestión de evento para refresh widget**/
         $("body").on('click', '.refresh_card_button', function() {
             var optionSelect = $("#rze_perspectives select").val();
@@ -112,10 +94,19 @@ var PimbaBisor = function (aOptions) {
     }
 
     //***************************************************************** MÉTODOS
+    /*
+    * Incorpora a self.widgetContainerActionClass una acción personalizada
+    */
+    this.addAction = function(divActionsContainer, aOptions) {
+        var action = $("<div>", aOptions);
+        $(action).appendTo(divActionsContainer);
+    }
+
     /**
      * Inicia pimba-bisor
      **/
     this.go = function() {
+        console.log("[Bisor] Go");
         /* Creamos físicamente cada widget desde el array de datos */
         self.createWidgets(self.dataWidgetOrigin);
 
@@ -139,59 +130,6 @@ var PimbaBisor = function (aOptions) {
      **/
     this.loadStaticTemplates = function(prefixBower) {
         console.log("[Bisor]loadStaticTemplates");
-        // Template para el dialog y el formulario de edición
-        $.ajax({
-            type: 'GET',
-            url: prefixBower + "pimba-bisor/"+self.dialogFormTemplateFile,
-            success: function(data) {
-                $(".rze_container").after(data);
-            },error: function(){ console.log("Error loadTemplateWidget[dialogFormTemplate]");  }
-        });
-
-        $("body").on('click', '#submit_add_form', function() {
-            if(!document.getElementById("rze_popup_add_form").checkValidity())
-            {
-                alert("Fill all fields, please.");
-            } else {
-                $("#rze_popup_add_form").submit();
-            }
-        });
-
-        /* Gestión de evento click sobre el boton crear/editar del formulario */
-        $("body").on('submit', '#rze_popup_add_form', function(event) {
-
-            var id = $( "#rze_popup_add_form [name='id']").val();
-            var title       = $( "#rze_popup_add_form [name='title']").val();
-            var description = $( "#rze_popup_add_form [name='description']").val();
-            var parentId    = $( "#rze_popup_add_form [name='parent']").val();
-
-            /* Diferenciamos si es nuevo o editamos, para diferenciar callbacks */
-            if (id != "") {
-                /* callback de edición de información de widget*/
-                var widgetData = {
-                    _id         : id,
-                    title       : title,
-                    description : description,
-                    parent     : parentId
-                };
-
-                self.loadDataInTemplateWidget(widgetData);
-                if (typeof(self.cb_edit_widget) === 'function' ) {
-                    self.cb_edit_widget(self, widgetData);
-                }
-            } else {
-                /* callback de creación de widget*/
-                if (typeof(self.cb_create_widget) === 'function' ) {
-                    self.cb_create_widget(self, {
-                        title: title,
-                        description: description,
-                        parent: parentId
-                    });
-                }
-            }
-            $('#rze_popup_add').modal('hide');
-            event.preventDefault();
-        });
 
         // Templates para widgets
         for (var i in self.depthTemplates) {
@@ -213,30 +151,11 @@ var PimbaBisor = function (aOptions) {
     }
 
     /*
-     * Dibuja el select de perspectivas
-     **/
-    this.drawSelectorCards = function() {
-        var tagFormSelectPerspectives = $("<form>", {
-            "id"    : "rze_perspectives"
-        });
-
-        var tagSpanRefresh = $("<span>", {
-            "class"    : "refresh_card_button glyphicon glyphicon-refresh"
-        });
-
-        /* Input para título */
-        var select = document.createElement('select');
-        $(select).appendTo(tagFormSelectPerspectives);
-        $(".rze_container").before(tagFormSelectPerspectives);
-        $(select).after(tagSpanRefresh);
-    }
-
-    /*
      * Establece los datos desde un array json
      **/
     this.setJSONDataWidgets = function(data) {
+        console.log("[Bisor] set JSON widgets data");
         self.dataWidgetOrigin = data;
-        self.go(); // Reinicia el dashboard
     }
 
     /*
@@ -367,40 +286,22 @@ var PimbaBisor = function (aOptions) {
     this.setupWidget = function(obj, widgetData) {
         /* Container de acciones en el widget*/
         var divActions = $("<div>", {
-            "class": 'actions'
+            "class": self.widgetContainerActionClass
         });
 
+
+        for (var i=0; i<self.actions.length; i++) {
+            self.addAction(divActions, self.actions[i]);
+        }
+
         $(obj).append(divActions);
+
 
         var divContent = $("<div>", {
             "class": 'content'
         });
+
         $(obj).append(divContent);
-
-        if (!self._isWidgetFirstDepth(obj.attr("id"))) {
-            /* Opción de eliminar */
-            var div = $("<div>", {
-                "class": 'delete glyphicon glyphicon-remove-circle',
-                "title": 'Delete card',
-            });
-            $(divActions).prepend(div);
-        }
-
-        /* Opción de editar */
-        var div = $("<div>", {
-            "class": 'edit glyphicon glyphicon-edit',
-            "title": 'Edit card',
-        });
-
-        $(divActions).prepend(div);
-
-        /* Opción de añadir */
-        var div = $("<div>", {
-            "class": 'add glyphicon glyphicon-credit-card',
-            "title": 'Add card'
-        });
-
-        $(divActions).prepend(div);
 
         if (!self._isWidgetFirstDepth(obj.attr("id"))) {
             /* Añadimos Tooltip de arrastre (la banza izquierda) */
@@ -411,7 +312,7 @@ var PimbaBisor = function (aOptions) {
             $(divActions).prepend(div);
         }
 
-        // Añadimos al DOM finalmente
+        // Añadimos la capa para los hijos
         var divChilds =  $("<div>", {
             "class": 'childs'
         });
@@ -547,19 +448,22 @@ var PimbaBisor = function (aOptions) {
      * recursivamente
      **/
     this.createWidgets = function(widgetsData) {
-        widgetsData["parent"] = false;
-        self.createWidgetsForWidget(widgetsData);
+            console.log("[Bisor] createWidgets");
+            widgetsData["parent"] = false;
+            self.createWidgetsForWidget(widgetsData);
     }
+
     /*
      * Crea en el DOM las capas de widgets para un widget dado
      * recursivamente
      */
     this.createWidgetsForWidget = function(widgetData) {
+        console.log("[Bisor] createWidgetsForWidget");
         self.addWidget(widgetData);
 
         var widgetsChildren = widgetData["childs"];
-        if (widgetsChildren) {
-            for (var j=0; j < widgetsChildren.length ; j++){
+        if (typeof(widgetsChildren) != 'undefined') {
+            for (var j=0; j < widgetsChildren.length ; j++) {
                 self.createWidgetsForWidget(widgetsChildren[j]);
             }
         }
@@ -607,6 +511,7 @@ var PimbaBisor = function (aOptions) {
      **/
     this.addWidget = function(widgetData) {
         var idWidget = widgetData["_id"];
+
         var idWidgetParent = (widgetData["parent"] == "undefined") ? "false":widgetData["parent"];
 
         /* Si no se especifica ID se crea uno aleatorio e insertamos en array general*/
@@ -671,45 +576,6 @@ var PimbaBisor = function (aOptions) {
      **/
     this.clearDashboard = function() {
         $(".rze_container").html("");
-    }
-
-    /* Activa y muestra el dialogo*/
-    this.addWidgetDialog = function(parentId) {
-        $('#rze_popup_add').modal('show');
-        $("#rze_popup_add_form [name='id']").val('');
-        $("#rze_popup_add_form [name='title']").val('');
-        $("#rze_popup_add_form [name='description']").val('');
-        $("#rze_popup_add_form [name='parent']").val('');
-
-
-        $("#rze_popup_add_form [name='parent']").val(parentId);
-        $("#rze_popup_add .modal-title").html("Create card in #"+ parentId);
-        $("#rze_popup_add_form #submit_add_form").html("Create");
-    }
-
-    this.editWidgetDialog = function(idWidget) {
-        var widget = $("#"+idWidget );
-        var content = $("#"+idWidget + " .content");
-
-        $('#rze_popup_add').modal('show');
-
-        $("#rze_popup_add_form").find("[name='id']").val('');
-        $("#rze_popup_add_form").find("[name='title']").html('');
-        $("#rze_popup_add_form").find("[name='description']").html('');
-        $("#rze_popup_add_form").find("[name='parent']").val('');
-
-        var id          = widget.attr("id");
-        var title       = content.find("[data-pimba-field='title']").html();
-        var description = content.find("[data-pimba-field='description']").html();
-        var parent      = widget.parent().attr("id");
-
-        $("#rze_popup_add_form [name='id']").val(id);
-        $("#rze_popup_add_form [name='title']").val(title);
-        $("#rze_popup_add_form [name='description']").val(description);
-        $("#rze_popup_add_form [name='parent']").val(parent);
-
-        $("#rze_popup_add .modal-title").html("Edit card");
-        $("#rze_popup_add_form #submit_add_form").html("Edit");
     }
 
     /*

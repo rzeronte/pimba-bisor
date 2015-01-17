@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>pimba-bisor - Demo</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- JQuery by Google-->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.css" />
+    <!-- Bootstrap CDN -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+    <!-- pimba-bisor -->
+    <script src="../pimba-bisor/js/pimba-bisor.js" ></script>
+    <link rel="stylesheet" href="../pimba-bisor/css/pimba-bisor.css" type="text/css">
+    <!-- theme default para las tarjetas -->
+    <link rel="stylesheet" href="../pimba-bisor/css/theme-default.css" type="text/css">
+
+
+    <!-- *********************Demo Fake App con Pimba-bisor **************** -->
+    <script type="text/javascript">
+        $( document ).ready(function() {
+
+            var pimbaBisor;     // objeto PimbaBisor
+            var dashboardData = {
+                "_id": "544987b19c14e40000000004",
+                "__v": 69,
+                "childs": [
+                    {
+                        "_id": "546031687a9dc85c73000003",
+                        "__v": 13,
+                        "childs": [
+                            {
+                                "_id": "54602a547a9dc85c73000001",
+                                "__v": 19,
+                                "description": "234",
+                                "parent": "546031687a9dc85c73000003",
+                                "title": "234",
+                                "user": "5449873c9c14e40000000003",
+                                "childs": ["544995479c14e4000000000c", "54593c82caf42be704000001", "544995da9c14e4000000000d"]
+                            }
+                        ],
+                        "description": "asdfasdf",
+                        "parent": "544987b19c14e40000000004",
+                        "title": "sdfasdf",
+                        "user": "5449873c9c14e40000000003"
+                    }
+                ],
+                "title": "Bugs pimba-bisor",
+                "user": "5449873c9c14e40000000003"
+            };
+
+            document.onload = initBisorDemo();
+
+            function initBisorDemo() {
+                aOptions = {
+                    widgetContainerActionClass: 'actions',
+                    actions: [
+                        { class: 'addMyAction glyphicon glyphicon-credit-card action'},
+                        { class: 'deleteMyAction glyphicon glyphicon glyphicon-remove action'}
+                    ]
+                };
+
+                pimbaBisor = new PimbaBisor(aOptions);
+            }
+
+            $("body").on('click', '.loadData', function() {
+                pimbaBisor.setJSONDataWidgets(dashboardData);
+                pimbaBisor.go();
+            });
+
+            // Control del evento click sobre la clase .addMyAction
+            $("body").on('click', '.addMyAction', function() {
+                    var widgetId = $(this).parent().parent().attr("id");
+                    alert("addMyAction on widget " + widgetId);
+            });
+
+            // Control del evento click sobre la clase .deleteMyAction
+            $("body").on('click', '.deleteMyAction', function() {
+                var widgetId = $(this).parent().parent().attr("id");
+                alert("deleteMyAction on widget " + widgetId);
+            });
+
+        });
+    </script>
+</head>
+
+<body id="body">
+
+    <h1>Ejemplo para añadir acciones</h1>
+    <p>En este ejemplo vemos como añadir acciones personalizada a un action</p>
+    <a class="loadData" href="#">Click to load widgets</a>
+    <div class="pimba_bisor_dashboard">
+        <div class="rze_container"></div>
+    </div>
+
+</body>
+</html>
