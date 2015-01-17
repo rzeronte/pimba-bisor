@@ -100,11 +100,7 @@ según su naturaleza.
 Nombre de la función del evento | Situación de lanzamiento | Argumentos de vuelta
 ------------------------------- | ------------------------ | --------------------
 cb_init | Inicialización del objeto Bisor. | self
-cb_change_select | Se produce un cambio de perspectiva en el selector de las mismas. | self, id_perspective
 cb_update_widget | Un widget es movido a un sitio distinto del que estaba. | self, dataWidget
-cb_edit_widget | Al editar un widget | self, dataWidget
-cb_create_widget | Al crear un widget | self, dataWidget
-cb_delete_widget | Al borrar un widget | self, dataWidget
 
 *NOTA: Conocerlos argumentos devueltos en cada callback es importante para un
 mayor control.*
@@ -137,6 +133,32 @@ Puedes ver el código de la demo callbacks-events.html para ver un ejemplo.
 
 *NOTA: Los callbacks pueden definirse 'inline' desde el propio array de opciones o
 si resulta mas cómodo puede definirse como una función separada.*
+
+##Añadir acciones a las tarjetas
+
+Cuando inicias pimbaBisor puedes definir las acciones que serán incorporadas a cada tarjeta creada mediante bisor
+
+```javascript
+		aOptions = {
+			widgetContainerActionClass: 'actions',
+			actions: [
+				{ class: 'myAction glyphicon glyphicon-credit-card action'},
+				{ class: 'deleteMyAction glyphicon glyphicon glyphicon-remove action'}
+			]
+		};
+		pimbaBisor = new PimbaBisor(aOptions);
+```
+
+Podrás capturar los eventos tu mismo mediante jQuery como harías normalmente:
+
+```javascript
+            $("body").on('click', '.myAction', function() {
+                    var widgetId = $(this).parent().parent().attr("id");
+                    alert("addMyAction on widget " + widgetId);
+            });
+
+```
+
 
 ##Métodos útiles
 A continuación se describen algunos de los métodos mas útiles para integrar Bisor con terceras aplicaciones.
