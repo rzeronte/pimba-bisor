@@ -138,10 +138,9 @@ si resulta mas cómodo puede definirse como una función separada.*
 
 Cuando inicias Bisor puedes definir las acciones que serán incorporadas a cada tarjeta creada.
 Las acciones no son mas que capas que serán incluidas en un contenedor de acciones. Puedes configurar la clase
-del contenedor de acciones mediante el parámetro *widgetContainerActionClass* para personalizar su CSS si así lo deseas.
-
-El contenedor de acciones incluirá las acciones que definas, también con su CSS correspondiente. A continuación puedes
-ver un ejemplo en el que se incluyen dos acciones reutilizando glyphicons de bootstrap.
+del contenedor de acciones mediante el parámetro *widgetContainerActionClass*, en caso contrario será '*actions*'
+El contenedor de acciones se rellena con las acciones definidas. A continuación puedes ver un ejemplo en el que se
+incluyen dos acciones reutilizando glyphicons de bootstrap.
 
 ```javascript
 aOptions = {
