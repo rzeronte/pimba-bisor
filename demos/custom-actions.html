@@ -78,13 +78,13 @@
 
             // Control del evento click sobre la clase .addMyAction
             $("body").on('click', '.addMyAction', function() {
-                    var widgetId = $(this).parent().parent().attr("id");
+                    var widgetId = $(this).closest('.rze_widget').attr("id");
                     alert("addMyAction on widget " + widgetId);
             });
 
             // Control del evento click sobre la clase .deleteMyAction
             $("body").on('click', '.deleteMyAction', function() {
-                var widgetId = $(this).parent().parent().attr("id");
+                var widgetId = $(this).closest('.rze_widget').attr("id");
                 alert("deleteMyAction on widget " + widgetId);
             });
 

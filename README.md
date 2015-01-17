@@ -136,26 +136,31 @@ si resulta mas cómodo puede definirse como una función separada.*
 
 ##Añadir acciones a las tarjetas
 
-Cuando inicias pimbaBisor puedes definir las acciones que serán incorporadas a cada tarjeta creada mediante bisor
+Cuando inicias Bisor puedes definir las acciones que serán incorporadas a cada tarjeta creada.
+Las acciones no son mas que capas que serán incluidas en un contenedor de acciones. Puedes configurar la clase
+del contenedor de acciones mediante el parámetro *widgetContainerActionClass* para personalizar su CSS si así lo deseas.
+
+El contenedor de acciones incluirá las acciones que definas, también con su CSS correspondiente. A continuación puedes
+ver un ejemplo en el que se incluyen dos acciones reutilizando glyphicons de bootstrap.
 
 ```javascript
-		aOptions = {
-			widgetContainerActionClass: 'actions',
-			actions: [
-				{ class: 'myAction glyphicon glyphicon-credit-card action'},
-				{ class: 'deleteMyAction glyphicon glyphicon glyphicon-remove action'}
-			]
-		};
-		pimbaBisor = new PimbaBisor(aOptions);
+aOptions = {
+	widgetContainerActionClass: 'actions',
+	actions: [
+		{ class: 'myAction glyphicon glyphicon-credit-card action'},
+		{ class: 'deleteMyAction glyphicon glyphicon glyphicon-remove action'}
+	]
+};
+pimbaBisor = new PimbaBisor(aOptions);
 ```
 
-Podrás capturar los eventos tu mismo mediante jQuery como harías normalmente:
+Podrás capturar los eventos tu mismo mediante jQuery como harías normalmente.
 
 ```javascript
-            $("body").on('click', '.myAction', function() {
-                    var widgetId = $(this).parent().parent().attr("id");
-                    alert("addMyAction on widget " + widgetId);
-            });
+$("body").on('click', '.myAction', function() {
+	var widgetId = $(this).closest('.rze_widget').attr("id");
+	alert("addMyAction on widget " + widgetId);
+});
 
 ```
 
