@@ -24,7 +24,13 @@ Bootstrap
 
 ##Instalación e inicialización
 
-Debes incluir previamente las librerías de Bisor:
+Puedes descargar el código fuente o instalar Bisor como dependencia mediante bower:
+
+```
+bower install desandro/masonry
+```
+
+Para integrarlo en tu proyecto, debes incluir previamente las librerías de Bisor:
 
 ```html
 <script type="text/javascript" src="../pimba-bisor/js/pimba-bisor.js"></script>
