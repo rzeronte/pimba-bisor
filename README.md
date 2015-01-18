@@ -2,6 +2,14 @@
 
 Allows the view of PIMBA's data through draggable widgets
 
+##Instalación e inicialización
+
+Puedes descargar el código fuente o instalar Bisor como dependencia mediante bower:
+
+```
+bower install desandro/masonry
+```
+
 ##Requisitos externos
 Bisor utiliza algunas librerías externas que puedes cargar desde un repositorio externo o incluirlas en tu propio proyecto.
 	
@@ -20,14 +28,6 @@ Bootstrap
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-```
-
-##Instalación e inicialización
-
-Puedes descargar el código fuente o instalar Bisor como dependencia mediante bower:
-
-```
-bower install desandro/masonry
 ```
 
 Para integrarlo en tu proyecto, debes incluir previamente las librerías de Bisor:
