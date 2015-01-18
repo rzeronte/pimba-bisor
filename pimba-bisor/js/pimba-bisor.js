@@ -107,6 +107,7 @@ var PimbaBisor = function (aOptions) {
      **/
     this.go = function() {
         console.log("[Bisor] Go");
+        self.clearDashboard();
         /* Creamos físicamente cada widget desde el array de datos */
         self.createWidgets(self.dataWidgetOrigin);
 
@@ -288,7 +289,7 @@ var PimbaBisor = function (aOptions) {
         var divActions = $("<div>", {
             "class": self.widgetContainerActionClass
         });
-        
+
         if (self.actions != undefined) {
             for (var i=0; i<self.actions.length; i++) {
                 self.addAction(divActions, self.actions[i]);
