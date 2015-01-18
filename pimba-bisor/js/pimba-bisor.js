@@ -33,10 +33,10 @@ var PimbaBisor = function (aOptions) {
     this.cb_delete_widget              = aOptions['cb_delete_widget'];
 
     /* Control de la instalación tipo bower o pelo */
-    if (aOptions["bowerInstallation"] != 'undefined') {
-        this.bowerInstallation        = aOptions["bowerInstallation"];
-    } else {
+    if (aOptions["bowerInstallation"] == undefined) {
         this.bowerInstallation        = true;
+    } else {
+        this.bowerInstallation        = aOptions["bowerInstallation"];
     }
 
     /*Template para el widget, si no se definen se usan por defecto */
