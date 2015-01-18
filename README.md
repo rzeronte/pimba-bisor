@@ -63,8 +63,10 @@ realizará mediante parámetros pasados al constructor:
 
 Parámetro | Valor | Descripción
 --------- | ----- | -----------
-showSelectorCards | true ó false | Muestra o no, el selector de cambio de perspectiva/tarjetas
 depthTemplates | Array *  | Un array que permite especificar templates HTML para cada nivel de profundidad de anidamiento de un widget y su clase CSS
+widgetContainerActionClass | 'actions' | Clase css para la capa contenedora de acciones en una tarjeta
+actions | Array | Array de opciones que tendrá la acción creada. Se aplican directamente al div de la acción. Para capturar su evento
+bowerInstallation | true/false | Permite indicar a Bisor si hemos instalado mediante bower.
 
 * El array para dephTemplates debe respetar el siguiente patrón
 
@@ -77,7 +79,6 @@ depthTemplates | Array *  | Un array que permite especificar templates HTML para
 ```javascript
 <script type='text/javascript'>
   aOptions = {
-      showSelectorCards: true,
       depthTemplates: {
           0: { file: '../pimba-bisor/templates/default-card.html', id:'bisor-template-default'},
           1: { file: '../pimba-bisor/templates/small-card.html',   id:'bisor-template-small'},
