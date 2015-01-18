@@ -7,7 +7,7 @@ Allows the view of PIMBA's data through draggable widgets
 Puedes descargar el código fuente o instalar Bisor como dependencia mediante bower:
 
 ```
-bower install desandro/masonry
+bower install rzeronte/pimba-bisor
 ```
 
 ##Requisitos externos
