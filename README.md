@@ -174,29 +174,14 @@ $("body").on('click', '.myAction', function() {
 ##Métodos útiles
 A continuación se describen algunos de los métodos mas útiles para integrar Bisor con terceras aplicaciones.
 
-#####fillSelectPerspectives ( *perspectivesJSONData* )
---------------------------------------------------
-Rellena el selector de perspectivas con los datos recibidos en el parámetro *perspectivesJSONData*.
-
-Este parámetro debe respetar el siguiente formato:
-
-	"perspectives" (Array): {
-		"__v": integer,
-		"_id": text,
-		"title": text,
-		"user": text,
-		"childs": Array[
-			"_id": text
-		]
-	}
-
 #####setJSONDataWidgets ( *dataWidgets* )
 -------------------------------------
 Establece los datos de los widgets para el dashboard actual mediante los
 datos recibidos en el parámetro *dataWidgets*. Es el método estándar para
-reiniciar el contenido de los widgets globalmente. El parámetro debe respetar
+indicar a Bisor el contenido de los widgets globalmente. El parámetro debe respetar
 el siguiente formato:
 
+```
 	"dataWidgets" (Array): {
 		"__v": integer,
 		"_id": text,
@@ -226,13 +211,23 @@ el siguiente formato:
 		"title": text,
 		"user": text
 	}
-    
+```
+
 Bisor utiliza este método internamente cada vez que cambiamos de perspectiva
 mediante el método estándard (el selector).
 
 *NOTA: En el fondo estámos indicando a Bisor la tarjeta que adoptará la forma
 del dashboard, por ello no se echa en falta datos como su descripción o
 parent.*
+
+#####createWidgets (*dataWidgets*)
+--------------------------------------------------
+Crea las tarjetas físicamente con los datos JSON aportados por el parámetro.
+
+
+#####go ()
+--------------------------------------------------
+Crea las tarjetas físicamente con los datos enviados previamente por el método setJSONDataWidgets()
 
 #####addWidget( *widgetData*)
 ----------------------------
@@ -253,3 +248,12 @@ siguiente formato:
 
 *NOTA: Hay que destacar que cuando se ejecuta este método, es posible incluir
 hijos que se incluirán como tal.*
+
+#####deleteWidget (*idWidget*)
+--------------------------------------------------
+Elimina del dashboard un widget identificado por el parámetro *idWidget*
+
+#####clearDashboard ()
+--------------------------------------------------
+Vacia el dashboard de tarjetas. Estas podrán ser redibujadas por el método .go si fuese necesario
+
