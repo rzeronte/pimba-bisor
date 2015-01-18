@@ -288,10 +288,11 @@ var PimbaBisor = function (aOptions) {
         var divActions = $("<div>", {
             "class": self.widgetContainerActionClass
         });
-
-
-        for (var i=0; i<self.actions.length; i++) {
-            self.addAction(divActions, self.actions[i]);
+        
+        if (self.actions != undefined) {
+            for (var i=0; i<self.actions.length; i++) {
+                self.addAction(divActions, self.actions[i]);
+            }
         }
 
         $(obj).append(divActions);
