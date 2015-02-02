@@ -1,101 +1,94 @@
-body{
-    margin: 0;
-    padding: 0;
-    font-family: Arial;
+.rze_container h1,
+.rze_container h2,
+.rze_container h3 {
+    font-size: 12px;
 }
 
-.pimba_bisor_dashboard {
+.rze_container .container {
+    padding-left:16px;
+    padding-right:16px;
+
 }
-/* Container para el section area*/
-.rze_container{
-    padding: 0px 0 0px 0;
-    background-color: #4d777a;
-    width: 99%;
-    min-height: 600px;
-    position: relative;
-    cursor: crosshair;
-    float: left;
+
+.rze_container .row {
+    margin-left: -6px;
+    margin-right: -6px;
+}
+
+.rze_container [class^="col-"] {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color: #eee;
+    border: 1px solid #ddd;
+    background-color: rgba(86,61,124,.15);
+    border: 1px solid rgba(86,61,124,.2);
+}
+
+.resize_control{
+    border: solid 1px black;
+    padding:0;
+    margin:0;
+    position: absolute;
+    cursor: pointer;
+}
+
+.resize_top{
+    background-color: yellow;
+    width: 40px;
+    height: 10px;
+}
+
+.resize_bottom{
+    background-color: green;
+    width: 40px;
+    height: 10px;
+}
+
+.resize_left{
+    background-color: red;
+    width: 10px;
+    height: 40px;
+}
+
+.resize_right{
+    background-color: blue;
+    width: 10px;
+    height:40px;
+}
+
+.dashboard{
 }
 
 /* Widget básico */
 .rze_widget{
-    border: solid 1px #d0d0d0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border: solid 1px #888888;
     background-color: #f3f3f3;
-    position: relative;
-    float: left;
-    width: auto;
-    height: auto;
-    margin: 10px 10px 0px 20px;
-    padding: 10px 10px 10px 10px;
-    height: auto;
-    overflow: hidden;
-    -moz-border-radius: 4px 4px 4px 4px;
-    -webkit-border-radius: 4px 4px 4px px;
-    border-radius: 4px 4px 4px 4px;
     font-size: 14px;
-    float: left;
+    min-height: 100px;
 }
-/* Depths*/
-.depth_0{width: 95%; margin-right: 20px; min-height: 900px;}
-.depth_1{width: 500px; min-height: 300px;}
-.depth_2{width: 400px; min-height: 200px;}
-.depth_3{width: 300px; min-height: 100px;}
-.depth_4{}
+
+
+.dashboard > .actions{
+    display:none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
 
 .rze_widget .actions {
-    width: 100%;
-    height: auto;
-    font-size: 16px !important;
-    cursor: pointer;
-    float: left;
-}
-.rze_widget .actions div{
-    margin-right: 5px;
-}
-.rze_widget .childs{
-    width: 100%;
-    height: 100%;
-    float: left;
+
 }
 
-.refresh_card_button{
-    cursor:pointer;
-    margin-left: 5px;
+.rze_widget .childs{
 }
+
 
 .rze_widget .content {
-    width: 100%;
-    height: auto;
-    margin: 0 0 0 5px;
-    padding: 0;
-    clear: right;
-    float: left;
-}
-.rze_widget .content p,
-.rze_widget .content h1,
-.rze_widget .content h2,
-.rze_widget .content h3
-{
-    margin: 0;
-    padding: 0;
 }
 
-.rze_widget .rze_widget{
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-.rze_widget > div.move{
-    width: 20px;
-    height: 20px;
-    z-index: 999;
-    color: #888;
-    cursor: move;
-    float: move;
-}
-
-.rze_widget > div.move:hover{
-    cursor: move;
+.rze_widget .move:hover{
+    cursor: move !important;
 }
 
 .rze_widget > div.edit{
@@ -103,33 +96,34 @@ body{
     height: 20px;
     color: #888;
     cursor:pointer;
-    float: left;
 }
 .rze_widget > div.add{
     width: 20px;
     height: 20px;
     color: #888;
     cursor:pointer;
-    float: left;
 }
 .rze_widget > div.delete{
     width: 20px;
     height: 20px;
     color: #888;
     cursor:pointer;
-    float: left;
 }
 
 .rze_widget_dragging{
     border: solid 3px #ccc;
     cursor: move;
     opacity: 0.7;
-    filter: alpha(opacity=70); /* For IE8 and earlier */
+    filter: alpha(opacity=20); /* For IE8 and earlier */
 }
 
+.rze_container >.rze_widget_hovered {
+    background-color: transparent !important;
+}
 .rze_widget_hovered{
     background-color: #ADDDFF;
-    border: solid 2px black;
+    filter: alpha(opacity=70); /* For IE8 and earlier */
+    border: solid 1px black;
 }
 
 .hoverClass{
@@ -143,17 +137,4 @@ canvas{
     left: 0;
     position: absolute;
     background-color: transparent;
-}
-
-.ui-dialog{
-    z-index: 1000 !important;
-}
-
-/* Formulario de edicion (dialog)*/
-#rze_popup_add  input{
-    width: 100%;    
-}
-#rze_popup_add  textarea{
-    width: 100%;
-    height: 200px;
 }

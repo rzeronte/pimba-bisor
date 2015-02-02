@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>pimba-bisor - Demo</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- JQuery by Google-->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.css" />
+    <!-- Bootstrap CDN -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+    <!-- pimba-bisor -->
+    <script src="../pimba-bisor/js/pimba-bisor.js" ></script>
+    <link rel="stylesheet" href="../pimba-bisor/css/pimba-bisor.css" type="text/css">
+    <!-- theme default para las tarjetas -->
+    <link rel="stylesheet" href="../pimba-bisor/css/theme-default.css" type="text/css">
+
+    <script src="../demos/sampleData.js" ></script>
+
+    <script type="text/javascript">
+        $( document ).ready(function() {
+
+            pimbaBisor=null;     // objeto PimbaBisor
+
+            document.onload = initBisorDemo();
+
+            function initBisorDemo() {
+                aOptions = {
+                    bowerInstallation: false,
+                    widgetContainerActionClass: 'actions',
+                    widgetsData: dashboardData,
+                    bootstrapColumnsAutoOnDrop: true
+                };
+
+                pimbaBisor = new PimbaBisor(aOptions);
+            }
+            setTimeout("pimbaBisor.go();", 1000);
+
+        });
+
+    </script>
+
+</head>
+
+<body id="body">
+
+    <div class="container rze_container">
+        <div class="row"></div>
+    </div>
+
+</body>
+</html>
