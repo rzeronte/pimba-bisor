@@ -4,18 +4,9 @@ var PimbaBisor = function (aOptions) {
 
     /* Propiedades */
     var dataWidgetOrigin               = new Array();
-    this.depthHover                    = new Array();
-    this.widgetMainDepthWidth          = 100;
-    this.widgetMainDepthHeight         = 100;
     this.currentWidgetDragging         = null;
-    this.currentWidgetOn               = null;
     this.currentFatherOfWidgetDragging = null;
-    this.mouseX                        = 0;
-    this.mouseY                        = 0;
-    this.maxDepth                      = 4;
     this.showSelectorCards             = aOptions['showSelectorCards'];
-    this.gridWidth                     = 20;
-    this.gridHeight                    = 20;
 
     // Contenedor de las acciones en los widgets
     if (aOptions['widgetContainerActionClass'] != '') {
@@ -23,7 +14,10 @@ var PimbaBisor = function (aOptions) {
     } else {
         this.widgetContainerActionClass    = 'actions';
     }
+
+    // Acciones predefinidas por el usuario
     this.actions                       = aOptions["actions"];
+
     /* Callbacks para refresco de información*/
     this.cb_init                       = aOptions['cb_init'];
     this.cb_change_select              = aOptions['cb_change_select'];
@@ -65,7 +59,6 @@ var PimbaBisor = function (aOptions) {
     }
 
     this.constructor = function(aOptions) {
-        console.log('[Bisor]constructor')
 
         /* Ejecutamos callback de inicio */
         if (typeof(this.cb_init) === 'function') {
@@ -79,7 +72,7 @@ var PimbaBisor = function (aOptions) {
         }
 
         // Cargamos vía AJAX las templates
-        self.loadStaticTemplates(bowerSource);
+        self.loadStaticTemplates();
 
     }
 
@@ -96,7 +89,6 @@ var PimbaBisor = function (aOptions) {
      * Inicia pimba-bisor
      **/
     this.go = function() {
-        console.log("[Bisor] Go");
         self.clearDashboard();
         /* Creamos físicamente cada widget desde el array de datos */
         self.createWidgets(self.dataWidgetOrigin);
@@ -125,10 +117,15 @@ var PimbaBisor = function (aOptions) {
     * */
     this.resizeBindControls = function() {
         $( ".resize_top" ).on( "click", function() {
-
+            var widget = $(this).parent();
+            widget.height(widget.height()-100);
+            self.updateResizers();
         });
 
         $( ".resize_bottom" ).on( "click", function() {
+            var widget = $(this).parent();
+            widget.height(widget.height()+100);
+            self.updateResizers();
         });
 
         // Resize Izquierda
@@ -141,8 +138,6 @@ var PimbaBisor = function (aOptions) {
                 widget.removeClass("col-md-" + currentColMd);
                 widget.addClass("col-md-"+parseInt(currentColMd - 1))
                 self.updateResizers();
-            } else {
-                console.log("mínimo o máximo");
             }
         });
 
@@ -156,8 +151,6 @@ var PimbaBisor = function (aOptions) {
                 widget.removeClass("col-md-" + currentColMd);
                 widget.addClass("col-md-"+parseInt(currentColMd + 1))
                 self.updateResizers();
-            } else {
-                console.log("mínimo o máximo");
             }
         });
 
@@ -194,7 +187,7 @@ var PimbaBisor = function (aOptions) {
     /*
      * Carga templates para dialogo y para depth de tarjetas
      **/
-    this.loadStaticTemplates = function(prefixBower) {
+    this.loadStaticTemplates = function() {
 
         // Templates para widgets
         var elementosCargados = 0;
@@ -212,17 +205,14 @@ var PimbaBisor = function (aOptions) {
                 type: 'GET',
                 url: fileRoute,
                 success: function(data) {
-                    console.log(elementosCargados +"-"+elementosParaCargar);
                     elementosCargados++;
                     if (elementosCargados == elementosParaCargar) {
                         self.ready = true;
-                        console.log("ready");
                     }
                     $(".rze_container").after(data);
                 },error: function(){ console.log("Error loadTemplateWidget[depthTemplates]");  }
             });
         }
-        console.log("fin loadStaticTemplates")
     }
 
     /*
@@ -276,49 +266,6 @@ var PimbaBisor = function (aOptions) {
             return true;
         } else {
             return false;
-        }
-    }
-
-    /*
-     * Redibuja todos los widgets dentro del widget dado
-     **/
-    this._widgetRedrawChildrens = function(oChildren) {
-
-        var liItems = $(".rze_container > .rze_widget .rze_widget").get();
-
-        for(var i = liItems.length - 1; i >= 0; --i) {
-            //$(liItems[i]).width($(liItems[i]).find( " >.content").width());
-        }
-
-    }
-
-    /**
-     * Asigna las clases de profundidad en función del data-depth del widget
-     **/
-    this.setClassByDataDepth = function() {
-        $(".rze_widget").each(function( index ) {
-            for (i=0; i <= self.maxDepth; i++) {
-                $(this).removeClass("depth_" + i);
-            }
-            var depth = $( this ).parents(".rze_widget").length;
-            $(this).addClass("depth_" + depth);
-            $(this).attr("data-depth", depth);
-        });
-    }
-
-    /**
-     * Refresca el estilo 'hover' de los widets cuando se apilan/sobreponen
-     **/
-    this.refreshCascadeSelectWidgets = function(){
-
-        $(".rze_widget").each(function( index ) {
-            $(this).removeClass("rze_widget_hovered");
-        });
-
-        for (i=0; i<self.depthHover.length; i++) {
-            $("#"+self.depthHover[i]).addClass("rze_widget_hovered");
-            $("#"+self.depthHover[i]).addClass("rze_widget_hovered");
-            var depth = $("#"+self.depthHover[i]).attr("data-depth");
         }
     }
 
@@ -386,7 +333,7 @@ var PimbaBisor = function (aOptions) {
         $(obj).draggable({
             handle     : "div.move",
             zIndex     : 10,
-            revert: 'valid',
+            revert: true,
             opacity: 0.25,
             start: function(event, ui) {
                 $(this).draggable("option", "cursorAt", {
@@ -410,6 +357,13 @@ var PimbaBisor = function (aOptions) {
                 // Sin esto no se ve el drag fuera del container (no podemos sacar a otro widget)
                 $(".rze_widget").css("overflow", "visible");
             },
+            drag: function() {
+                $(this).draggable("option", "cursorAt", {
+                    cursor: "move",
+                    left: Math.round($(this).outerWidth() / 2),
+                    top: Math.round($(this).outerHeight() / 2)
+                });
+            },
             stop: function() {
                 $(".rze_ghost").remove();
                 self.currentWidgetDragging = null;
@@ -424,19 +378,16 @@ var PimbaBisor = function (aOptions) {
         /*-----------------------Creamos la configuración droppable básica*/
         $(obj).droppable({
             accept: '.rze_widget',
+            greedy: true,
             over: function (event, ui) {
                 //Actualizamos el widget sobre el que nos encontramos
                 var idWidget = $(this).attr("id");
-                self.currentWidgetOn = idWidget;
-                console.log("over) self.currentWidgetOn:"+ idWidget);
 
                 // Como podemos estar encima de varios
                 // guardamos el últimos sobre el quenos encontramos
-                self.depthHover.push(idWidget);
                 $(this).addClass("rze_widget_hovered")
 
-                if (self.currentWidgetOn != $("#"+self.currentWidgetDragging).parent().parent().attr("id") &&
-                self.currentWidgetOn != $(".rze_container >.rze_widget:first").attr("id")) {
+                if (idWidget != $("#"+self.currentWidgetDragging).parent().parent().attr("id")) {
                     // Creamos una copia de la capa que arrastramos y la colocamos antes de la que nos hemos
                     //posicionado
 
@@ -459,16 +410,6 @@ var PimbaBisor = function (aOptions) {
                 // Si salimos, eliminamos la referencia del array dephHover
                 $(this).removeClass("rze_widget_hovered")
 
-                if (self.depthHover.length == 0) {
-                    self.currentWidgetOn = null;
-                } else {
-                    var stackHover = self.depthHover.pop();
-                    var stackLastAfterPop = self.depthHover[self.depthHover.length-1];
-                    self.currentWidgetOn = stackLastAfterPop;
-                }
-                console.log("out) self.currentWidgetOn:"+ self.currentWidgetOn);
-
-                //self.refreshCascadeSelectWidgets();
             },
             drop: function (event, ui) {
                 var draggableId = ui.draggable.attr("id");
@@ -477,56 +418,41 @@ var PimbaBisor = function (aOptions) {
                 $(".rze_ghost").remove();
                 $(this).removeClass("rze_widget_hovered")
 
-                // HACK Jquery: Para evitar que se dispare el drop hacia atrás
-                // comprobamos adcionalmente que el drop que ejecuta esto, es el del
-                //  widget
-                console.log("self.currentWidgetOn:"+ self.currentWidgetOn +" - attr(id):"+ droppableId);
-
-                if (self.currentWidgetOn == droppableId) {
+                //if (self.currentWidgetOn == droppableId) {
                     // Solo hago cosas si cambio de padre el widget que arrastro
-                    if (self.currentWidgetOn != $("#"+self.currentWidgetDragging).parent().parent().attr("id")) {
+                    if (droppableId != $("#"+self.currentWidgetDragging).parent().parent().attr("id")) {
                         // callback de actualización
                         if (typeof(self.cb_update_widget) === 'function' ) {
                             self.cb_update_widget(self, {
                                 '_id': self.currentWidgetDragging,
-                                'parent': self.currentWidgetOn,
+                                'parent': droppableId,
                                 'title': $(self.currentWidgetDragging + " [name='title']").val(),
                                 'description': $(self.currentWidgetDragging + " [name='description']").val(),
                                 'from': (self.currentFatherOfWidgetDragging != null) ? self.currentFatherOfWidgetDragging.attr("id") : null
                             });
                         }
                         // Cambiamos el padre en el array de datos
-                        self.changeWidgetParentInArray(self.currentWidgetDragging, self.currentWidgetOn);
+                        self.changeWidgetParentInArray(self.currentWidgetDragging, droppableId);
 
                         // Movemos el widget físicamente
-                        $("#"+self.currentWidgetOn + "> .childs").append($("#"+self.currentWidgetDragging));
+                        $("#"+droppableId + "> .childs").append($("#"+self.currentWidgetDragging));
 
 
                         // Cambiamos la posición X e Y en el array de datos (con el widget ya movido físicamente)
                         self.setWidgetPositionXYInArray(self.currentWidgetDragging, 69, 69);
 
-                        // Redibujamos la capa destino
-                        self._widgetRedrawChildrens($("#"+self.currentWidgetOn));
-
-                        self.setClassByDataDepth();
+                        //self.setClassByDataDepth();
 
                         self.calcBootstrapGrid(self.currentWidgetDragging);
                         self.updateResizers();
 
-                        // Actualizamos el origen si existiese
-                        if (self.currentFatherOfWidgetDragging != null){
-                            self._widgetRedrawChildrens(self.currentFatherOfWidgetDragging);
-                            self.currentFatherOfWidgetDragging = null;
-                        }
+
                     } else {
                         // Cambiamos la posición X e Y en el array de datos (con el widget ya movido físicamente)
                         self.setWidgetPositionXYInArray(self.currentWidgetDragging, 69, 69);
                     }
                     $(".rze_widget").css("overflow", "hidden");
-                    $("#"+self.currentWidgetOn).find(".rze_widget").show();
-                    self.depthHover = new Array();
-                    //self.refreshCascadeSelectWidgets();
-                }
+                //}
             }
         });
     }
@@ -554,7 +480,6 @@ var PimbaBisor = function (aOptions) {
                 }
             }
 
-            console.log("Hay ocupadas:" + columnas);
 
             // Si es menor que 12, ocupamos tó el espacio libre
             if (columnas < 12) {
@@ -580,7 +505,6 @@ var PimbaBisor = function (aOptions) {
                         diferencia = 12 - ocupacion;
                     }
 
-                    //console.log("no es igual, todas a " + newColMd + "ocupan ("+diferencia+"), menos una con diferencia de " + diferencia);
 
                     for (var i=0; i<hermanos.length;i++) {
                         for (var j=1;j<=12;j++) { $(hermanos[i]).removeClass("col-md-" + j); }
@@ -673,7 +597,8 @@ var PimbaBisor = function (aOptions) {
         var divWidget = $("<div>", {
             "id": idWidget,
             "class": 'rze_widget col-md-'+widgetData["col-md"],
-            "data-draggable": "true"
+            "data-draggable": "true",
+            "style": "height:"+ widgetData["height"]+"px;"
         });
 
         //$('[data-toggle="tooltip"]').tooltip({
@@ -684,7 +609,7 @@ var PimbaBisor = function (aOptions) {
         self.setupWidget(divWidget, widgetData);
         self.loadDataInTemplateWidget(widgetData);
 
-        self.setClassByDataDepth();
+        //self.setClassByDataDepth();
     }
 
     /*

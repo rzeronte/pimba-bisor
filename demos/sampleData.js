@@ -1,35 +1,36 @@
 var dashboardData = {
-    "_id": "544987b19c14e40000000004",
+    "_id": "cod-ligas-del-mundo",
     "__v": 69,
     "childs": [
         {
-            "_id": "546031687a9dc85c73000003",
+            "_id": "cod-liga",
             "__v": 13,
             "childs": [
                 {
-                    "_id": "54602a547a9dc85c73000001",
+                    "_id": "cod-real-madrid",
                     "__v": 19,
                     "description": "El mejor equipo del siglo XX y uno de los siempre favoritos",
-                    "parent": "546031687a9dc85c73000003",
+                    "parent": "cod-liga",
                     "title": "RealMadrid",
                     "user": "5449873c9c14e40000000003",
+                    "height": 400,
                     "childs": [
                         {
-                            "_id": "54602a547a9dc85c7300012a",
+                            "_id": "cod-cristiano",
                             "__v": 19,
                             "description": "",
-                            "parent": "54602a547a9dc85c73000001",
-                            "title": "Cristiano rolando",
+                            "parent": "cod-real-madrid",
+                            "title": "Cristiano",
                             "user": "5449873c9c14e40000000003",
                             "childs": [],
                             "col-md": 6
                         },
                         {
-                            "_id": "54602a547a9df85c7300012f",
+                            "_id": "cod-james",
                             "__v": 19,
                             "description": "",
-                            "parent": "54602a547a9dc85c73000001",
-                            "title": "Tony Cross",
+                            "parent": "cod-real-madrid",
+                            "title": "James",
                             "user": "5449873c9c14e40000000003",
                             "childs": [],
                             "col-md": 6
@@ -38,20 +39,20 @@ var dashboardData = {
                     "col-md": 4
                 },
                 {
-                    "_id": "54602a547a9dc85c73000123",
+                    "_id": "cod-barsa",
                     "__v": 19,
                     "description": "La era Guardiola marcó un hito en el mundo del fútbol",
-                    "parent": "546031687a9dc85c73000003",
+                    "parent": "cod-liga",
                     "title": "Barcelona",
                     "user": "5449873c9c14e40000000003",
                     "childs": [],
                     "col-md": 4
                 },
                 {
-                    "_id": "54602a547a9dc853131313",
+                    "_id": "cod-atletico",
                     "__v": 19,
                     "description": "Ole ole ole, el cholo Simeone",
-                    "parent": "546031687a9dc85c73000003",
+                    "parent": "cod-liga",
                     "title": "Atletico de Madrid",
                     "user": "5449873c9c14e40000000003",
                     "childs": [],
@@ -60,30 +61,30 @@ var dashboardData = {
 
             ],
             "description": "",
-            "parent": "544987b19c14e40000000004",
+            "parent": "cod-ligas-del-mundo",
             "title": "La Liga",
             "user": "5449873c9c14e40000000003",
             "col-md": 4
         },
         {
-            "_id": "546031687a9dc85c7301111111",
+            "_id": "cod-premier",
             "__v": 13,
             "childs": [
                 {
-                    "_id": "54602a547a9dc85c71231000001",
+                    "_id": "cod-liverpool",
                     "__v": 19,
                     "description": "Nunca caminarás solo",
-                    "parent": "546031687a9dc85c7301111111",
+                    "parent": "cod-premier",
                     "title": "Liverpool",
                     "user": "5449873c9c14e40000000003",
                     "childs": [],
                     "col-md": 4
                 },
                 {
-                    "_id": "54602a547a9dc85c7300032231123",
+                    "_id": "cod-manchester",
                     "__v": 19,
                     "description": "Equipo en alza de la competición inglesa",
-                    "parent": "546031687a9dc85c7301111111",
+                    "parent": "cod-premier",
                     "title": "Manchester City",
                     "user": "5449873c9c14e40000000003",
                     "childs": [],
@@ -92,31 +93,31 @@ var dashboardData = {
 
             ],
             "description": "",
-            "parent": "544987b19c14e40000000004",
+            "parent": "cod-ligas-del-mundo",
             "title": "Premier",
             "user": "5449873c9c14e40000000003",
             "col-md": 4
         },
         {
-            "_id": "546031687a9dc85c7301133333",
+            "_id": "cod-calcio",
             "__v": 13,
             "childs": [
                 {
-                    "_id": "54602a547a9dc85c7123100000a",
+                    "_id": "cod-inter-milan",
                     "__v": 19,
                     "description": "Nunca caminarás solo",
-                    "parent": "546031687a9dc85c7301133333",
-                    "title": "Liverpool",
+                    "parent": "cod-calcio",
+                    "title": "Inter de Milán",
                     "user": "5449873c9c14e40000000003",
                     "childs": [],
                     "col-md": 4
                 },
                 {
-                    "_id": "54602a547a9dc85c730003223112b",
+                    "_id": "cod-juventus",
                     "__v": 19,
                     "description": "Equipo en alza de la competición inglesa",
-                    "parent": "546031687a9dc85c7301133333",
-                    "title": "Manchester City",
+                    "parent": "cod-calcio",
+                    "title": "Juventus",
                     "user": "5449873c9c14e40000000003",
                     "childs": [],
                     "col-md": 6
@@ -124,7 +125,7 @@ var dashboardData = {
 
             ],
             "description": "",
-            "parent": "544987b19c14e40000000004",
+            "parent": "cod-ligas-del-mundo",
             "title": "Calcio",
             "user": "5449873c9c14e40000000003",
             "col-md": 4
