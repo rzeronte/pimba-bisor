@@ -19,13 +19,10 @@
     padding-top: 12px;
     padding-bottom: 12px;
     background-color: #eee;
-    border: 1px solid #ddd;
     background-color: rgba(86,61,124,.15);
-    border: 1px solid rgba(86,61,124,.2);
 }
 
 .resize_control{
-    border: solid 1px black;
     padding:0;
     margin:0;
     position: absolute;
@@ -63,10 +60,10 @@
 .rze_widget{
     padding-top: 10px;
     padding-bottom: 10px;
-    border: solid 1px #888888;
     background-color: #f3f3f3;
     font-size: 14px;
     min-height: 100px;
+    border: solid 1px #888;
 }
 
 
@@ -87,27 +84,11 @@
 .rze_widget .content {
 }
 
-.rze_widget .move:hover{
-    cursor: move !important;
-}
-
-.rze_widget > div.edit{
-    width: 20px;
-    height: 20px;
-    color: #888;
-    cursor:pointer;
-}
-.rze_widget > div.add{
-    width: 20px;
-    height: 20px;
-    color: #888;
-    cursor:pointer;
-}
-.rze_widget > div.delete{
-    width: 20px;
-    height: 20px;
-    color: #888;
-    cursor:pointer;
+.rze_widget .content div,
+.rze_widget .content p
+{
+    padding:0;
+    margin:0;
 }
 
 .rze_widget_dragging{
@@ -120,6 +101,7 @@
 .rze_container >.rze_widget_hovered {
     background-color: transparent !important;
 }
+
 .rze_widget_hovered{
     background-color: #ADDDFF;
     filter: alpha(opacity=70); /* For IE8 and earlier */
@@ -130,11 +112,32 @@
     background-color: red;
 }
 
-
-canvas{
-    z-index:9999;
-    top: 0;
-    left: 0;
+/* Porciones para la detección del cambio de orden */
+.drag_order{
     position: absolute;
-    background-color: transparent;
+}
+
+.drag_order_top{
+    width: 100px;
+    height: 15px;
+}
+
+.drag_order_bottom{
+    width: 100px;
+    height: 15px;
+}
+
+.drag_order_left{
+    width: 10px;
+    height: 100px;
+}
+
+.drag_order_right{
+    width: 10px;
+    height: 100px;
+}
+
+.dragging{
+    width: 100px;
+    height: 100px;
 }

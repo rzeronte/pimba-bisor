@@ -1,6 +1,13 @@
 var PimbaBisor = function (aOptions) {
 
     var self = this;
+    this.mouseX;
+    this.mouseY;
+
+    $(document).mousemove(function(e) {
+        self.mouseX = e.pageX;
+        self.mouseY = e.pageY;
+    });
 
     /* Propiedades */
     var dataWidgetOrigin               = new Array();
@@ -105,10 +112,22 @@ var PimbaBisor = function (aOptions) {
     this.updateResizersForWidget = function (widgetId) {
         var widget = $("#" + widgetId);
 
-        widget.find(".resize_top").position(   { of : "#" + widget.attr("id"), at: 'center top', my: 'center top' }).fadeTo('fast', 0);
-        widget.find(".resize_bottom").position({ of : "#" + widget.attr("id"), at: 'center bottom', my: 'center bottom' }).fadeTo('fast', 0);
-        widget.find(".resize_left").position(  { of : "#" + widget.attr("id"), at: 'left center', my: 'left center' }).fadeTo('fast', 0);
-        widget.find(".resize_right").position( { of : "#" + widget.attr("id"), at: 'right center', my: 'right center' }).fadeTo('fast', 0);
+        //widget.find(".resize_top").position(   { of : "#" + widget.attr("id"), at: 'center top', my: 'center top' }).fadeTo('fast', 0);
+        //widget.find(".resize_bottom").position({ of : "#" + widget.attr("id"), at: 'center bottom', my: 'center bottom' }).fadeTo('fast', 0);
+        //widget.find(".resize_left").position(  { of : "#" + widget.attr("id"), at: 'left center', my: 'left center' }).fadeTo('fast', 0);
+        //widget.find(".resize_right").position( { of : "#" + widget.attr("id"), at: 'right center', my: 'right center' }).fadeTo('fast', 0);
+
+        widget.find(".drag_order_top").width(widget.find(".drag_order_top").parent().innerWidth());
+        widget.find(".drag_order_top").position(   { of : "#" + widget.attr("id"), at: 'center top', my: 'center top' });
+
+        widget.find(".drag_order_bottom").width(widget.find(".drag_order_bottom").parent().innerWidth());
+        widget.find(".drag_order_bottom").position({ of : "#" + widget.attr("id"), at: 'center bottom', my: 'center bottom' });
+
+        widget.find(".drag_order_left").height(widget.find(".drag_order_left").parent().innerHeight());
+        widget.find(".drag_order_left").position(  { of : "#" + widget.attr("id"), at: 'left center', my: 'left center' });
+
+        widget.find(".drag_order_right").height(widget.find(".drag_order_right").parent().innerHeight());
+        widget.find(".drag_order_right").position( { of : "#" + widget.attr("id"), at: 'right center', my: 'right center' });
 
     }
 
@@ -275,15 +294,25 @@ var PimbaBisor = function (aOptions) {
     this.setupWidget = function(obj, widgetData) {
 
         /* Container de acciones en el widget*/
-        var divActionResizeTop    = $("<div>", { "class": "resize_control resize_top"});
-        var divActionResizeBottom = $("<div>", { "class": "resize_control resize_bottom"});
-        var divActionResizeLeft   = $("<div>", { "class": "resize_control resize_left"});
-        var divActionResizeRight  = $("<div>", { "class": "resize_control resize_right"});
+        //var divActionResizeTop    = $("<div>", { "class": "resize_control resize_top"});
+        //var divActionResizeBottom = $("<div>", { "class": "resize_control resize_bottom"});
+        //var divActionResizeLeft   = $("<div>", { "class": "resize_control resize_left"});
+        //var divActionResizeRight  = $("<div>", { "class": "resize_control resize_right"});
+        //
+        //$(obj).append(divActionResizeTop);
+        //$(obj).append(divActionResizeBottom);
+        //$(obj).append(divActionResizeLeft);
+        //$(obj).append(divActionResizeRight);
 
-        $(obj).append(divActionResizeTop);
-        $(obj).append(divActionResizeBottom);
-        $(obj).append(divActionResizeLeft);
-        $(obj).append(divActionResizeRight);
+        /* Container de acciones en el widget*/
+        var divActionOrderTop    = $("<div>", { "class": "drag_order drag_order_top"});
+        var divActionOrderBottom = $("<div>", { "class": "drag_order drag_order_bottom"});
+        var divActionOrderLeft   = $("<div>", { "class": "drag_order drag_order_left"});
+        var divActionOrderRight  = $("<div>", { "class": "drag_order drag_order_right"});
+        $(obj).append(divActionOrderTop);
+        $(obj).append(divActionOrderBottom);
+        $(obj).append(divActionOrderLeft);
+        $(obj).append(divActionOrderRight);
 
         var divActions = $("<div>", {
             "class": self.widgetContainerActionClass
@@ -310,7 +339,7 @@ var PimbaBisor = function (aOptions) {
                 "title": 'Move card',
                 'text': 'Move'
             });
-            $(divActions).prepend(div);
+            //$(divActions).prepend(div);
         }
 
         // Añadimos la capa para los hijos
@@ -328,24 +357,29 @@ var PimbaBisor = function (aOptions) {
             obj.appendTo("#" + widgetData['parent'] + "> .childs");
         }
 
-
         // HACEMOS EL WIDGET DRAGGABLE
         $(obj).draggable({
-            handle     : "div.move",
+            //handle     : "div.move",
             zIndex     : 10,
-            revert: true,
-            opacity: 0.25,
+            opacity: 0.5,
+//            helper: 'clone',
+            scroll:true,
+            cursor: 'move',
+            refreshPositions:true,
+            appendTo: 'body',
+            cursorAt: {
+                top: 20,
+                left: 20
+            },
+            helper: function (){
+                return $("<div style='width: 40px;height:40px;background-color:red;' class='hola'></div>");
+            },
+            //helper: 'clone',
             start: function(event, ui) {
-                $(this).draggable("option", "cursorAt", {
-                    cursor: "move",
-                    left: Math.round($(this).outerWidth() / 2),
-                    top: Math.round($(this).outerHeight() / 2)
-                });
 
                 var idWidget = $(this).attr("id");
-                $(this).addClass("current");
-
                 self.currentWidgetDragging = idWidget;
+
                 var divParent = $(this).parents(".rze_widget");
                 if (divParent.length > 0) {
                     self.currentFatherOfWidgetDragging = divParent;
@@ -357,12 +391,13 @@ var PimbaBisor = function (aOptions) {
                 // Sin esto no se ve el drag fuera del container (no podemos sacar a otro widget)
                 $(".rze_widget").css("overflow", "visible");
             },
-            drag: function() {
-                $(this).draggable("option", "cursorAt", {
-                    cursor: "move",
-                    left: Math.round($(this).outerWidth() / 2),
-                    top: Math.round($(this).outerHeight() / 2)
-                });
+            drag: function(event, ui) {
+                var offset = ui.helper.offset();
+
+                $(".hola").css("top", self.mouseY);
+                $(".hola").css("left", self.mouseX);
+
+
             },
             stop: function() {
                 $(".rze_ghost").remove();
@@ -375,84 +410,59 @@ var PimbaBisor = function (aOptions) {
             }
         });
 
-        /*-----------------------Creamos la configuración droppable básica*/
-        $(obj).droppable({
-            accept: '.rze_widget',
+        $(divActionOrderRight).droppable({
             greedy: true,
             over: function (event, ui) {
-                //Actualizamos el widget sobre el que nos encontramos
-                var idWidget = $(this).attr("id");
+                var widgetSobre = $(this).parent().attr("id");
+                $("#"+widgetSobre).after($("#"+self.currentWidgetDragging)).show('slow');;
+                $("#"+self.currentWidgetDragging).fadeIn('fast');
 
-                // Como podemos estar encima de varios
-                // guardamos el últimos sobre el quenos encontramos
-                $(this).addClass("rze_widget_hovered")
-
-                if (idWidget != $("#"+self.currentWidgetDragging).parent().parent().attr("id")) {
-                    // Creamos una copia de la capa que arrastramos y la colocamos antes de la que nos hemos
-                    //posicionado
-
-                    var divClone = $("<div/>", {
-                        class: 'rze_widget rze_ghost'
-                    });
-
-                    divClone.html($("#"+self.currentWidgetDragging).html());
-
-                    var currentMd = self.getColMdForWidget(self.currentWidgetDragging);
-
-                    divClone.removeClass("col-md-"+ currentMd);
-                    divClone.addClass("col-md-1");
-
-                    //$(this).find(">.childs").prepend(divClone);
-                }
+                console.log("[Bisor] over - drag_border_right from: " + widgetSobre)
             },
             out: function (event, ui) {
                 $(".rze_ghost").remove();
-                // Si salimos, eliminamos la referencia del array dephHover
                 $(this).removeClass("rze_widget_hovered")
+            },
+            drop: function (event, ui) {
+                //alert("se2");
+            }
+        });
+
+        $(divActionOrderLeft).droppable({
+            greedy: true,
+            over: function (event, ui) {
+                var widgetSobre = $(this).parent().attr("id");
+                $("#"+widgetSobre).after($("#"+self.currentWidgetDragging));
+                $("#"+self.currentWidgetDragging).fadeIn('fast');
+
+                console.log("[Bisor] over - drag_border_left from: " + widgetSobre)
+            },
+            out: function (event, ui) {
+                $(".rze_ghost").fadeOut('fast');
+            },
+            drop: function (event, ui) {
+                //alert("se2");
+            }
+        });
+
+        /*-----------------------Creamos la configuración droppable básica*/
+        $(obj).find(">.content").droppable({
+            accept: '.rze_widget',
+            greedy: true,
+            start: function(event, ui) {
+            },
+            over: function (event, ui) {
+                var widgetSobre = $(this).parent().attr("id");
+                $("#"+self.currentWidgetDragging).hide();
+                $("#" + widgetSobre + " >.childs").append($("#"+self.currentWidgetDragging));
+                $("#"+self.currentWidgetDragging).fadeIn('fast');
+
+                console.log("[Bisor] over - >.contene from: " + widgetSobre)
+            },
+            out: function (event, ui) {
 
             },
             drop: function (event, ui) {
-                var draggableId = ui.draggable.attr("id");
-                var droppableId = $(this).attr("id");
-
-                $(".rze_ghost").remove();
-                $(this).removeClass("rze_widget_hovered")
-
-                //if (self.currentWidgetOn == droppableId) {
-                    // Solo hago cosas si cambio de padre el widget que arrastro
-                    if (droppableId != $("#"+self.currentWidgetDragging).parent().parent().attr("id")) {
-                        // callback de actualización
-                        if (typeof(self.cb_update_widget) === 'function' ) {
-                            self.cb_update_widget(self, {
-                                '_id': self.currentWidgetDragging,
-                                'parent': droppableId,
-                                'title': $(self.currentWidgetDragging + " [name='title']").val(),
-                                'description': $(self.currentWidgetDragging + " [name='description']").val(),
-                                'from': (self.currentFatherOfWidgetDragging != null) ? self.currentFatherOfWidgetDragging.attr("id") : null
-                            });
-                        }
-                        // Cambiamos el padre en el array de datos
-                        self.changeWidgetParentInArray(self.currentWidgetDragging, droppableId);
-
-                        // Movemos el widget físicamente
-                        $("#"+droppableId + "> .childs").append($("#"+self.currentWidgetDragging));
-
-
-                        // Cambiamos la posición X e Y en el array de datos (con el widget ya movido físicamente)
-                        self.setWidgetPositionXYInArray(self.currentWidgetDragging, 69, 69);
-
-                        //self.setClassByDataDepth();
-
-                        self.calcBootstrapGrid(self.currentWidgetDragging);
-                        self.updateResizers();
-
-
-                    } else {
-                        // Cambiamos la posición X e Y en el array de datos (con el widget ya movido físicamente)
-                        self.setWidgetPositionXYInArray(self.currentWidgetDragging, 69, 69);
-                    }
-                    $(".rze_widget").css("overflow", "hidden");
-                //}
             }
         });
     }
