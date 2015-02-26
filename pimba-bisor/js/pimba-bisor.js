@@ -1,8 +1,11 @@
 var PimbaBisor = function (aOptions) {
 
     var self = this;
+    // Situación del ratón y timer para dragorder
     this.mouseX;
     this.mouseY;
+    this.timerDrag;
+    this.timerDuration = 300;
 
     $(document).mousemove(function(e) {
         self.mouseX = e.pageX;
@@ -395,14 +398,20 @@ var PimbaBisor = function (aOptions) {
             greedy: true,
             over: function (event, ui) {
                 var widgetSobre = $(this).parent().attr("id");
+                var doReplicate = function(event, ui) {
 
-                $("#"+widgetSobre).after($("#"+self.currentWidgetDragging));
-                $("#"+self.currentWidgetDragging).fadeIn('fast');
-                self.updateResizers();
-                console.log("[Bisor] over - drag_border_right from: " + widgetSobre)
+                    $("#"+widgetSobre).after($("#"+self.currentWidgetDragging));
+                    $("#"+self.currentWidgetDragging).fadeIn('fast');
+                    self.updateResizers();
+                    console.log("[Bisor] over - drag_border_right from: " + widgetSobre)
+                }
+
+                self.timerDrag = setTimeout(doReplicate, self.timerDuration);
+
             },
             out: function (event, ui) {
                 $(".rze_ghost").remove();
+                clearTimeout(self.timerDrag);
                 $(this).removeClass("rze_widget_hovered")
             },
             drop: function (event, ui) {
@@ -413,14 +422,20 @@ var PimbaBisor = function (aOptions) {
             greedy: true,
             over: function (event, ui) {
                 var widgetSobre = $(this).parent().attr("id");
-                $("#"+widgetSobre).before($("#"+self.currentWidgetDragging));
-                $("#"+self.currentWidgetDragging).fadeIn('fast');
+                var doReplicate = function(event, ui) {
+                    $("#"+widgetSobre).before($("#"+self.currentWidgetDragging));
+                    $("#"+self.currentWidgetDragging).fadeIn('fast');
 
-                self.updateResizers();
-                console.log("[Bisor] over - drag_border_left from: " + widgetSobre)
+                    self.updateResizers();
+                    console.log("[Bisor] over - drag_border_left from: " + widgetSobre)
+                }
+
+                self.timerDrag = setTimeout(doReplicate, self.timerDuration);
+
             },
             out: function (event, ui) {
                 $(".rze_ghost").fadeOut('fast');
+                clearTimeout(self.timerDrag);
             },
             drop: function (event, ui) {
             }
