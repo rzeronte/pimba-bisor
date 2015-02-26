@@ -396,7 +396,7 @@ var PimbaBisor = function (aOptions) {
             over: function (event, ui) {
                 var widgetSobre = $(this).parent().attr("id");
 
-                $("#"+widgetSobre).after($("#"+self.currentWidgetDragging)).show('slow');;
+                $("#"+widgetSobre).after($("#"+self.currentWidgetDragging));
                 $("#"+self.currentWidgetDragging).fadeIn('fast');
                 self.updateResizers();
                 console.log("[Bisor] over - drag_border_right from: " + widgetSobre)
@@ -413,7 +413,7 @@ var PimbaBisor = function (aOptions) {
             greedy: true,
             over: function (event, ui) {
                 var widgetSobre = $(this).parent().attr("id");
-                $("#"+widgetSobre).after($("#"+self.currentWidgetDragging));
+                $("#"+widgetSobre).before($("#"+self.currentWidgetDragging));
                 $("#"+self.currentWidgetDragging).fadeIn('fast');
 
                 self.updateResizers();
