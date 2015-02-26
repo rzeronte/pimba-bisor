@@ -594,8 +594,7 @@ var PimbaBisor = function (aOptions) {
         var divWidget = $("<div>", {
             "id": idWidget,
             "class": 'rze_widget col-md-' + colmd,
-            "data-draggable": "true",
-            "style": "height:"+ widgetData["height"]+"px;"
+            "data-draggable": "true"
         });
 
         //$('[data-toggle="tooltip"]').tooltip({
