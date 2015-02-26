@@ -608,10 +608,15 @@ var PimbaBisor = function (aOptions) {
             idWidget = self._randomIdentifiers(1111, 9999);
         }
 
+        // Fix para cuando no hay definidas columnas, suponemos 1 como default
+        if (widgetData["col-md"] == undefined) {
+            widgetData["col-md"] = 1;
+        }
+
         // Contenedor principal del widget
         var divWidget = $("<div>", {
             "id": idWidget,
-            "class": 'rze_widget col-md-'+widgetData["col-md"],
+            "class": 'rze_widget col-md-'+widgetData["colmd"],
             "data-draggable": "true",
             "style": "height:"+ widgetData["height"]+"px;"
         });
