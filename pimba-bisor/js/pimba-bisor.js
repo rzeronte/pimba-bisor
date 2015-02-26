@@ -609,8 +609,8 @@ var PimbaBisor = function (aOptions) {
         }
 
         // Fix para cuando no hay definidas columnas, suponemos 1 como default
-        if (widgetData["col-md"] == undefined) {
-            widgetData["col-md"] = 1;
+        if (widgetData["colmd"] == undefined) {
+            widgetData["colmd"] = 1;
         }
 
         // Contenedor principal del widget
