@@ -114,20 +114,24 @@ var PimbaBisor = function (aOptions) {
 
         //widget.find(".resize_top").position(   { of : "#" + widget.attr("id"), at: 'center top', my: 'center top' }).fadeTo('fast', 0);
         //widget.find(".resize_bottom").position({ of : "#" + widget.attr("id"), at: 'center bottom', my: 'center bottom' }).fadeTo('fast', 0);
-        //widget.find(".resize_left").position(  { of : "#" + widget.attr("id"), at: 'left center', my: 'left center' }).fadeTo('fast', 0);
-        //widget.find(".resize_right").position( { of : "#" + widget.attr("id"), at: 'right center', my: 'right center' }).fadeTo('fast', 0);
+        widget.find(".resize_left").position(  { of : "#" + widget.attr("id"), at: 'left', my: 'left' }).css({ 'opacity' : 0 });
+        widget.find(".resize_right").position( { of : "#" + widget.attr("id"), at: 'right', my: 'right' }).css({ 'opacity' : 0 });
 
-        widget.find(".drag_order_top").width(widget.find(".drag_order_top").parent().innerWidth());
-        widget.find(".drag_order_top").position(   { of : "#" + widget.attr("id"), at: 'center top', my: 'center top' });
+        //var orderTop = widget.find(".drag_order_top");
+        //orderTop.width(orderTop.parent().innerWidth());
+        //orderTop.position(   { of : "#" + widget.attr("id"), at: 'center top', my: 'center top' });
 
-        widget.find(".drag_order_bottom").width(widget.find(".drag_order_bottom").parent().innerWidth());
-        widget.find(".drag_order_bottom").position({ of : "#" + widget.attr("id"), at: 'center bottom', my: 'center bottom' });
+        //var orderBottom = widget.find(".drag_order_bottom");
+        //orderBottom.width(orderBottom.parent().innerWidth());
+        //orderBottom.position({ of : "#" + widget.attr("id"), at: 'center bottom', my: 'center bottom' });
 
-        widget.find(".drag_order_left").height(widget.find(".drag_order_left").parent().innerHeight());
-        widget.find(".drag_order_left").position(  { of : "#" + widget.attr("id"), at: 'left center', my: 'left center' });
+        var orderLeft = widget.find(".drag_order_left");
+        orderLeft.height(orderLeft.parent().innerHeight());
+        orderLeft.position(  { of : "#" + widget.attr("id"), at: 'left', my: 'left' });
 
-        widget.find(".drag_order_right").height(widget.find(".drag_order_right").parent().innerHeight());
-        widget.find(".drag_order_right").position( { of : "#" + widget.attr("id"), at: 'right center', my: 'right center' });
+        var orderRight = widget.find(".drag_order_left");
+        orderRight.height(orderRight.parent().innerHeight());
+        orderRight.position( { of : "#" + widget.attr("id"), at: 'right', my: 'right' });
 
     }
 
@@ -187,6 +191,8 @@ var PimbaBisor = function (aOptions) {
         $(".rze_widget").each(function( index ) {
             self.updateResizersForWidget($(this).attr("id"))
         });
+
+        $(".drag_order").hide();
     }
 
     /*
@@ -296,13 +302,13 @@ var PimbaBisor = function (aOptions) {
         /* Container de acciones en el widget*/
         //var divActionResizeTop    = $("<div>", { "class": "resize_control resize_top"});
         //var divActionResizeBottom = $("<div>", { "class": "resize_control resize_bottom"});
-        //var divActionResizeLeft   = $("<div>", { "class": "resize_control resize_left"});
-        //var divActionResizeRight  = $("<div>", { "class": "resize_control resize_right"});
-        //
+        var divActionResizeLeft   = $("<div>", { "class": "resize_control resize_left"});
+        var divActionResizeRight  = $("<div>", { "class": "resize_control resize_right"});
+
         //$(obj).append(divActionResizeTop);
         //$(obj).append(divActionResizeBottom);
-        //$(obj).append(divActionResizeLeft);
-        //$(obj).append(divActionResizeRight);
+        $(obj).append(divActionResizeLeft);
+        $(obj).append(divActionResizeRight);
 
         /* Container de acciones en el widget*/
         var divActionOrderTop    = $("<div>", { "class": "drag_order drag_order_top"});
@@ -361,10 +367,9 @@ var PimbaBisor = function (aOptions) {
         $(obj).draggable({
             //handle     : "div.move",
             zIndex     : 10,
-            opacity: 0.5,
-//            helper: 'clone',
             scroll:true,
             cursor: 'move',
+            opacity: 0.2,
             refreshPositions:true,
             appendTo: 'body',
             cursorAt: {
@@ -374,8 +379,8 @@ var PimbaBisor = function (aOptions) {
             helper: function (){
                 return $("<div style='width: 40px;height:40px;background-color:red;' class='hola'></div>");
             },
-            //helper: 'clone',
             start: function(event, ui) {
+                $(".drag_order").show();
 
                 var idWidget = $(this).attr("id");
                 self.currentWidgetDragging = idWidget;
@@ -386,7 +391,6 @@ var PimbaBisor = function (aOptions) {
                 }
 
                 $(this).draggable( "option", "zIndex", 15 );
-                $(this).addClass("rze_widget_dragging");
 
                 // Sin esto no se ve el drag fuera del container (no podemos sacar a otro widget)
                 $(".rze_widget").css("overflow", "visible");
@@ -400,11 +404,12 @@ var PimbaBisor = function (aOptions) {
 
             },
             stop: function() {
+                $(".drag_order").hide();
                 $(".rze_ghost").remove();
+                self.updateResizers();
                 self.currentWidgetDragging = null;
                 self.currentFatherOfWidgetDragging = null;
                 $(this).draggable( "option", "zIndex", 10 );
-                $(this).removeClass("rze_widget_dragging");
                 $(".rze_widget").css("overflow", "hidden");
                 $(this).removeClass("current");
             }
@@ -414,9 +419,9 @@ var PimbaBisor = function (aOptions) {
             greedy: true,
             over: function (event, ui) {
                 var widgetSobre = $(this).parent().attr("id");
+
                 $("#"+widgetSobre).after($("#"+self.currentWidgetDragging)).show('slow');;
                 $("#"+self.currentWidgetDragging).fadeIn('fast');
-
                 console.log("[Bisor] over - drag_border_right from: " + widgetSobre)
             },
             out: function (event, ui) {
