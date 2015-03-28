@@ -5,7 +5,7 @@ var PimbaBisor = function (aOptions) {
     this.mouseX;
     this.mouseY;
     this.timerDrag;
-    this.timerDuration = 300;
+    this.timerDuration = 200;
 
     $(document).mousemove(function(e) {
         self.mouseX = e.pageX;
@@ -114,14 +114,6 @@ var PimbaBisor = function (aOptions) {
      * */
     this.updateResizersForWidget = function (widgetId) {
         var widget = $("#" + widgetId);
-
-        //var orderTop = widget.find(".drag_order_top");
-        //orderTop.width(orderTop.parent().innerWidth());
-        //orderTop.position(   { of : "#" + widget.attr("id"), at: 'center top', my: 'center top' });
-
-        //var orderBottom = widget.find(".drag_order_bottom");
-        //orderBottom.width(orderBottom.parent().innerWidth());
-        //orderBottom.position({ of : "#" + widget.attr("id"), at: 'center bottom', my: 'center bottom' });
 
         var orderLeft = $("#" + widgetId+ ">.drag_order_left");
         orderLeft.height($("#" + widgetId).innerHeight());
@@ -298,12 +290,8 @@ var PimbaBisor = function (aOptions) {
     this.setupWidget = function(obj, widgetData) {
 
         /* Container de acciones en el widget*/
-        var divActionOrderTop    = $("<div>", { "class": "drag_order drag_order_top"});
-        var divActionOrderBottom = $("<div>", { "class": "drag_order drag_order_bottom"});
         var divActionOrderLeft   = $("<div>", { "class": "drag_order drag_order_left"});
         var divActionOrderRight  = $("<div>", { "class": "drag_order drag_order_right"});
-        $(obj).append(divActionOrderTop);
-        $(obj).append(divActionOrderBottom);
         $(obj).append(divActionOrderLeft);
         $(obj).append(divActionOrderRight);
 
@@ -320,7 +308,7 @@ var PimbaBisor = function (aOptions) {
         $(obj).append(divActions);
 
         var divContent = $("<div>", {
-            "class": 'content'
+            "class": 'content row'
         });
 
         $(obj).append(divContent);
@@ -370,8 +358,6 @@ var PimbaBisor = function (aOptions) {
                 return $("<div style='width: 40px;height:40px;background-color:red;' class='hola'></div>");
             },
             start: function(event, ui) {
-                //$(".drag_order").show();
-
                 var idWidget = $(this).attr("id");
                 self.currentWidgetDragging = idWidget;
 
@@ -381,27 +367,37 @@ var PimbaBisor = function (aOptions) {
                 }
             },
             drag: function(event, ui) {
-                var offset = ui.helper.offset();
-
                 $(".hola").css("top", self.mouseY);
                 $(".hola").css("left", self.mouseX);
             },
             stop: function() {
-                //$(".drag_order").hide();
-                $(".rze_ghost").remove();
+                if (typeof(self.cb_update_widget) === 'function') {
+                    self.cb_update_widget(self, {
+                        '_id': self.currentWidgetDragging,
+                        'parent': $("#"+self.currentWidgetDragging).parent().parent().attr("id"),
+                        'title': $(self.currentWidgetDragging + " [name='title']").val(),
+                        'description': $(self.currentWidgetDragging + " [name='description']").val(),
+                        'from': (self.currentFatherOfWidgetDragging != null) ? self.currentFatherOfWidgetDragging.attr("id") : null
+                    });
+                }
+
+                self.updateResizers();
                 self.currentWidgetDragging = null;
                 self.currentFatherOfWidgetDragging = null;
+                $(".rze_widget_preview").removeClass("rze_widget_preview");
+                $(".drag_order_hover").removeClass("drag_order_hover");
             }
         });
 
         $(divActionOrderRight).droppable({
             greedy: true,
             over: function (event, ui) {
+                $(this).addClass("drag_order_hover");
                 var widgetSobre = $(this).parent().attr("id");
                 var doReplicate = function(event, ui) {
-
+                    $("#"+self.currentWidgetDragging).addClass("rze_widget_preview");
                     $("#"+widgetSobre).after($("#"+self.currentWidgetDragging));
-                    $("#"+self.currentWidgetDragging).fadeIn('fast');
+                    $("#"+self.currentWidgetDragging).show();
                     self.updateResizers();
                     console.log("[Bisor] over - drag_border_right from: " + widgetSobre)
                 }
@@ -412,7 +408,7 @@ var PimbaBisor = function (aOptions) {
             out: function (event, ui) {
                 $(".rze_ghost").remove();
                 clearTimeout(self.timerDrag);
-                $(this).removeClass("rze_widget_hovered")
+                $(".drag_order_hover").removeClass("drag_order_hover");
             },
             drop: function (event, ui) {
             }
@@ -421,42 +417,56 @@ var PimbaBisor = function (aOptions) {
         $(divActionOrderLeft).droppable({
             greedy: true,
             over: function (event, ui) {
+                $(this).addClass("drag_order_hover");
+
                 var widgetSobre = $(this).parent().attr("id");
                 var doReplicate = function(event, ui) {
+                    $("#"+self.currentWidgetDragging).addClass("rze_widget_preview");
                     $("#"+widgetSobre).before($("#"+self.currentWidgetDragging));
-                    $("#"+self.currentWidgetDragging).fadeIn('fast');
+                    $("#"+self.currentWidgetDragging).prev().find(">.drag_order_right").addClass("drag_order_hover");
+                    $("#"+self.currentWidgetDragging).show();
 
                     self.updateResizers();
                     console.log("[Bisor] over - drag_border_left from: " + widgetSobre)
+                }
+
+            },
+            out: function (event, ui) {
+                $(".rze_ghost").fadeOut('fast');
+                $(".drag_order_hover").removeClass("drag_order_hover");
+                clearTimeout(self.timerDrag);
+            },
+            drop: function (event, ui) {
+
+            }
+        });
+
+        /*-----------------------Creamos la configuración droppable básica*/
+        $(obj).find(">.content").droppable({
+        //$(obj).droppable({
+            accept: '.rze_widget',
+            greedy: true,
+            over: function (event, ui) {
+                var widgetSobre = $(this).parent().attr("id");
+
+                var doReplicate = function(event, ui) {
+                    //Ocultamos paramostrar con efecto
+                    $("#"+self.currentWidgetDragging).addClass("rze_widget_preview");
+                    $("#" + widgetSobre + " >.childs").append($("#"+self.currentWidgetDragging));
+
+                    console.log("[Bisor] over - >.contene from: " + widgetSobre)
+
                 }
 
                 self.timerDrag = setTimeout(doReplicate, self.timerDuration);
 
             },
             out: function (event, ui) {
-                $(".rze_ghost").fadeOut('fast');
                 clearTimeout(self.timerDrag);
-            },
-            drop: function (event, ui) {
-            }
-        });
-
-        /*-----------------------Creamos la configuración droppable básica*/
-        $(obj).find(">.content").droppable({
-            accept: '.rze_widget',
-            greedy: true,
-            over: function (event, ui) {
-                var widgetSobre = $(this).parent().attr("id");
-                $("#"+self.currentWidgetDragging).hide();
-                $("#" + widgetSobre + " >.childs").append($("#"+self.currentWidgetDragging));
-                $("#"+self.currentWidgetDragging).fadeIn('fast');
-
-                console.log("[Bisor] over - >.contene from: " + widgetSobre)
-            },
-            out: function (event, ui) {
 
             },
             drop: function (event, ui) {
+
             }
         });
     }

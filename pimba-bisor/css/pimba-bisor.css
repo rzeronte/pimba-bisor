@@ -1,8 +1,3 @@
-.rze_container h1,
-.rze_container h2,
-.rze_container h3 {
-    font-size: 12px;
-}
 
 .rze_container .container {
     padding-left:16px;
@@ -11,8 +6,6 @@
 }
 
 .rze_container .row {
-    margin-left: -6px;
-    margin-right: -6px;
 }
 
 .rze_container [class^="col-"] {
@@ -53,17 +46,21 @@
     height:40px;
 }
 
-.dashboard{
+
+/* Dashboard/Perspectiva */
+.dashboard {
+    background-color: lightgray !important;
 }
 
 /* Widget básico */
 .rze_widget{
     padding-top: 10px;
     padding-bottom: 10px;
-    background-color: #f3f3f3;
     font-size: 14px;
     min-height: 100px;
-    border: solid 1px #888;
+    background-color: slategray;
+    border: solid 4px lightgray;
+    border-collapse: collapse;
 }
 
 
@@ -72,24 +69,22 @@
     margin: 0 !important;
     padding: 0 !important;
 }
-
+.dashboard .title{
+    font-size: 18px;
+}
 .rze_widget .actions {
 
 }
 
 .rze_widget .childs{
+    padding: 5px;
 }
 
 
 .rze_widget .content {
+    padding:5px;
 }
 
-.rze_widget .content div,
-.rze_widget .content p
-{
-    padding:0;
-    margin:0;
-}
 
 .rze_container >.rze_widget_hovered {
     background-color: transparent !important;
@@ -105,23 +100,11 @@
     background-color: red;
 }
 
-.hoverClass{
-    background-color: red;
-}
-
 /* Porciones para la detección del cambio de orden */
 .drag_order{
     position: absolute;
 }
-
-.drag_order_top{
-    width: 100px;
-    height: 15px;
-}
-
-.drag_order_bottom{
-    width: 100px;
-    height: 15px;
+.drag_order_hover{
 }
 
 .drag_order_left{
@@ -134,7 +117,7 @@
     height: 100px;
 }
 
-.dragging{
-    width: 100px;
-    height: 100px;
+.rze_widget_preview {
+    border: solid 3px greenyellow !important;
+    background-color: darkseagreen;
 }

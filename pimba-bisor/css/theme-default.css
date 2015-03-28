@@ -2,9 +2,11 @@
     margin-top: 4px;
 }
 
-.title{
-    color: #888888;
-    background-color: #ADDDFF;
+.title,
+.title p{
+    color: white;
+    padding:0;
+    margin:0;
 }
 
 .desc{
@@ -12,9 +14,11 @@
 }
 
 .big .title{
-    color: #888888;
+    color: white;
 }
 .small .title{
 }
 .default .title{
 }
+
+

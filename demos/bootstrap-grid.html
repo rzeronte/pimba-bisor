@@ -37,7 +37,10 @@
                     bowerInstallation: false,
                     widgetContainerActionClass: 'actions',
                     widgetsData: dashboardData,
-                    bootstrapColumnsAutoOnDrop: true
+                    bootstrapColumnsAutoOnDrop: true,
+                    'cb_update_widget': function(objBisor, dataWidget) {
+                        console.log(dataWidget);
+                    }
                 };
 
                 pimbaBisor = new PimbaBisor(aOptions);
